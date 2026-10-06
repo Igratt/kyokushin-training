@@ -4,7 +4,7 @@ import { VitePWA } from 'vite-plugin-pwa';
 
 // Deployed at https://igratt.github.io/kyokushin/ — the base and the manifest URLs are absolute on purpose:
 // Android's WebAPK installer is picky about relative start_url/scope. For another host change BASE (e.g. '/').
-const BASE = '/kyokushin/';
+const BASE = '/kyokushin-training/';
 
 export default defineConfig({
   base: BASE,
@@ -15,14 +15,11 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['assets/*.webp'],
       includeManifestIcons: false,
-      // A fresh app identity (manifest file name + id): the first Android install of this app got stuck
-      // half-way and every retry under the same identity failed, while the Trenkės PWA installs fine.
-      manifestFilename: 'kyokushin.webmanifest',
       // Kept deliberately identical in shape to the Trenkės manifest, which installs fine on the same phone:
-      // relative start_url/scope, icons at the root, no orientation. Icons are NOT precached so the
-      // browser and Google's WebAPK server always see the same bytes.
+      // relative start_url/scope, icons at the root, no orientation/id. Icons are NOT precached so the
+      // browser and Google's WebAPK server always see the same bytes. Hosted at a fresh path because the
+      // first Android install at /kyokushin/ got stuck and every retry there failed.
       manifest: {
-        id: 'kyokushin-training-2',
         name: 'Kyokushin Training',
         short_name: 'Kyokushin',
         lang: 'lt',

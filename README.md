@@ -6,7 +6,7 @@ Programa paimta iš `src/data/workout_data.json` (šaltinis: `Kyokushin_sporto_s
 
 ## Gyvas adresas
 
-https://igratt.github.io/kyokushin/ (GitHub Pages, šaka `gh-pages`). Atnaujinti po pakeitimų:
+https://igratt.github.io/kyokushin-training/ (GitHub Pages, repo `Igratt/kyokushin-training`, šaka `gh-pages`). Atnaujinti po pakeitimų:
 
 ```bash
 npm run deploy
@@ -21,7 +21,7 @@ npm install
 npm run dev
 ```
 
-Atsidaro adresas `http://localhost:5173/kyokushin/` (programa gyvena sub-kelyje `/kyokushin/`, kaip ir GitHub Pages). Telefone tame pačiame Wi-Fi: `npm run dev -- --host` ir atidaryk rodomą `http://192.168.x.x:5173/kyokushin/` adresą.
+Atsidaro adresas `http://localhost:5173/kyokushin-training/` (programa gyvena sub-kelyje `/kyokushin-training/`, kaip ir GitHub Pages). Telefone tame pačiame Wi-Fi: `npm run dev -- --host` ir atidaryk rodomą `http://192.168.x.x:5173/kyokushin-training/` adresą.
 
 ## Production build
 
