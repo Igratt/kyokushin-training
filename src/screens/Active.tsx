@@ -3,6 +3,7 @@ import type { Day, Session, Settings } from '../types';
 import { DAY_COLORS, OPTIONAL_WEIGHT } from '../data/program';
 import { formatClock, formatWeight, progress, restFor, type Action } from '../workout/engine';
 import { useAlarm, useFullscreen, useNow, useWakeLock } from '../hooks';
+import { isNative } from '../native';
 import { Confirm, DayTag, ProgressBar, TopBar } from '../ui';
 
 interface Props {
@@ -74,7 +75,7 @@ export default function Active({ session: s, day, dispatch, settings, suggested,
           </span>
         }
         right={
-          fs.supported ? (
+          fs.supported && !isNative ? (
             <button className="btn-icon" onClick={fs.toggle} aria-label="Visas ekranas">
               {fs.isFull ? '⤡' : '⛶'}
             </button>

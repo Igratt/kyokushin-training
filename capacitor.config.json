@@ -1,0 +1,12 @@
+{
+  "appId": "lt.igratt.kyokushin",
+  "appName": "Kyokushin",
+  "webDir": "dist-native",
+  "server": {
+    "androidScheme": "https"
+  },
+  "android": {
+    "allowMixedContent": false,
+    "adjustMarginsForEdgeToEdge": "force"
+  }
+}

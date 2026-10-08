@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Kyokushin</string>
+    <string name="title_activity_main">Kyokushin</string>
+    <string name="package_name">lt.igratt.kyokushin</string>
+    <string name="custom_url_scheme">lt.igratt.kyokushin</string>
+</resources>

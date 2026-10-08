@@ -1,4 +1,5 @@
 import type { Session, Settings, WorkoutRecord } from './types';
+import { mirrorToNative } from './native';
 
 const KEYS = {
   session: 'kyokushin.session.v1',
@@ -6,6 +7,8 @@ const KEYS = {
   rest: 'kyokushin.rest.v1',
   settings: 'kyokushin.settings.v1',
 };
+
+export const STORAGE_KEYS = Object.values(KEYS);
 
 function read<T>(key: string, fallback: T): T {
   try {
@@ -18,8 +21,14 @@ function read<T>(key: string, fallback: T): T {
 
 function write(key: string, value: unknown): boolean {
   try {
-    if (value === null || value === undefined) localStorage.removeItem(key);
-    else localStorage.setItem(key, JSON.stringify(value));
+    if (value === null || value === undefined) {
+      localStorage.removeItem(key);
+      mirrorToNative(key, null);
+    } else {
+      const serialized = JSON.stringify(value);
+      localStorage.setItem(key, serialized);
+      mirrorToNative(key, serialized);
+    }
     return true;
   } catch {
     return false;

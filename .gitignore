@@ -1,5 +1,17 @@
 node_modules
 dist
+dist-native
 dev-dist
 .DS_Store
 *.log
+android/app/build
+android/build
+android/.gradle
+android/local.properties
+android/.idea
+android/*.iml
+android/app/*.iml
+android/app/release
+android/capacitor-cordova-android-plugins/build
+*.keystore
+*.p12

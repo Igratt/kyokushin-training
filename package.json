@@ -7,11 +7,17 @@
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
-    "deploy": "node deploy.mjs"
+    "deploy": "node deploy.mjs",
+    "build:native": "vite build --base ./ --outDir dist-native --emptyOutDir",
+    "sync:android": "npm run build:native && cap sync android"
   },
   "dependencies": {
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "@capacitor/android": "^7.0.0",
+    "@capacitor/app": "^7.0.0",
+    "@capacitor/core": "^7.0.0",
+    "@capacitor/preferences": "^7.0.0"
   },
   "devDependencies": {
     "@types/react": "^18.3.12",
@@ -19,6 +25,7 @@
     "@vitejs/plugin-react": "^4.3.4",
     "typescript": "^5.6.3",
     "vite": "^6.0.0",
-    "vite-plugin-pwa": "^0.21.1"
+    "vite-plugin-pwa": "^0.21.1",
+    "@capacitor/cli": "^7.0.0"
   }
 }

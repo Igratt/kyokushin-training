@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useMemo, useState, type ReactElement } from 'react';
+import { App as CapacitorApp } from '@capacitor/app';
 import type { DayId, Session, Settings, WorkoutRecord } from './types';
 import { getDay } from './data/program';
+import { isNative } from './native';
 import { storage } from './storage';
 import { createSession, lastWeights, reduce, toRecord, type Action } from './workout/engine';
 import Home from './screens/Home';
@@ -43,6 +45,26 @@ export default function App() {
     const id = window.setTimeout(() => setToast(null), 2500);
     return () => window.clearTimeout(id);
   }, [toast]);
+
+  // Android hardware back button: step back through the screens instead of closing the app.
+  // A workout in progress stays saved, so leaving it is always safe.
+  useEffect(() => {
+    if (!isNative) return;
+    const handle = CapacitorApp.addListener('backButton', () => {
+      setView((v) => {
+        if (v.name === 'home') {
+          CapacitorApp.minimizeApp().catch(() => undefined);
+          return v;
+        }
+        if (v.name === 'historyDetail') return { name: 'history' };
+        if (v.name === 'complete') return v;
+        return { name: 'home' };
+      });
+    });
+    return () => {
+      handle.then((h) => h.remove()).catch(() => undefined);
+    };
+  }, []);
 
   const dispatch = useCallback((a: Action) => {
     setSession((s) => (s ? reduce(s, getDay(s.dayId), a) : s));
