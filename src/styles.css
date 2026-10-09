@@ -136,6 +136,13 @@ ul, ol { padding: 0; list-style: none; }
 .reps { color: var(--day); }
 .weight { display: grid; gap: 4px; }
 .weight input { font-size: 22px; font-weight: 700; }
+.kg-input { font-size: 22px; font-weight: 700; }
+.kg-small { max-width: 130px; font-size: 18px; padding: 8px 12px; }
+.unit { color: var(--muted); font-weight: 600; }
+.weight-line { min-height: 28px; }
+.weight-ask { width: 100%; display: grid; gap: 8px; background: var(--surface); border: 1px solid var(--day); border-radius: 14px; padding: 12px 14px; text-align: left; }
+.weight-ask-title { font-family: var(--font-display); font-size: 22px; font-weight: 700; text-transform: uppercase; }
+.weight-ask .kg-input { max-width: 160px; }
 .done-list { display: flex; flex-wrap: wrap; gap: 4px 14px; }
 
 /* rest */

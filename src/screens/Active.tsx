@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import type { Day, Session, Settings } from '../types';
 import { DAY_COLORS, OPTIONAL_WEIGHT } from '../data/program';
-import { formatClock, formatWeight, progress, restFor, type Action } from '../workout/engine';
+import { effectiveSets, formatClock, formatWeight, progress, restFor, type Action } from '../workout/engine';
 import { useAlarm, useFullscreen, useNow, useWakeLock } from '../hooks';
 import { isNative } from '../native';
 import { Confirm, DayTag, ProgressBar, TopBar } from '../ui';
@@ -25,6 +25,9 @@ export default function Active({ session: s, day, dispatch, settings, suggested,
   useWakeLock(true);
   const [confirmExit, setConfirmExit] = useState(false);
   const [showNote, setShowNote] = useState(false);
+  const [perSetOpen, setPerSetOpen] = useState(false);
+  const [perSetText, setPerSetText] = useState('');
+  const [askOptional, setAskOptional] = useState(false);
   const firedFor = useRef<number | null>(null);
 
   const ex = day.exercises[s.exerciseIndex];
@@ -33,13 +36,15 @@ export default function Active({ session: s, day, dispatch, settings, suggested,
   const allDone = done >= ex.sets;
   const prog = progress(s, day);
   const color = DAY_COLORS[day.id];
-  const weightText = s.weights[ex.id] ?? '';
   const lastW = suggested[ex.id];
-  const [showWeight, setShowWeight] = useState(!OPTIONAL_WEIGHT.has(ex.id) || weightText !== '');
+  const exWeightText = s.weights[ex.id] ?? '';
+  const doneSets = effectiveSets(s, day, s.exerciseIndex);
+
   useEffect(() => {
-    setShowWeight(!OPTIONAL_WEIGHT.has(ex.id) || (s.weights[ex.id] ?? '') !== '');
     setShowNote(false);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    setPerSetOpen(false);
+    setPerSetText('');
+    setAskOptional(false);
   }, [ex.id]);
 
   // Rest finished: alarm once per rest, then move on. Works after a lock screen too,
@@ -55,8 +60,24 @@ export default function Active({ session: s, day, dispatch, settings, suggested,
 
   const completeSet = () => {
     alarm.prime();
-    dispatch({ type: 'COMPLETE_SET', now: Date.now() });
+    dispatch({ type: 'COMPLETE_SET', now: Date.now(), perSetWeight: perSetOpen ? perSetText : undefined });
+    setPerSetText('');
+    setPerSetOpen(false);
   };
+
+  const weightInput = (id: string) => (
+    <div className="row">
+      <input
+        id={id}
+        className="kg-input"
+        inputMode="decimal"
+        placeholder="kg"
+        value={exWeightText}
+        onChange={(e) => dispatch({ type: 'SET_WEIGHT', exerciseId: ex.id, value: e.target.value })}
+      />
+      <span className="unit">kg</span>
+    </div>
+  );
 
   const topBar = (
     <>
@@ -106,7 +127,9 @@ export default function Active({ session: s, day, dispatch, settings, suggested,
     const frac = Math.min(1, Math.max(0, 1 - remainingMs / totalMs));
     const target = s.restTarget;
     const nextEx = day.exercises[target.exerciseIndex];
-    const label = s.restLabel === 'set' ? `Poilsis prieš setą ${target.setIndex + 1}/${ex.sets}` : `Poilsis prieš kitą pratimą`;
+    const afterExercise = s.restLabel === 'exercise';
+    const label = afterExercise ? 'Poilsis prieš kitą pratimą' : `Poilsis prieš setą ${target.setIndex + 1}/${ex.sets}`;
+    const askWeight = afterExercise && (!OPTIONAL_WEIGHT.has(ex.id) || askOptional);
     return (
       <div className="screen active" style={{ '--day': color } as CSSProperties}>
         {topBar}
@@ -119,14 +142,29 @@ export default function Active({ session: s, day, dispatch, settings, suggested,
             </svg>
             <div className="ring-time h-display">{formatClock(Math.ceil(remainingMs / 1000))}</div>
           </div>
+
+          {afterExercise &&
+            (askWeight ? (
+              <div className="weight-ask">
+                <div className="weight-ask-title">Kokį svorį naudojai?</div>
+                <div className="muted small">
+                  {ex.name} · {done} setai{lastW !== undefined ? ` · praeitą kartą ${formatWeight(lastW)}` : ''}
+                </div>
+                {weightInput('kg-exercise')}
+                <div className="muted small">Įrašoma visiems šio pratimo setams, be atskiro patvirtinimo.</div>
+              </div>
+            ) : (
+              <button className="link" onClick={() => setAskOptional(true)}>
+                + įrašyti svorį ({ex.name})
+              </button>
+            ))}
+
           <div className="next-card">
             <img src={nextEx.image} alt="" />
             <div>
-              <div className="muted small">{s.restLabel === 'set' ? 'Tas pats pratimas' : 'Toliau'}</div>
+              <div className="muted small">{afterExercise ? 'Toliau' : 'Tas pats pratimas'}</div>
               <div className="next-name">{nextEx.name}</div>
-              <div className="muted small">
-                {s.restLabel === 'set' ? `setas ${target.setIndex + 1}/${nextEx.sets}` : `${nextEx.sets} × ${nextEx.reps}`}
-              </div>
+              <div className="muted small">{afterExercise ? `${nextEx.sets} × ${nextEx.reps}` : `setas ${target.setIndex + 1}/${nextEx.sets}`}</div>
             </div>
           </div>
           <div className="row rest-btns">
@@ -168,31 +206,34 @@ export default function Active({ session: s, day, dispatch, settings, suggested,
         <div className="muted small">Poilsis po seto: {restFor(s, day, s.exerciseIndex)} s</div>
       </div>
 
-      {showWeight ? (
+      {perSetOpen ? (
         <div className="weight">
-          <label className="muted small" htmlFor="kg">
-            Svoris, kg{OPTIONAL_WEIGHT.has(ex.id) ? ' (nebūtina)' : ''}
+          <label className="muted small" htmlFor="kg-set">
+            Svoris šiam setui, kg
           </label>
-          <input
-            id="kg"
-            inputMode="decimal"
-            placeholder="kg"
-            value={weightText}
-            onChange={(e) => dispatch({ type: 'SET_WEIGHT', exerciseId: ex.id, value: e.target.value })}
-          />
-          {lastW !== undefined && <div className="muted small">Praeitą kartą: {formatWeight(lastW)}</div>}
+          <input id="kg-set" className="kg-input" inputMode="decimal" placeholder="kg" value={perSetText} onChange={(e) => setPerSetText(e.target.value)} />
         </div>
       ) : (
-        <button className="link" onClick={() => setShowWeight(true)}>
-          + pridėti svorį
-        </button>
+        <div className="row wrap weight-line">
+          {exWeightText ? (
+            <span className="muted small">Svoris: {exWeightText} kg</span>
+          ) : lastW !== undefined ? (
+            <span className="muted small">Praeitą kartą: {formatWeight(lastW)}</span>
+          ) : null}
+          {!allDone && (
+            <button className="link small" onClick={() => setPerSetOpen(true)}>
+              + svoris šiam setui
+            </button>
+          )}
+        </div>
       )}
 
       {done > 0 && (
         <div className="done-list muted small">
-          {log.sets.map((st) => (
+          {doneSets.map((st) => (
             <span key={st.set}>
               ✓ {st.set}: {formatWeight(st.weightKg)}
+              {st.perSet ? '*' : ''}
             </span>
           ))}
         </div>

@@ -3,6 +3,7 @@
   "appName": "Kyokushin",
   "webDir": "dist-native",
   "server": {
+    "url": "https://igratt.github.io/kyokushin-training/",
     "androidScheme": "https"
   },
   "android": {

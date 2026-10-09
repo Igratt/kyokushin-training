@@ -22,4 +22,4 @@ export function getDay(id: DayId): Day {
 export const DAY_COLORS: Record<DayId, string> = { A: '#3B82F6', B: '#F97316', C: '#22C55E' };
 
 /** Power / bodyweight moves where a weight is optional: the kg field starts collapsed. */
-export const OPTIONAL_WEIGHT = new Set(['A1', 'A5', 'A7', 'B1', 'B6', 'C1', 'C6', 'C8']);
+export const OPTIONAL_WEIGHT = new Set(['A1', 'A5', 'A7', 'A9', 'B1', 'B6', 'B9', 'C1', 'C6', 'C8', 'C9']);

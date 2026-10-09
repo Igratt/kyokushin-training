@@ -7,14 +7,96 @@
       "name": "A DIENA",
       "subtitle": "Kojų jėga + sprogstamumas",
       "exercises": [
-        {"id":"A1","name":"Box Jump","sets":4,"reps":"3","restSeconds":75,"image":"assets/A_1.png","description":"Lengvai pritūpk, mostelk rankomis ir sprogstamai pašok ant dėžės. Nusileisk minkštai abiem kojomis ir nulipk žemyn.","focus":"Maksimalus greitis, ne nuovargis."},
-        {"id":"A2","name":"Back Squat","sets":4,"reps":"5","restSeconds":150,"image":"assets/A_2.png","description":"Štanga ant viršutinės nugaros. Leiskis žemyn su stabilia nugara ir stokis aukštyn per visą pėdą.","focus":"Palik apie 1–2 pakartojimus rezerve."},
-        {"id":"A3","name":"Romanian Deadlift","sets":3,"reps":"6–8","restSeconds":120,"image":"assets/A_3.png","description":"Laikyk štangą arti kojų ir stumk klubus atgal. Turi jausti galinę šlaunį ir sėdmenis, ne vien nugarą.","focus":"Nugara neutrali, klubai juda atgal."},
-        {"id":"A4","name":"Bulgarian Split Squat","sets":3,"reps":"8 / koja","restSeconds":90,"image":"assets/A_4.png","description":"Viena koja priekyje, kita užkelta ant suoliuko. Leiskis per priekinę koją ir laikyk liemenį stabilų.","focus":"Kontrolė ir vienos kojos stabilumas."},
-        {"id":"A5","name":"Explosive Step-Up","sets":3,"reps":"5 / koja","restSeconds":75,"image":"assets/A_5.png","description":"Viena koja ant suoliuko ar dėžės, per ją stumkis aukštyn kuo greičiau. Viršuje gali pridėti kelio pakėlimą.","focus":"Greitis svarbiau už didelį svorį."},
-        {"id":"A6","name":"Standing Calf Raise","sets":3,"reps":"12–15","restSeconds":60,"image":"assets/A_6.png","description":"Atsistok ant pakylos krašto ir kelkis ant pirštų. Lėtai nusileisk žemyn, tada stipriai kilk aukštyn.","focus":"Pilna amplitudė, kontroliuotas nusileidimas."},
-        {"id":"A7","name":"Hanging Leg Raise","sets":3,"reps":"10–15","restSeconds":60,"image":"assets/A_7.png","description":"Kabėdamas ant skersinio kelk kelius arba tiesesnes kojas aukštyn. Nesisiūbuok ir neleisk judesiui virsti inercija.","focus":"Core kontrolė, ne siūbavimas."},
-        {"id":"A8","name":"Pallof Press","sets":3,"reps":"10 / pusė","restSeconds":50,"image":"assets/A_8.png","description":"Stovėk šonu prie troso ar gumos ir stumk rankas pirmyn. Užduotis – neleisti liemeniui suktis.","focus":"Anti-rotation ir stabilumas."}
+        {
+          "id": "A1",
+          "name": "Box Jump",
+          "sets": 4,
+          "reps": "3",
+          "restSeconds": 75,
+          "image": "assets/A_1.png",
+          "description": "Lengvai pritūpk, mostelk rankomis ir sprogstamai pašok ant dėžės. Nusileisk minkštai abiem kojomis ir nulipk žemyn.",
+          "focus": "Maksimalus greitis, ne nuovargis."
+        },
+        {
+          "id": "A2",
+          "name": "Back Squat",
+          "sets": 4,
+          "reps": "5",
+          "restSeconds": 150,
+          "image": "assets/A_2.png",
+          "description": "Štanga ant viršutinės nugaros. Leiskis žemyn su stabilia nugara ir stokis aukštyn per visą pėdą.",
+          "focus": "Palik apie 1–2 pakartojimus rezerve."
+        },
+        {
+          "id": "A3",
+          "name": "Romanian Deadlift",
+          "sets": 3,
+          "reps": "6–8",
+          "restSeconds": 120,
+          "image": "assets/A_3.png",
+          "description": "Laikyk štangą arti kojų ir stumk klubus atgal. Turi jausti galinę šlaunį ir sėdmenis, ne vien nugarą.",
+          "focus": "Nugara neutrali, klubai juda atgal."
+        },
+        {
+          "id": "A4",
+          "name": "Bulgarian Split Squat",
+          "sets": 3,
+          "reps": "8 / koja",
+          "restSeconds": 90,
+          "image": "assets/A_4.png",
+          "description": "Viena koja priekyje, kita užkelta ant suoliuko. Leiskis per priekinę koją ir laikyk liemenį stabilų.",
+          "focus": "Kontrolė ir vienos kojos stabilumas."
+        },
+        {
+          "id": "A5",
+          "name": "Explosive Step-Up",
+          "sets": 3,
+          "reps": "5 / koja",
+          "restSeconds": 75,
+          "image": "assets/A_5.png",
+          "description": "Viena koja ant suoliuko ar dėžės, per ją stumkis aukštyn kuo greičiau. Viršuje gali pridėti kelio pakėlimą.",
+          "focus": "Greitis svarbiau už didelį svorį."
+        },
+        {
+          "id": "A6",
+          "name": "Standing Calf Raise",
+          "sets": 3,
+          "reps": "12–15",
+          "restSeconds": 60,
+          "image": "assets/A_6.png",
+          "description": "Atsistok ant pakylos krašto ir kelkis ant pirštų. Lėtai nusileisk žemyn, tada stipriai kilk aukštyn.",
+          "focus": "Pilna amplitudė, kontroliuotas nusileidimas."
+        },
+        {
+          "id": "A7",
+          "name": "Hanging Leg Raise",
+          "sets": 3,
+          "reps": "10–15",
+          "restSeconds": 60,
+          "image": "assets/A_7.png",
+          "description": "Kabėdamas ant skersinio kelk kelius arba tiesesnes kojas aukštyn. Nesisiūbuok ir neleisk judesiui virsti inercija.",
+          "focus": "Core kontrolė, ne siūbavimas."
+        },
+        {
+          "id": "A8",
+          "name": "Pallof Press",
+          "sets": 3,
+          "reps": "10 / pusė",
+          "restSeconds": 50,
+          "image": "assets/A_8.png",
+          "description": "Stovėk šonu prie troso ar gumos ir stumk rankas pirmyn. Užduotis – neleisti liemeniui suktis.",
+          "focus": "Anti-rotation ir stabilumas."
+        },
+        {
+          "id": "A9",
+          "name": "Crunch",
+          "sets": 3,
+          "reps": "15–20",
+          "restSeconds": 45,
+          "image": "assets/A_9.webp",
+          "description": "Gulėk ant nugaros, keliai sulenkti, pėdos ant žemės. Lėtai kelk pečius nuo grindų įtempdamas presą, viršuje sustok sekundei ir kontroliuotai nusileisk. Kaklo netempk rankomis.",
+          "focus": "Trumpa, kontroliuota amplitudė, presas visą laiką įtemptas."
+        }
       ]
     },
     {
@@ -22,14 +104,96 @@
       "name": "B DIENA",
       "subtitle": "Viršus + smūgio galia",
       "exercises": [
-        {"id":"B1","name":"Medicine Ball Rotational Throw","sets":4,"reps":"4 / pusė","restSeconds":75,"image":"assets/B_1.png","description":"Stovėk šonu prie sienos, įsuk klubus ir sprogstamai mesk kamuolį. Jėga turi eiti iš pėdos, klubų ir liemens.","focus":"Maksimalus sprogstamumas."},
-        {"id":"B2","name":"Bench Press","sets":4,"reps":"5","restSeconds":150,"image":"assets/B_2.png","description":"Pėdos tvirtai ant žemės, mentes pritrauk. Nuleisk štangą iki krūtinės ir išspausk aukštyn kontroliuotai.","focus":"Palik apie 1–2 pakartojimus rezerve."},
-        {"id":"B3","name":"Pull-Ups / Weighted","sets":4,"reps":"5–8","restSeconds":105,"image":"assets/B_3.png","description":"Prisitrauk iki smakro virš skersinio ir pilnai nusileisk. Jei lengva – pridėk papildomą svorį.","focus":"Jokio siūbavimo."},
-        {"id":"B4","name":"Landmine Press","sets":3,"reps":"6–8 / ranka","restSeconds":90,"image":"assets/B_4.png","description":"Laikyk štangos galą prie peties ir spausk į viršų–į priekį. Stovėsena stabili, liemuo nekliba.","focus":"Spaudimas kampu ir core stabilumas."},
-        {"id":"B5","name":"Chest-Supported Row","sets":3,"reps":"8–10","restSeconds":90,"image":"assets/B_5.png","description":"Krūtine atsiremk į suolą ir trauk hantelius link savęs. Gale suspausk mentes ir lėtai nuleisk.","focus":"Viršutinė nugara ir mentės."},
-        {"id":"B6","name":"Explosive Push-Ups","sets":3,"reps":"5","restSeconds":75,"image":"assets/B_6.png","description":"Leiskis į atsispaudimą ir tada stipriai stumkis nuo grindų taip, kad rankos atsiplėštų.","focus":"Maksimalus greitis, ne iki failure."},
-        {"id":"B7","name":"Face Pull","sets":3,"reps":"12–15","restSeconds":60,"image":"assets/B_7.png","description":"Su virve trauk link veido, alkūnes laikyk aukščiau ir į šonus. Puiku pečių balansui ir galinei deltai.","focus":"Suspausk mentes gale."},
-        {"id":"B8","name":"Cable Woodchopper","sets":3,"reps":"10 / pusė","restSeconds":60,"image":"assets/B_8.png","description":"Su trosu trauk rankeną įstrižai per kūną. Judesį pradeda liemuo ir presas, o ne vien rankos.","focus":"Kontroliuota rotacija."}
+        {
+          "id": "B1",
+          "name": "Medicine Ball Rotational Throw",
+          "sets": 4,
+          "reps": "4 / pusė",
+          "restSeconds": 75,
+          "image": "assets/B_1.png",
+          "description": "Stovėk šonu prie sienos, įsuk klubus ir sprogstamai mesk kamuolį. Jėga turi eiti iš pėdos, klubų ir liemens.",
+          "focus": "Maksimalus sprogstamumas."
+        },
+        {
+          "id": "B2",
+          "name": "Bench Press",
+          "sets": 4,
+          "reps": "5",
+          "restSeconds": 150,
+          "image": "assets/B_2.png",
+          "description": "Pėdos tvirtai ant žemės, mentes pritrauk. Nuleisk štangą iki krūtinės ir išspausk aukštyn kontroliuotai.",
+          "focus": "Palik apie 1–2 pakartojimus rezerve."
+        },
+        {
+          "id": "B3",
+          "name": "Pull-Ups / Weighted",
+          "sets": 4,
+          "reps": "5–8",
+          "restSeconds": 105,
+          "image": "assets/B_3.png",
+          "description": "Prisitrauk iki smakro virš skersinio ir pilnai nusileisk. Jei lengva – pridėk papildomą svorį.",
+          "focus": "Jokio siūbavimo."
+        },
+        {
+          "id": "B4",
+          "name": "Landmine Press",
+          "sets": 3,
+          "reps": "6–8 / ranka",
+          "restSeconds": 90,
+          "image": "assets/B_4.png",
+          "description": "Laikyk štangos galą prie peties ir spausk į viršų–į priekį. Stovėsena stabili, liemuo nekliba.",
+          "focus": "Spaudimas kampu ir core stabilumas."
+        },
+        {
+          "id": "B5",
+          "name": "Chest-Supported Row",
+          "sets": 3,
+          "reps": "8–10",
+          "restSeconds": 90,
+          "image": "assets/B_5.png",
+          "description": "Krūtine atsiremk į suolą ir trauk hantelius link savęs. Gale suspausk mentes ir lėtai nuleisk.",
+          "focus": "Viršutinė nugara ir mentės."
+        },
+        {
+          "id": "B6",
+          "name": "Explosive Push-Ups",
+          "sets": 3,
+          "reps": "5",
+          "restSeconds": 75,
+          "image": "assets/B_6.png",
+          "description": "Leiskis į atsispaudimą ir tada stipriai stumkis nuo grindų taip, kad rankos atsiplėštų.",
+          "focus": "Maksimalus greitis, ne iki failure."
+        },
+        {
+          "id": "B7",
+          "name": "Rear Delt Fly (hanteliai)",
+          "sets": 3,
+          "reps": "12–15",
+          "restSeconds": 60,
+          "image": "assets/B_7.webp",
+          "description": "Pasilenk per klubus su tiesia nugara, hanteliai kabo žemyn. Kelk rankas į šonus iki pečių lygio šiek tiek sulenktomis alkūnėmis, gale suspausk mentes ir lėtai nuleisk.",
+          "focus": "Galinė delta ir mentės, ne inercija."
+        },
+        {
+          "id": "B8",
+          "name": "Cable Woodchopper",
+          "sets": 3,
+          "reps": "10 / pusė",
+          "restSeconds": 60,
+          "image": "assets/B_8.png",
+          "description": "Su trosu trauk rankeną įstrižai per kūną. Judesį pradeda liemuo ir presas, o ne vien rankos.",
+          "focus": "Kontroliuota rotacija."
+        },
+        {
+          "id": "B9",
+          "name": "Plank",
+          "sets": 3,
+          "reps": "45–60 s",
+          "restSeconds": 45,
+          "image": "assets/B_9.webp",
+          "description": "Atsiremk į alkūnes ir kojų pirštus, kūnas tiesus nuo galvos iki kulnų. Įtempk pilvą ir sėdmenis, neleisk klubams nukarti ar kilti.",
+          "focus": "Tiesi linija ir ramus kvėpavimas."
+        }
       ]
     },
     {
@@ -37,14 +201,96 @@
       "name": "C DIENA",
       "subtitle": "Full body power / atletiškumas",
       "exercises": [
-        {"id":"C1","name":"Jump Squat","sets":4,"reps":"3","restSeconds":75,"image":"assets/C_1.png","description":"Pritūpk negiliai ir iš apačios sprogstamai pašok aukštyn. Nusileisk minkštai ir išlaikyk ritmą.","focus":"Greitis ir galia."},
-        {"id":"C2","name":"Trap-Bar Deadlift","sets":4,"reps":"4","restSeconds":150,"image":"assets/C_2.png","description":"Atsistok trap bar viduje, suimk rankenas ir kelk svorį išlaikydamas neutralią nugarą bei tvirtą atramą.","focus":"Stiprus, tvarkingas pakėlimas."},
-        {"id":"C3","name":"Push Press","sets":4,"reps":"4","restSeconds":120,"image":"assets/C_3.png","description":"Štanga prie pečių, trumpas dip žemyn ir tada stiprus stūmimas kojomis bei rankomis virš galvos.","focus":"Jėgos perdavimas per visą kūną."},
-        {"id":"C4","name":"Walking Lunges","sets":3,"reps":"8 / koja","restSeconds":90,"image":"assets/C_4.png","description":"Su hanteliais ženk didelį žingsnį į priekį, leiskis į įtūpstą ir keliauk tolyn išlaikydamas kontrolę.","focus":"Stabilus kelis ir liemuo."},
-        {"id":"C5","name":"Chin-Ups","sets":3,"reps":"6–10","restSeconds":90,"image":"assets/C_5.png","description":"Prisitraukimai delnais į save. Leiskis pilnai žemyn ir kilk aukštyn be siūbavimo.","focus":"Pilna amplitudė."},
-        {"id":"C6","name":"Medicine Ball Slam","sets":4,"reps":"5","restSeconds":60,"image":"assets/C_6.png","description":"Pakelk kamuolį virš galvos ir visa jėga trenk jį į grindis. Naudok visą kūną – pilvą, klubus ir rankas.","focus":"Sprogstamai, bet techniškai."},
-        {"id":"C7","name":"Farmer Carry","sets":3,"reps":"30–40 m","restSeconds":75,"image":"assets/C_7.png","description":"Paėmęs sunkius hantelius eik stabiliai pirmyn: krūtinė aukštai, pilvas įtemptas, pečiai nesusmukę.","focus":"Grip, core ir laikysena."},
-        {"id":"C8","name":"Ab Wheel","sets":3,"reps":"8–12","restSeconds":60,"image":"assets/C_8.png","description":"Atsiklaupęs ridenk ratuką pirmyn tiek, kiek gali išlaikyti tvirtą liemenį. Neleisk nugarai išsirieti.","focus":"Core ir anti-extension."}
+        {
+          "id": "C1",
+          "name": "Jump Squat",
+          "sets": 4,
+          "reps": "3",
+          "restSeconds": 75,
+          "image": "assets/C_1.png",
+          "description": "Pritūpk negiliai ir iš apačios sprogstamai pašok aukštyn. Nusileisk minkštai ir išlaikyk ritmą.",
+          "focus": "Greitis ir galia."
+        },
+        {
+          "id": "C2",
+          "name": "Trap-Bar Deadlift",
+          "sets": 4,
+          "reps": "4",
+          "restSeconds": 150,
+          "image": "assets/C_2.png",
+          "description": "Atsistok trap bar viduje, suimk rankenas ir kelk svorį išlaikydamas neutralią nugarą bei tvirtą atramą.",
+          "focus": "Stiprus, tvarkingas pakėlimas."
+        },
+        {
+          "id": "C3",
+          "name": "Push Press",
+          "sets": 4,
+          "reps": "4",
+          "restSeconds": 120,
+          "image": "assets/C_3.png",
+          "description": "Štanga prie pečių, trumpas dip žemyn ir tada stiprus stūmimas kojomis bei rankomis virš galvos.",
+          "focus": "Jėgos perdavimas per visą kūną."
+        },
+        {
+          "id": "C4",
+          "name": "Walking Lunges",
+          "sets": 3,
+          "reps": "8 / koja",
+          "restSeconds": 90,
+          "image": "assets/C_4.png",
+          "description": "Su hanteliais ženk didelį žingsnį į priekį, leiskis į įtūpstą ir keliauk tolyn išlaikydamas kontrolę.",
+          "focus": "Stabilus kelis ir liemuo."
+        },
+        {
+          "id": "C5",
+          "name": "Chin-Ups",
+          "sets": 3,
+          "reps": "6–10",
+          "restSeconds": 90,
+          "image": "assets/C_5.png",
+          "description": "Prisitraukimai delnais į save. Leiskis pilnai žemyn ir kilk aukštyn be siūbavimo.",
+          "focus": "Pilna amplitudė."
+        },
+        {
+          "id": "C6",
+          "name": "Medicine Ball Slam",
+          "sets": 4,
+          "reps": "5",
+          "restSeconds": 60,
+          "image": "assets/C_6.png",
+          "description": "Pakelk kamuolį virš galvos ir visa jėga trenk jį į grindis. Naudok visą kūną – pilvą, klubus ir rankas.",
+          "focus": "Sprogstamai, bet techniškai."
+        },
+        {
+          "id": "C7",
+          "name": "Farmer Carry",
+          "sets": 3,
+          "reps": "30–40 m",
+          "restSeconds": 75,
+          "image": "assets/C_7.png",
+          "description": "Paėmęs sunkius hantelius eik stabiliai pirmyn: krūtinė aukštai, pilvas įtemptas, pečiai nesusmukę.",
+          "focus": "Grip, core ir laikysena."
+        },
+        {
+          "id": "C8",
+          "name": "Ab Wheel",
+          "sets": 3,
+          "reps": "8–12",
+          "restSeconds": 60,
+          "image": "assets/C_8.png",
+          "description": "Atsiklaupęs ridenk ratuką pirmyn tiek, kiek gali išlaikyti tvirtą liemenį. Neleisk nugarai išsirieti.",
+          "focus": "Core ir anti-extension."
+        },
+        {
+          "id": "C9",
+          "name": "Bicycle Crunch",
+          "sets": 3,
+          "reps": "12 / pusė",
+          "restSeconds": 45,
+          "image": "assets/C_9.webp",
+          "description": "Gulėk ant nugaros, rankos prie smilkinių. Traukdamas vieną kelį prie krūtinės suk liemenį ir priešingą alkūnę link kelio, tada keisk puses lėtai ir kontroliuotai.",
+          "focus": "Sukimas iš liemens, ne iš kaklo."
+        }
       ]
     }
   ]

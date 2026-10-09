@@ -12,6 +12,10 @@ https://igratt.github.io/kyokushin-training/ (GitHub Pages, repo `Igratt/kyokush
 npm run deploy
 ```
 
+## Android programa
+
+APK: https://github.com/Igratt/kyokushin-training/releases/latest/download/Kyokushin.apk (renka GitHub Actions iš `android/`, pasirašo tuo pačiu raktu kaip Trenkės). Programa krauna gyvą svetainės versiją (`capacitor.config.json` → `server.url`) ir ją saugo darbui be interneto, todėl `npm run deploy` atnaujina ir programą kitą kartą ją atidarius. Naują APK reikia tik keičiant native dalį (`android/`, Capacitor įskiepiai).
+
 ## Paleisti lokaliai
 
 Reikia Node.js 18+ (naudota 20).

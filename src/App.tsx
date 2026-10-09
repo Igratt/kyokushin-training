@@ -138,6 +138,8 @@ export default function App() {
         <Complete
           session={session}
           day={getDay(session.dayId)}
+          suggested={suggested}
+          dispatch={dispatch}
           onSave={save}
           onDiscard={discard}
           onReopen={() => {

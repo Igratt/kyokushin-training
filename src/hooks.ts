@@ -112,7 +112,7 @@ export function useAlarm() {
   const fire = useCallback((settings: Settings) => {
     if (settings.vibrate && 'vibrate' in navigator) {
       try {
-        navigator.vibrate([250, 120, 250, 120, 500]);
+        navigator.vibrate([400, 150, 400, 150, 900]);
       } catch {
         /* ignore */
       }
@@ -121,18 +121,24 @@ export function useAlarm() {
       try {
         const ctx = ctxRef.current;
         const t0 = ctx.currentTime;
-        [0, 0.28, 0.56].forEach((offset, i) => {
+        // Loud gym alarm: square wave near full scale, three short beeps and a long one, played twice.
+        const beep = (at: number, freq: number, dur: number) => {
           const osc = ctx.createOscillator();
           const gain = ctx.createGain();
           osc.type = 'square';
-          osc.frequency.value = i === 2 ? 1175 : 880;
-          gain.gain.setValueAtTime(0.0001, t0 + offset);
-          gain.gain.exponentialRampToValueAtTime(0.25, t0 + offset + 0.02);
-          gain.gain.exponentialRampToValueAtTime(0.0001, t0 + offset + (i === 2 ? 0.45 : 0.2));
+          osc.frequency.value = freq;
+          gain.gain.setValueAtTime(0.0001, at);
+          gain.gain.exponentialRampToValueAtTime(0.95, at + 0.015);
+          gain.gain.setValueAtTime(0.95, at + dur - 0.04);
+          gain.gain.exponentialRampToValueAtTime(0.0001, at + dur);
           osc.connect(gain).connect(ctx.destination);
-          osc.start(t0 + offset);
-          osc.stop(t0 + offset + 0.5);
-        });
+          osc.start(at);
+          osc.stop(at + dur + 0.05);
+        };
+        for (const base of [0, 2.0]) {
+          [0, 0.32, 0.64].forEach((o) => beep(t0 + base + o, 1046, 0.24));
+          beep(t0 + base + 1.0, 1318, 0.7);
+        }
       } catch {
         /* ignore */
       }

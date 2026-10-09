@@ -28,6 +28,8 @@ export interface SetLog {
   set: number;
   reps: string;
   weightKg: number | null;
+  /** True when the weight was typed for this specific set; otherwise the exercise-level weight applies. */
+  perSet?: boolean;
   completedAt: string;
 }
 

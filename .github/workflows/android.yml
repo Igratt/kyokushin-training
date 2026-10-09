@@ -7,13 +7,11 @@ name: Android APK
 on:
   push:
     branches: [main]
+    # The app loads the live web version (capacitor.config.json server.url), so web changes reach phones
+    # through `npm run deploy` without a new APK. Only native changes need a rebuild here.
     paths:
-      - 'src/**'
-      - 'public/**'
-      - 'index.html'
       - 'package.json'
       - 'package-lock.json'
-      - 'vite.config.ts'
       - 'capacitor.config.json'
       - 'android/**'
       - '.github/workflows/android.yml'

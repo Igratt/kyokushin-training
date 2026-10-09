@@ -1,4 +1,4 @@
-import type { Day, DayId, Position, Session, WorkoutRecord } from '../types';
+import type { Day, DayId, Position, Session, SetLog, WorkoutRecord } from '../types';
 
 /*
  * Workout state machine. Pure functions only, so the whole flow can be reasoned about
@@ -11,7 +11,7 @@ import type { Day, DayId, Position, Session, WorkoutRecord } from '../types';
  */
 
 export type Action =
-  | { type: 'COMPLETE_SET'; now: number }
+  | { type: 'COMPLETE_SET'; now: number; perSetWeight?: string }
   | { type: 'REST_DONE'; now: number }
   | { type: 'SKIP_REST'; now: number }
   | { type: 'ADJUST_REST'; deltaSec: number; now: number }
@@ -84,11 +84,13 @@ export function reduce(s: Session, day: Day, a: Action): Session {
       const ex = day.exercises[s.exerciseIndex];
       const log = s.logs[s.exerciseIndex];
       if (log.sets.length >= ex.sets) return s;
+      // Weight is normally asked once per exercise (see effectiveSets); a value typed for this set wins.
+      const perSetKg = parseWeight(a.perSetWeight);
       const newLog = {
         ...log,
         sets: [
           ...log.sets,
-          { set: log.sets.length + 1, reps: ex.reps, weightKg: parseWeight(s.weights[ex.id]), completedAt: new Date(a.now).toISOString() },
+          { set: log.sets.length + 1, reps: ex.reps, weightKg: perSetKg, perSet: perSetKg !== null, completedAt: new Date(a.now).toISOString() },
         ],
       };
       const logs = s.logs.map((l, i) => (i === s.exerciseIndex ? newLog : l));
@@ -189,6 +191,13 @@ export function progress(session: Session, day: Day): { done: number; planned: n
   return { done, planned, percent: planned ? Math.round((done / planned) * 100) : 0 };
 }
 
+/** Sets of one exercise with the weight resolved: a weight typed for that set wins, otherwise the exercise-level weight. */
+export function effectiveSets(session: Session, day: Day, exerciseIndex: number): SetLog[] {
+  const ex = day.exercises[exerciseIndex];
+  const exerciseKg = parseWeight(session.weights[ex.id]);
+  return session.logs[exerciseIndex].sets.map((st) => (st.perSet ? st : { ...st, weightKg: exerciseKg }));
+}
+
 export function toRecord(session: Session, day: Day, note: string): WorkoutRecord {
   const finishedAt = session.finishedAt ?? new Date().toISOString();
   const { done, planned } = progress(session, day);
@@ -205,7 +214,7 @@ export function toRecord(session: Session, day: Day, note: string): WorkoutRecor
       name: ex.name,
       plannedSets: ex.sets,
       reps: ex.reps,
-      sets: session.logs[i].sets,
+      sets: effectiveSets(session, day, i),
       note: session.notes[ex.id]?.trim() || undefined,
     })),
     note: note.trim() || undefined,
