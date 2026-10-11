@@ -121,15 +121,17 @@ export function useAlarm() {
       try {
         const ctx = ctxRef.current;
         const t0 = ctx.currentTime;
-        // Loud gym alarm: square wave near full scale, three short beeps and a long one, played twice.
+        // Gym alarm: three short beeps and a long one, played twice. Level 0.55 (was 0.95, "a bit quieter").
+        // The Android app plays the same pattern natively (res/raw/rest_end.wav), also in the background.
+        const LEVEL = 0.55;
         const beep = (at: number, freq: number, dur: number) => {
           const osc = ctx.createOscillator();
           const gain = ctx.createGain();
           osc.type = 'square';
           osc.frequency.value = freq;
           gain.gain.setValueAtTime(0.0001, at);
-          gain.gain.exponentialRampToValueAtTime(0.95, at + 0.015);
-          gain.gain.setValueAtTime(0.95, at + dur - 0.04);
+          gain.gain.exponentialRampToValueAtTime(LEVEL, at + 0.015);
+          gain.gain.setValueAtTime(LEVEL, at + dur - 0.04);
           gain.gain.exponentialRampToValueAtTime(0.0001, at + dur);
           osc.connect(gain).connect(ctx.destination);
           osc.start(at);

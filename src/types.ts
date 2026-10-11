@@ -1,4 +1,4 @@
-export type DayId = 'A' | 'B' | 'C';
+export type DayId = string;
 
 export interface Exercise {
   id: string;
@@ -6,22 +6,28 @@ export interface Exercise {
   sets: number;
   reps: string;
   restSeconds: number;
-  image: string;
-  description: string;
-  focus: string;
+  image?: string;
+  description?: string;
+  focus?: string;
 }
 
 export interface Day {
   id: DayId;
   name: string;
-  subtitle: string;
+  subtitle?: string;
+  /** Accent colour of the day (A blue, B orange, C green, other days from a palette). */
+  color: string;
   exercises: Exercise[];
 }
 
 export interface Program {
+  id: string;
   programName: string;
-  goal: string;
+  goal?: string;
+  focus?: string;
   days: Day[];
+  /** Built into the app (src/data/programs) or imported from a file on this phone. */
+  source: 'builtin' | 'imported';
 }
 
 export interface SetLog {
@@ -45,25 +51,33 @@ export interface Position {
   setIndex: number;
 }
 
-/** The whole live workout. Persisted to localStorage on every change so a refresh or a locked phone loses nothing. */
+/** The whole live workout. Persisted on every change so a refresh or a locked phone loses nothing. */
 export interface Session {
+  id: string;
+  programId: string;
+  programName: string;
   dayId: DayId;
+  /** Snapshot of the day as it was at the start, so later program changes never break a running workout. */
+  day: Day;
   startedAt: string;
   finishedAt?: string;
   phase: Phase;
   exerciseIndex: number;
   setIndex: number;
-  /** Absolute timestamp (ms) when the current rest ends. Timer is derived from this, never from a counter. */
+  /** Absolute timestamp (ms) when the current rest ends. The timer is derived from it, never from a counter. */
   restEndsAt: number | null;
   restSeconds: number | null;
   restTarget: Position | null;
   restLabel: 'set' | 'exercise' | null;
   logs: ExerciseLog[];
-  /** Weight input text per exercise id (string so "72,5" stays as typed). */
+  /** Confirmed weight per exercise id, as typed (so "72,5" stays as typed). */
   weights: Record<string, string>;
   notes: Record<string, string>;
+  workoutNote?: string;
   restOverrides: Record<string, number>;
   lastActionAt: number;
+  /** Exercise whose "what weight did you use?" dialog is open (set right after its last set). */
+  pendingWeightFor?: string | null;
 }
 
 export interface RecordExercise {
@@ -77,7 +91,11 @@ export interface RecordExercise {
 
 export interface WorkoutRecord {
   id: string;
+  programId?: string;
+  programName?: string;
   dayId: DayId;
+  dayName?: string;
+  dayColor?: string;
   startedAt: string;
   finishedAt: string;
   durationSec: number;
@@ -85,9 +103,13 @@ export interface WorkoutRecord {
   totalSetsPlanned: number;
   exercises: RecordExercise[];
   note?: string;
+  /** False while the workout is still running (it is saved after every set). Older records have no flag. */
+  completed?: boolean;
+  updatedAt?: string;
 }
 
 export interface Settings {
   sound: boolean;
   vibrate: boolean;
+  programId?: string;
 }

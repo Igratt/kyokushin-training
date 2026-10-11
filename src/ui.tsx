@@ -1,11 +1,9 @@
-import type { ReactNode } from 'react';
-import type { DayId } from './types';
-import { DAY_COLORS } from './data/program';
+import { useEffect, useState, type ReactNode } from 'react';
 
-export function DayTag({ dayId }: { dayId: DayId }) {
+export function DayTag({ label, color }: { label: string; color: string }) {
   return (
-    <span className="tag" style={{ background: DAY_COLORS[dayId] }}>
-      {dayId} DIENA
+    <span className="tag" style={{ background: color }}>
+      {label}
     </span>
   );
 }
@@ -27,6 +25,20 @@ export function TopBar({ left, center, right }: { left?: ReactNode; center?: Rea
       <div className="topbar-side right">{right}</div>
     </div>
   );
+}
+
+/** Exercise photo, or a neutral card with the name when the program has no picture (or it fails to load). */
+export function ExerciseImage({ src, name, className }: { src?: string; name: string; className?: string }) {
+  const [failed, setFailed] = useState(false);
+  useEffect(() => setFailed(false), [src]);
+  if (!src || failed) {
+    return (
+      <div className={'img-ph ' + (className ?? '')} role="img" aria-label={name}>
+        <span>{name}</span>
+      </div>
+    );
+  }
+  return <img src={src} alt={name} className={className} onError={() => setFailed(true)} />;
 }
 
 export function Confirm({

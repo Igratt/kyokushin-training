@@ -1,14 +1,13 @@
 import { useEffect, useRef, useState, type CSSProperties } from 'react';
-import type { Day, Session, Settings } from '../types';
-import { DAY_COLORS, OPTIONAL_WEIGHT } from '../data/program';
+import type { Session, Settings } from '../types';
+import { exerciseKey } from '../data/programs';
 import { effectiveSets, formatClock, formatWeight, progress, restFor, type Action } from '../workout/engine';
 import { useAlarm, useFullscreen, useNow, useWakeLock } from '../hooks';
-import { isNative } from '../native';
-import { Confirm, DayTag, ProgressBar, TopBar } from '../ui';
+import { isNative, nativeTimer } from '../native';
+import { Confirm, DayTag, ExerciseImage, ProgressBar, TopBar } from '../ui';
 
 interface Props {
   session: Session;
-  day: Day;
   dispatch: (a: Action) => void;
   settings: Settings;
   suggested: Record<string, number>;
@@ -17,7 +16,8 @@ interface Props {
 
 const RING = 2 * Math.PI * 54;
 
-export default function Active({ session: s, day, dispatch, settings, suggested, onExit }: Props) {
+export default function Active({ session: s, dispatch, settings, suggested, onExit }: Props) {
+  const day = s.day;
   const resting = s.phase === 'RESTING';
   const now = useNow(resting, 200);
   const alarm = useAlarm();
@@ -27,33 +27,30 @@ export default function Active({ session: s, day, dispatch, settings, suggested,
   const [showNote, setShowNote] = useState(false);
   const [perSetOpen, setPerSetOpen] = useState(false);
   const [perSetText, setPerSetText] = useState('');
-  const [askOptional, setAskOptional] = useState(false);
   const firedFor = useRef<number | null>(null);
 
   const ex = day.exercises[s.exerciseIndex];
-  const log = s.logs[s.exerciseIndex];
-  const done = log.sets.length;
+  const done = s.logs[s.exerciseIndex].sets.length;
   const allDone = done >= ex.sets;
-  const prog = progress(s, day);
-  const color = DAY_COLORS[day.id];
-  const lastW = suggested[ex.id];
+  const prog = progress(s);
+  const color = day.color;
+  const lastW = suggested[exerciseKey(ex.name)];
   const exWeightText = s.weights[ex.id] ?? '';
-  const doneSets = effectiveSets(s, day, s.exerciseIndex);
+  const doneSets = effectiveSets(s, s.exerciseIndex);
 
   useEffect(() => {
     setShowNote(false);
     setPerSetOpen(false);
     setPerSetText('');
-    setAskOptional(false);
   }, [ex.id]);
 
-  // Rest finished: alarm once per rest, then move on. Works after a lock screen too,
-  // because `now` is re-read when the tab becomes visible and the end time is absolute.
+  // Rest finished: move on (and beep in the browser; the Android app rings natively, also in the background).
+  // Works after a lock screen too, because `now` is re-read when the app becomes visible and the end time is absolute.
   useEffect(() => {
     if (!resting || s.restEndsAt === null) return;
     if (now >= s.restEndsAt && firedFor.current !== s.restEndsAt) {
       firedFor.current = s.restEndsAt;
-      alarm.fire(settings);
+      if (!nativeTimer) alarm.fire(settings);
       dispatch({ type: 'REST_DONE', now: Date.now() });
     }
   }, [now, resting, s.restEndsAt, alarm, settings, dispatch]);
@@ -65,20 +62,6 @@ export default function Active({ session: s, day, dispatch, settings, suggested,
     setPerSetOpen(false);
   };
 
-  const weightInput = (id: string) => (
-    <div className="row">
-      <input
-        id={id}
-        className="kg-input"
-        inputMode="decimal"
-        placeholder="kg"
-        value={exWeightText}
-        onChange={(e) => dispatch({ type: 'SET_WEIGHT', exerciseId: ex.id, value: e.target.value })}
-      />
-      <span className="unit">kg</span>
-    </div>
-  );
-
   const topBar = (
     <>
       <TopBar
@@ -89,7 +72,7 @@ export default function Active({ session: s, day, dispatch, settings, suggested,
         }
         center={
           <span className="top-center">
-            <DayTag dayId={day.id} />
+            <DayTag label={day.name} color={color} />
             <span className="top-ex">
               Pratimas {s.exerciseIndex + 1}/{day.exercises.length}
             </span>
@@ -106,7 +89,7 @@ export default function Active({ session: s, day, dispatch, settings, suggested,
       <ProgressBar percent={prog.percent} color={color} />
       {confirmExit && (
         <Confirm
-          text="Išeiti į pradžią? Progresas lieka išsaugotas, galėsi tęsti."
+          text="Išeiti į pradžią? Treniruotė lieka išsaugota, galėsi tęsti."
           yes="Į pradžią"
           no="Tęsti"
           onYes={onExit}
@@ -128,13 +111,11 @@ export default function Active({ session: s, day, dispatch, settings, suggested,
     const target = s.restTarget;
     const nextEx = day.exercises[target.exerciseIndex];
     const afterExercise = s.restLabel === 'exercise';
-    const label = afterExercise ? 'Poilsis prieš kitą pratimą' : `Poilsis prieš setą ${target.setIndex + 1}/${ex.sets}`;
-    const askWeight = afterExercise && (!OPTIONAL_WEIGHT.has(ex.id) || askOptional);
     return (
       <div className="screen active" style={{ '--day': color } as CSSProperties}>
         {topBar}
         <div className="rest-view">
-          <div className="rest-label">{label}</div>
+          <div className="rest-label">{afterExercise ? 'Poilsis prieš kitą pratimą' : `Poilsis prieš setą ${target.setIndex + 1}/${ex.sets}`}</div>
           <div className="ring-wrap">
             <svg viewBox="0 0 120 120" className="ring" aria-hidden="true">
               <circle cx="60" cy="60" r="54" className="ring-bg" />
@@ -142,25 +123,8 @@ export default function Active({ session: s, day, dispatch, settings, suggested,
             </svg>
             <div className="ring-time h-display">{formatClock(Math.ceil(remainingMs / 1000))}</div>
           </div>
-
-          {afterExercise &&
-            (askWeight ? (
-              <div className="weight-ask">
-                <div className="weight-ask-title">Kokį svorį naudojai?</div>
-                <div className="muted small">
-                  {ex.name} · {done} setai{lastW !== undefined ? ` · praeitą kartą ${formatWeight(lastW)}` : ''}
-                </div>
-                {weightInput('kg-exercise')}
-                <div className="muted small">Įrašoma visiems šio pratimo setams, be atskiro patvirtinimo.</div>
-              </div>
-            ) : (
-              <button className="link" onClick={() => setAskOptional(true)}>
-                + įrašyti svorį ({ex.name})
-              </button>
-            ))}
-
           <div className="next-card">
-            <img src={nextEx.image} alt="" />
+            <ExerciseImage src={nextEx.image} name={nextEx.name} className="next-img" />
             <div>
               <div className="muted small">{afterExercise ? 'Toliau' : 'Tas pats pratimas'}</div>
               <div className="next-name">{nextEx.name}</div>
@@ -187,11 +151,11 @@ export default function Active({ session: s, day, dispatch, settings, suggested,
     <div className="screen active" style={{ '--day': color } as CSSProperties}>
       {topBar}
       <div className="ex-head">
-        <div className="muted small">{ex.focus}</div>
+        {ex.focus && <div className="muted small">{ex.focus}</div>}
         <h1 className="h-display ex-title">{ex.name}</h1>
       </div>
-      <img src={ex.image} alt={ex.name} className="ex-image" />
-      <p className="ex-desc">{ex.description}</p>
+      <ExerciseImage src={ex.image} name={ex.name} className="ex-image" />
+      {ex.description && <p className="ex-desc">{ex.description}</p>}
 
       <div className="set-info">
         <div className="set-dots" aria-hidden="true">
@@ -203,7 +167,7 @@ export default function Active({ session: s, day, dispatch, settings, suggested,
           <span className="h-display big">{allDone ? 'Visi setai atlikti' : `Setas ${done + 1} / ${ex.sets}`}</span>
           <span className="h-display big reps">{ex.reps}</span>
         </div>
-        <div className="muted small">Poilsis po seto: {restFor(s, day, s.exerciseIndex)} s</div>
+        <div className="muted small">Poilsis po seto: {restFor(s, s.exerciseIndex)} s</div>
       </div>
 
       {perSetOpen ? (
@@ -274,11 +238,7 @@ export default function Active({ session: s, day, dispatch, settings, suggested,
           <button className="btn btn-ghost" disabled={prog.done === 0} onClick={() => dispatch({ type: 'UNDO_SET', now: Date.now() })}>
             Anuliuoti setą
           </button>
-          <button
-            className="btn btn-ghost"
-            disabled={s.exerciseIndex >= day.exercises.length - 1}
-            onClick={() => dispatch({ type: 'NEXT_EXERCISE' })}
-          >
+          <button className="btn btn-ghost" disabled={s.exerciseIndex >= day.exercises.length - 1} onClick={() => dispatch({ type: 'NEXT_EXERCISE' })}>
             Kitas ›
           </button>
         </div>

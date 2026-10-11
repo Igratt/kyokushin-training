@@ -1,44 +1,52 @@
 import { useState, type CSSProperties } from 'react';
-import type { Day } from '../types';
-import { DAY_COLORS } from '../data/program';
-import { Confirm, DayTag, TopBar } from '../ui';
+import type { Day, Program, Session } from '../types';
+import { plural } from '../data/programs';
+import { progress } from '../workout/engine';
+import { Confirm, DayTag, ExerciseImage, TopBar } from '../ui';
 
 interface Props {
+  program: Program;
   day: Day;
   restOverrides: Record<string, number>;
-  onSetRest: (exerciseId: string, seconds: number | null) => void;
+  onSetRest: (key: string, seconds: number | null) => void;
   onStart: () => void;
   onBack: () => void;
-  hasActive: boolean;
+  active: Session | null;
 }
 
 export default function Preview(p: Props) {
   const [confirm, setConfirm] = useState(false);
   const totalSets = p.day.exercises.reduce((n, e) => n + e.sets, 0);
-  const start = () => (p.hasActive ? setConfirm(true) : p.onStart());
+  const running = p.active && p.active.phase !== 'FINISHED' ? p.active : null;
+  const runningProg = running ? progress(running) : null;
+  const start = () => (running ? setConfirm(true) : p.onStart());
+  const count = p.day.exercises.length;
 
   return (
-    <div className="screen" style={{ '--day': DAY_COLORS[p.day.id] } as CSSProperties}>
+    <div className="screen" style={{ '--day': p.day.color } as CSSProperties}>
       <TopBar
         left={
           <button className="btn-icon" onClick={p.onBack} aria-label="Atgal">
             ‹
           </button>
         }
-        center={<DayTag dayId={p.day.id} />}
+        center={<DayTag label={p.day.name} color={p.day.color} />}
       />
-      <h1 className="h-display title">{p.day.subtitle}</h1>
+      <h1 className="h-display title">{p.day.subtitle ?? p.day.name}</h1>
       <p className="muted small">
-        {p.day.exercises.length} pratimai · {totalSets} setai. Poilsį po setu gali pakoreguoti čia, prieš startą.
+        {count} {plural(count, 'pratimas', 'pratimai', 'pratimų')} · {totalSets} {plural(totalSets, 'setas', 'setai', 'setų')}. Poilsį po setu gali
+        pakoreguoti čia, prieš startą.
       </p>
 
       <ol className="ex-list">
         {p.day.exercises.map((ex, i) => {
-          const rest = p.restOverrides[ex.id] ?? ex.restSeconds;
-          const changed = p.restOverrides[ex.id] !== undefined && p.restOverrides[ex.id] !== ex.restSeconds;
+          const key = `${p.program.id}/${ex.id}`;
+          const override = p.restOverrides[key];
+          const rest = override ?? ex.restSeconds;
+          const changed = override !== undefined && override !== ex.restSeconds;
           return (
             <li key={ex.id} className="ex-row">
-              <img src={ex.image} alt="" className="thumb" loading="lazy" />
+              <ExerciseImage src={ex.image} name={ex.name} className="thumb" />
               <div className="ex-main">
                 <div className="ex-name">
                   <span className="num">{i + 1}</span>
@@ -49,15 +57,15 @@ export default function Preview(p: Props) {
                 </div>
               </div>
               <div className="rest-ctl">
-                <button className="btn-mini" onClick={() => p.onSetRest(ex.id, Math.max(15, rest - 15))} aria-label="Mažiau poilsio">
+                <button className="btn-mini" onClick={() => p.onSetRest(key, Math.max(15, rest - 15))} aria-label="Mažiau poilsio">
                   −
                 </button>
                 <span className={'rest-val' + (changed ? ' changed' : '')}>{rest} s</span>
-                <button className="btn-mini" onClick={() => p.onSetRest(ex.id, Math.min(600, rest + 15))} aria-label="Daugiau poilsio">
+                <button className="btn-mini" onClick={() => p.onSetRest(key, Math.min(600, rest + 15))} aria-label="Daugiau poilsio">
                   +
                 </button>
                 {changed && (
-                  <button className="link-mini" onClick={() => p.onSetRest(ex.id, null)}>
+                  <button className="link-mini" onClick={() => p.onSetRest(key, null)}>
                     atstatyti
                   </button>
                 )}
@@ -68,12 +76,11 @@ export default function Preview(p: Props) {
       </ol>
 
       <div className="sticky-bottom">
-        {confirm ? (
+        {confirm && running && runningProg ? (
           <Confirm
-            text="Yra nebaigta treniruotė. Pradėti naują ir ją atmesti?"
+            text={`Pradėta ${running.day.name} (${runningProg.done}/${runningProg.planned} setų) bus užbaigta. Atlikti setai liks istorijoje.`}
             yes="Pradėti naują"
             no="Ne"
-            danger
             onYes={p.onStart}
             onNo={() => setConfirm(false)}
           />

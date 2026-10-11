@@ -1,13 +1,13 @@
-import type { Day, DayId, Position, Session, SetLog, WorkoutRecord } from '../types';
+import type { Day, Position, Program, Session, SetLog, WorkoutRecord } from '../types';
+import { DEFAULT_PROGRAM_ID, exerciseKey } from '../data/programs';
 
 /*
- * Workout state machine. Pure functions only, so the whole flow can be reasoned about
- * (and tested) without React:
+ * Workout state machine. Pure functions only:
  *
  *   ACTIVE_SET --COMPLETE_SET--> RESTING --(timer / skip)--> ACTIVE_SET ... --> FINISHED
  *
- * Rest is stored as an absolute end timestamp, so a locked phone or a closed tab
- * never pauses it.
+ * Rest is stored as an absolute end timestamp, so a locked phone or a closed app never pauses it.
+ * After the last set of an exercise, `pendingWeightFor` opens the "what weight did you use?" dialog.
  */
 
 export type Action =
@@ -19,114 +19,177 @@ export type Action =
   | { type: 'NEXT_EXERCISE' }
   | { type: 'UNDO_SET'; now: number }
   | { type: 'SET_WEIGHT'; exerciseId: string; value: string }
+  | { type: 'RESOLVE_WEIGHT'; exerciseId: string; value: string | null }
   | { type: 'SET_NOTE'; exerciseId: string; value: string }
+  | { type: 'SET_WORKOUT_NOTE'; value: string }
   | { type: 'FINISH'; now: number }
   | { type: 'REOPEN' };
 
 const DOUBLE_TAP_MS = 700;
+/** Finishing a workout long after its last set (e.g. the next day) dates it to that last set. */
+const STALE_FINISH_MS = 30 * 60 * 1000;
 
-export function createSession(
-  day: Day,
-  opts: { restOverrides: Record<string, number>; suggestedWeights: Record<string, number>; now: number },
-): Session {
-  const weights: Record<string, string> = {};
-  for (const ex of day.exercises) {
-    const w = opts.suggestedWeights[ex.id];
-    if (w !== undefined) weights[ex.id] = String(w);
+const NO_REST = { restEndsAt: null, restSeconds: null, restTarget: null, restLabel: null } as const;
+
+function newId(now: number): string {
+  return now.toString(36) + '-' + Math.random().toString(36).slice(2, 8);
+}
+
+function clone<T>(v: T): T {
+  return JSON.parse(JSON.stringify(v)) as T;
+}
+
+export function createSession(program: Program, day: Day, opts: { restOverrides: Record<string, number>; now: number }): Session {
+  const snapshot = clone(day);
+  const rest: Record<string, number> = {};
+  for (const ex of snapshot.exercises) {
+    const o = opts.restOverrides[`${program.id}/${ex.id}`];
+    if (o !== undefined) rest[ex.id] = o;
   }
   return {
+    id: newId(opts.now),
+    programId: program.id,
+    programName: program.programName,
     dayId: day.id,
+    day: snapshot,
     startedAt: new Date(opts.now).toISOString(),
     phase: 'ACTIVE_SET',
     exerciseIndex: 0,
     setIndex: 0,
-    restEndsAt: null,
-    restSeconds: null,
-    restTarget: null,
-    restLabel: null,
-    logs: day.exercises.map((ex) => ({ exerciseId: ex.id, sets: [] })),
-    weights,
+    ...NO_REST,
+    logs: snapshot.exercises.map((ex) => ({ exerciseId: ex.id, sets: [] })),
+    weights: {},
     notes: {},
-    restOverrides: { ...opts.restOverrides },
+    restOverrides: rest,
     lastActionAt: 0,
+    pendingWeightFor: null,
   };
 }
 
-export function restFor(session: Session, day: Day, exerciseIndex: number): number {
-  const ex = day.exercises[exerciseIndex];
-  const override = session.restOverrides[ex.id];
+/** Brings a stored session up to the current shape (older app versions saved fewer fields). */
+export function migrateSession(raw: unknown, programs: Program[]): Session | null {
+  if (!raw || typeof raw !== 'object') return null;
+  const s = raw as Partial<Session>;
+  if (!s.dayId || !Array.isArray(s.logs)) return null;
+  const programId = s.programId ?? DEFAULT_PROGRAM_ID;
+  const program = programs.find((p) => p.id === programId) ?? programs.find((p) => p.id === DEFAULT_PROGRAM_ID);
+  let day = s.day && Array.isArray(s.day.exercises) && s.day.exercises.length ? s.day : undefined;
+  if (!day) {
+    const fromProgram = program?.days.find((d) => d.id === s.dayId);
+    if (!fromProgram) return null;
+    day = clone(fromProgram);
+  }
+  if (!day.color) day = { ...day, color: program?.days.find((d) => d.id === day?.id)?.color ?? '#3B82F6' };
+  const oldLogs = s.logs;
+  const logs = day.exercises.map((ex, i) => {
+    const found = oldLogs[i]?.exerciseId === ex.id ? oldLogs[i] : oldLogs.find((l) => l?.exerciseId === ex.id);
+    return found && Array.isArray(found.sets) ? found : { exerciseId: ex.id, sets: [] };
+  });
+  const count = day.exercises.length;
+  const exerciseIndex = Math.min(Math.max(0, s.exerciseIndex ?? 0), count - 1);
+  const targetOk = !!s.restTarget && s.restTarget.exerciseIndex >= 0 && s.restTarget.exerciseIndex < count;
+  const resting = s.phase === 'RESTING' && targetOk && typeof s.restEndsAt === 'number';
+  return {
+    id: s.id ?? newId(Date.parse(s.startedAt ?? '') || Date.now()),
+    programId,
+    programName: s.programName ?? program?.programName ?? '',
+    dayId: s.dayId,
+    day,
+    startedAt: s.startedAt ?? new Date().toISOString(),
+    finishedAt: s.finishedAt,
+    phase: s.phase === 'FINISHED' ? 'FINISHED' : resting ? 'RESTING' : 'ACTIVE_SET',
+    exerciseIndex,
+    setIndex: s.setIndex ?? 0,
+    restEndsAt: resting ? (s.restEndsAt as number) : null,
+    restSeconds: resting ? s.restSeconds ?? null : null,
+    restTarget: resting ? (s.restTarget as Position) : null,
+    restLabel: resting ? s.restLabel ?? null : null,
+    logs,
+    weights: s.weights ?? {},
+    notes: s.notes ?? {},
+    workoutNote: s.workoutNote,
+    restOverrides: s.restOverrides ?? {},
+    lastActionAt: s.lastActionAt ?? 0,
+    pendingWeightFor: s.pendingWeightFor && day.exercises.some((e) => e.id === s.pendingWeightFor) ? s.pendingWeightFor : null,
+  };
+}
+
+export function restFor(s: Session, exerciseIndex: number): number {
+  const ex = s.day.exercises[exerciseIndex];
+  const override = s.restOverrides[ex.id];
   return override !== undefined && override > 0 ? override : ex.restSeconds;
 }
 
-export function parseWeight(text: string | undefined): number | null {
-  if (!text) return null;
-  const n = parseFloat(text.replace(',', '.'));
+export function parseWeight(value: string | undefined | null): number | null {
+  if (!value) return null;
+  const n = parseFloat(value.replace(',', '.'));
   return Number.isFinite(n) && n > 0 ? n : null;
 }
 
-function nextIncompleteAfter(session: Session, day: Day, from: number): number | null {
-  for (let i = from + 1; i < day.exercises.length; i++) {
-    if (session.logs[i].sets.length < day.exercises[i].sets) return i;
+export function formatKg(n: number): string {
+  return Number.isInteger(n) ? String(n) : String(n).replace('.', ',');
+}
+
+function nextIncompleteAfter(s: Session, from: number): number | null {
+  for (let i = from + 1; i < s.day.exercises.length; i++) {
+    if (s.logs[i].sets.length < s.day.exercises[i].sets) return i;
   }
   return null;
 }
 
-function positionFor(session: Session, day: Day, exerciseIndex: number): Position {
-  const done = session.logs[exerciseIndex].sets.length;
-  return { exerciseIndex, setIndex: Math.min(done, day.exercises[exerciseIndex].sets - 1) };
+function positionFor(s: Session, exerciseIndex: number): Position {
+  const done = s.logs[exerciseIndex].sets.length;
+  return { exerciseIndex, setIndex: Math.min(done, s.day.exercises[exerciseIndex].sets - 1) };
 }
 
-export function reduce(s: Session, day: Day, a: Action): Session {
+function lastSetTime(s: Session): string {
+  let t = '';
+  for (const l of s.logs) for (const st of l.sets) if (st.completedAt > t) t = st.completedAt;
+  return t;
+}
+
+export function reduce(s: Session, a: Action): Session {
+  const day = s.day;
   switch (a.type) {
     case 'COMPLETE_SET': {
-      if (s.phase !== 'ACTIVE_SET') return s;
+      if (s.phase !== 'ACTIVE_SET' || s.pendingWeightFor) return s;
       if (a.now - s.lastActionAt < DOUBLE_TAP_MS) return s;
       const ex = day.exercises[s.exerciseIndex];
       const log = s.logs[s.exerciseIndex];
       if (log.sets.length >= ex.sets) return s;
-      // Weight is normally asked once per exercise (see effectiveSets); a value typed for this set wins.
+      // The weight is asked once per exercise (pendingWeightFor); a value typed for this set wins.
       const perSetKg = parseWeight(a.perSetWeight);
-      const newLog = {
-        ...log,
-        sets: [
-          ...log.sets,
-          { set: log.sets.length + 1, reps: ex.reps, weightKg: perSetKg, perSet: perSetKg !== null, completedAt: new Date(a.now).toISOString() },
-        ],
+      const setLog: SetLog = {
+        set: log.sets.length + 1,
+        reps: ex.reps,
+        weightKg: perSetKg,
+        perSet: perSetKg !== null,
+        completedAt: new Date(a.now).toISOString(),
       };
+      const newLog = { ...log, sets: [...log.sets, setLog] };
       const logs = s.logs.map((l, i) => (i === s.exerciseIndex ? newLog : l));
-      const withLogs = { ...s, logs, lastActionAt: a.now };
+      const exerciseDone = newLog.sets.length >= ex.sets;
+      const base: Session = { ...s, logs, lastActionAt: a.now, pendingWeightFor: exerciseDone ? ex.id : null };
       let target: Position | null = null;
       let label: 'set' | 'exercise' | null = null;
-      if (newLog.sets.length < ex.sets) {
+      if (!exerciseDone) {
         target = { exerciseIndex: s.exerciseIndex, setIndex: newLog.sets.length };
         label = 'set';
       } else {
-        const next = nextIncompleteAfter(withLogs, day, s.exerciseIndex);
+        const next = nextIncompleteAfter(base, s.exerciseIndex);
         if (next !== null) {
           target = { exerciseIndex: next, setIndex: logs[next].sets.length };
           label = 'exercise';
         }
       }
-      if (!target) {
-        return { ...withLogs, phase: 'FINISHED', finishedAt: new Date(a.now).toISOString(), restEndsAt: null, restSeconds: null, restTarget: null, restLabel: null };
-      }
-      const rest = restFor(s, day, s.exerciseIndex);
-      return { ...withLogs, phase: 'RESTING', restEndsAt: a.now + rest * 1000, restSeconds: rest, restTarget: target, restLabel: label };
+      if (!target) return { ...base, phase: 'FINISHED', finishedAt: new Date(a.now).toISOString(), ...NO_REST };
+      const rest = restFor(s, s.exerciseIndex);
+      return { ...base, phase: 'RESTING', restEndsAt: a.now + rest * 1000, restSeconds: rest, restTarget: target, restLabel: label };
     }
     case 'REST_DONE':
     case 'SKIP_REST': {
       if (s.phase !== 'RESTING' || !s.restTarget) return s;
-      return {
-        ...s,
-        phase: 'ACTIVE_SET',
-        exerciseIndex: s.restTarget.exerciseIndex,
-        setIndex: s.restTarget.setIndex,
-        restEndsAt: null,
-        restSeconds: null,
-        restTarget: null,
-        restLabel: null,
-        lastActionAt: a.now,
-      };
+      return { ...s, phase: 'ACTIVE_SET', exerciseIndex: s.restTarget.exerciseIndex, setIndex: s.restTarget.setIndex, ...NO_REST, lastActionAt: a.now };
     }
     case 'ADJUST_REST': {
       if (s.phase !== 'RESTING' || s.restEndsAt === null) return s;
@@ -136,11 +199,11 @@ export function reduce(s: Session, day: Day, a: Action): Session {
     }
     case 'PREV_EXERCISE': {
       if (s.phase !== 'ACTIVE_SET' || s.exerciseIndex === 0) return s;
-      return { ...s, ...positionFor(s, day, s.exerciseIndex - 1) };
+      return { ...s, ...positionFor(s, s.exerciseIndex - 1) };
     }
     case 'NEXT_EXERCISE': {
       if (s.phase !== 'ACTIVE_SET' || s.exerciseIndex >= day.exercises.length - 1) return s;
-      return { ...s, ...positionFor(s, day, s.exerciseIndex + 1) };
+      return { ...s, ...positionFor(s, s.exerciseIndex + 1) };
     }
     case 'UNDO_SET': {
       let bestIdx = -1;
@@ -160,87 +223,121 @@ export function reduce(s: Session, day: Day, a: Action): Session {
         phase: 'ACTIVE_SET',
         exerciseIndex: bestIdx,
         setIndex: logs[bestIdx].sets.length,
-        restEndsAt: null,
-        restSeconds: null,
-        restTarget: null,
-        restLabel: null,
+        ...NO_REST,
         finishedAt: undefined,
         lastActionAt: a.now,
+        pendingWeightFor: s.pendingWeightFor === logs[bestIdx].exerciseId ? null : s.pendingWeightFor ?? null,
       };
     }
     case 'SET_WEIGHT':
       return { ...s, weights: { ...s.weights, [a.exerciseId]: a.value } };
+    case 'RESOLVE_WEIGHT': {
+      if (s.pendingWeightFor !== a.exerciseId) return s;
+      const weights = { ...s.weights };
+      if (a.value !== null && parseWeight(a.value) !== null) weights[a.exerciseId] = a.value.trim();
+      return { ...s, weights, pendingWeightFor: null };
+    }
     case 'SET_NOTE':
       return { ...s, notes: { ...s.notes, [a.exerciseId]: a.value } };
+    case 'SET_WORKOUT_NOTE':
+      return { ...s, workoutNote: a.value };
     case 'FINISH': {
       if (s.phase === 'FINISHED') return s;
-      return { ...s, phase: 'FINISHED', finishedAt: new Date(a.now).toISOString(), restEndsAt: null, restSeconds: null, restTarget: null, restLabel: null };
+      const last = lastSetTime(s);
+      const finishedAt = last && a.now - Date.parse(last) > STALE_FINISH_MS ? last : new Date(a.now).toISOString();
+      return { ...s, phase: 'FINISHED', finishedAt, ...NO_REST };
     }
     case 'REOPEN': {
       if (s.phase !== 'FINISHED') return s;
-      return { ...s, phase: 'ACTIVE_SET', finishedAt: undefined, ...positionFor(s, day, s.exerciseIndex) };
+      return { ...s, phase: 'ACTIVE_SET', finishedAt: undefined, ...positionFor(s, s.exerciseIndex) };
     }
     default:
       return s;
   }
 }
 
-export function progress(session: Session, day: Day): { done: number; planned: number; percent: number } {
-  const planned = day.exercises.reduce((n, e) => n + e.sets, 0);
-  const done = session.logs.reduce((n, l) => n + l.sets.length, 0);
+export function progress(s: Session): { done: number; planned: number; percent: number } {
+  const planned = s.day.exercises.reduce((n, e) => n + e.sets, 0);
+  const done = s.logs.reduce((n, l) => n + l.sets.length, 0);
   return { done, planned, percent: planned ? Math.round((done / planned) * 100) : 0 };
 }
 
-/** Sets of one exercise with the weight resolved: a weight typed for that set wins, otherwise the exercise-level weight. */
-export function effectiveSets(session: Session, day: Day, exerciseIndex: number): SetLog[] {
-  const ex = day.exercises[exerciseIndex];
-  const exerciseKg = parseWeight(session.weights[ex.id]);
-  return session.logs[exerciseIndex].sets.map((st) => (st.perSet ? st : { ...st, weightKg: exerciseKg }));
+/** Sets of one exercise with the weight resolved: a weight typed for that set wins, otherwise the exercise weight. */
+export function effectiveSets(s: Session, exerciseIndex: number): SetLog[] {
+  const ex = s.day.exercises[exerciseIndex];
+  const exerciseKg = parseWeight(s.weights[ex.id]);
+  return s.logs[exerciseIndex].sets.map((st) => (st.perSet ? st : { ...st, weightKg: exerciseKg }));
 }
 
-export function toRecord(session: Session, day: Day, note: string): WorkoutRecord {
-  const finishedAt = session.finishedAt ?? new Date().toISOString();
-  const { done, planned } = progress(session, day);
+export function toRecord(s: Session): WorkoutRecord {
+  const { done, planned } = progress(s);
+  const finishedAt = s.finishedAt ?? (lastSetTime(s) || s.startedAt);
   return {
-    id: finishedAt + '-' + day.id,
-    dayId: day.id,
-    startedAt: session.startedAt,
+    id: s.id,
+    programId: s.programId,
+    programName: s.programName,
+    dayId: s.dayId,
+    dayName: s.day.name,
+    dayColor: s.day.color,
+    startedAt: s.startedAt,
     finishedAt,
-    durationSec: Math.max(0, Math.round((Date.parse(finishedAt) - Date.parse(session.startedAt)) / 1000)),
+    durationSec: Math.max(0, Math.round((Date.parse(finishedAt) - Date.parse(s.startedAt)) / 1000)),
     totalSetsDone: done,
     totalSetsPlanned: planned,
-    exercises: day.exercises.map((ex, i) => ({
+    exercises: s.day.exercises.map((ex, i) => ({
       exerciseId: ex.id,
       name: ex.name,
       plannedSets: ex.sets,
       reps: ex.reps,
-      sets: effectiveSets(session, day, i),
-      note: session.notes[ex.id]?.trim() || undefined,
+      sets: effectiveSets(s, i),
+      note: s.notes[ex.id]?.trim() || undefined,
     })),
-    note: note.trim() || undefined,
+    note: s.workoutNote?.trim() || undefined,
+    completed: s.phase === 'FINISHED',
+    updatedAt: new Date().toISOString(),
   };
 }
 
-/** Last weight used per exercise id across history, newest first. */
-export function lastWeights(history: WorkoutRecord[]): Record<string, number> {
+/** Last weight used per exercise (by name, so it carries across days and programs), newest first. */
+export function lastWeights(history: WorkoutRecord[], excludeId?: string): Record<string, number> {
   const out: Record<string, number> = {};
-  const sorted = [...history].sort((a, b) => b.finishedAt.localeCompare(a.finishedAt));
+  const sorted = history.filter((r) => r.id !== excludeId).sort((a, b) => b.finishedAt.localeCompare(a.finishedAt));
   for (const rec of sorted) {
     for (const ex of rec.exercises) {
-      if (out[ex.exerciseId] !== undefined) continue;
-      const withWeight = [...ex.sets].reverse().find((s) => s.weightKg !== null);
-      if (withWeight && withWeight.weightKg !== null) out[ex.exerciseId] = withWeight.weightKg;
+      const key = exerciseKey(ex.name);
+      if (out[key] !== undefined) continue;
+      const withWeight = [...ex.sets].reverse().find((st) => st.weightKg !== null);
+      if (withWeight && withWeight.weightKg !== null) out[key] = withWeight.weightKg;
     }
   }
   return out;
 }
 
-export function lastDoneByDay(history: WorkoutRecord[]): Partial<Record<DayId, string>> {
-  const out: Partial<Record<DayId, string>> = {};
-  for (const rec of history) {
-    if (!out[rec.dayId] || rec.finishedAt > (out[rec.dayId] as string)) out[rec.dayId] = rec.finishedAt;
+export function lastDoneByDay(history: WorkoutRecord[], programId: string): Record<string, string> {
+  const out: Record<string, string> = {};
+  for (const r of history) {
+    if ((r.programId ?? DEFAULT_PROGRAM_ID) !== programId) continue;
+    if (!out[r.dayId] || r.finishedAt > out[r.dayId]) out[r.dayId] = r.finishedAt;
   }
   return out;
+}
+
+/** Texts for the Android notifications during a rest. */
+export function restTimerText(s: Session): { title: string; text: string; doneTitle: string; doneText: string } {
+  const t = s.restTarget;
+  const cur = s.day.exercises[s.exerciseIndex];
+  if (!t) return { title: 'Poilsis', text: '', doneTitle: 'Poilsis baigėsi', doneText: '' };
+  if (s.restLabel === 'set') {
+    const setText = `setas ${t.setIndex + 1}/${cur.sets}`;
+    return { title: `Poilsis · ${cur.name}`, text: `Toliau ${setText}`, doneTitle: 'Poilsis baigėsi', doneText: `${cur.name} · ${setText}` };
+  }
+  const next = s.day.exercises[t.exerciseIndex];
+  return {
+    title: 'Poilsis prieš kitą pratimą',
+    text: `Toliau: ${next.name} · ${next.sets} × ${next.reps}`,
+    doneTitle: 'Poilsis baigėsi',
+    doneText: `Toliau: ${next.name}`,
+  };
 }
 
 export function formatClock(totalSec: number): string {
@@ -258,10 +355,14 @@ export function formatDuration(totalSec: number): string {
 export function formatDate(iso: string): string {
   const d = new Date(iso);
   if (Number.isNaN(d.getTime())) return '';
-  return d.toLocaleDateString('lt-LT', { year: 'numeric', month: '2-digit', day: '2-digit' }) + ' ' + d.toLocaleTimeString('lt-LT', { hour: '2-digit', minute: '2-digit' });
+  return (
+    d.toLocaleDateString('lt-LT', { year: 'numeric', month: '2-digit', day: '2-digit' }) +
+    ' ' +
+    d.toLocaleTimeString('lt-LT', { hour: '2-digit', minute: '2-digit' })
+  );
 }
 
 export function formatWeight(kg: number | null): string {
   if (kg === null) return '—';
-  return (Number.isInteger(kg) ? String(kg) : kg.toFixed(1).replace('.', ',')) + ' kg';
+  return formatKg(Math.round(kg * 100) / 100) + ' kg';
 }

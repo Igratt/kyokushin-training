@@ -1,28 +1,40 @@
 import { useState, type CSSProperties } from 'react';
 import type { WorkoutRecord } from '../types';
-import { DAY_COLORS } from '../data/program';
+import { DEFAULT_PROGRAM_ID, dayColor } from '../data/programs';
 import { formatDate, formatDuration, formatWeight } from '../workout/engine';
 import { Confirm, DayTag, TopBar } from '../ui';
 
 interface Props {
   history: WorkoutRecord[];
+  activeId?: string;
   detailId?: string;
   onOpen: (id: string) => void;
   onBack: () => void;
   onDelete?: (id: string) => void;
 }
 
+const colorOf = (r: WorkoutRecord) => r.dayColor ?? dayColor(r.dayId, 0);
+const nameOf = (r: WorkoutRecord) => r.dayName ?? `${r.dayId} DIENA`;
+
 export default function History(p: Props) {
   const [confirm, setConfirm] = useState(false);
-  const sorted = [...p.history].sort((a, b) => b.finishedAt.localeCompare(a.finishedAt));
+  const multiProgram = new Set(p.history.map((r) => r.programId ?? DEFAULT_PROGRAM_ID)).size > 1;
   const back = (
     <button className="btn-icon" onClick={p.onBack} aria-label="Atgal">
       ‹
     </button>
   );
+  const status = (r: WorkoutRecord) =>
+    r.completed === false ? (
+      r.id === p.activeId ? (
+        <span className="status-pill live">vyksta</span>
+      ) : (
+        <span className="status-pill partial">nebaigta</span>
+      )
+    ) : null;
 
   if (p.detailId) {
-    const rec = sorted.find((r) => r.id === p.detailId);
+    const rec = p.history.find((r) => r.id === p.detailId);
     if (!rec) {
       return (
         <div className="screen">
@@ -32,9 +44,12 @@ export default function History(p: Props) {
       );
     }
     return (
-      <div className="screen" style={{ '--day': DAY_COLORS[rec.dayId] } as CSSProperties}>
-        <TopBar left={back} center={<DayTag dayId={rec.dayId} />} />
-        <h1 className="h-display title">{formatDate(rec.finishedAt)}</h1>
+      <div className="screen" style={{ '--day': colorOf(rec) } as CSSProperties}>
+        <TopBar left={back} center={<DayTag label={nameOf(rec)} color={colorOf(rec)} />} />
+        <h1 className="h-display title">
+          {formatDate(rec.finishedAt)} {status(rec)}
+        </h1>
+        {rec.programName && <p className="muted small">{rec.programName}</p>}
         <div className="stats">
           <div className="stat">
             <div className="h-display stat-num">{formatDuration(rec.durationSec)}</div>
@@ -78,18 +93,21 @@ export default function History(p: Props) {
   return (
     <div className="screen">
       <TopBar left={back} center={<span className="top-ex">Istorija</span>} />
-      {sorted.length === 0 ? (
-        <p className="muted">Dar nėra išsaugotų treniruočių. Užbaigus treniruotę spausk „Išsaugoti treniruotę“.</p>
+      {p.history.length === 0 ? (
+        <p className="muted">Dar nėra treniruočių. Kiekvienas atliktas setas čia įsirašo automatiškai.</p>
       ) : (
         <ul className="hist-list">
-          {sorted.map((r) => (
+          {p.history.map((r) => (
             <li key={r.id}>
-              <button className="hist-row" style={{ '--day': DAY_COLORS[r.dayId] } as CSSProperties} onClick={() => p.onOpen(r.id)}>
-                <span className="hist-day h-display">{r.dayId}</span>
+              <button className="hist-row" style={{ '--day': colorOf(r) } as CSSProperties} onClick={() => p.onOpen(r.id)}>
+                <span className="hist-day h-display">{r.dayId.slice(0, 2)}</span>
                 <span className="hist-main">
-                  <span>{formatDate(r.finishedAt)}</span>
+                  <span>
+                    {formatDate(r.finishedAt)} {status(r)}
+                  </span>
                   <span className="muted small">
                     {formatDuration(r.durationSec)} · {r.totalSetsDone}/{r.totalSetsPlanned} setų
+                    {multiProgram && r.programName ? ` · ${r.programName}` : ''}
                   </span>
                 </span>
                 <span className="chev">›</span>

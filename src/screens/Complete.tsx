@@ -1,28 +1,27 @@
 import { useMemo, useState, type CSSProperties } from 'react';
-import type { Day, Session } from '../types';
-import { DAY_COLORS, OPTIONAL_WEIGHT } from '../data/program';
+import type { Session } from '../types';
+import { exerciseKey } from '../data/programs';
 import { formatDuration, formatWeight, toRecord, type Action } from '../workout/engine';
 import { Confirm, DayTag, TopBar } from '../ui';
 
 interface Props {
   session: Session;
-  day: Day;
   suggested: Record<string, number>;
   dispatch: (a: Action) => void;
-  onSave: (note: string) => void;
-  onDiscard: () => void;
+  onClose: () => void;
+  onDelete: () => void;
   onReopen: () => void;
 }
 
-export default function Complete({ session: s, day, suggested, dispatch, onSave, onDiscard, onReopen }: Props) {
-  const [note, setNote] = useState('');
+export default function Complete({ session: s, suggested, dispatch, onClose, onDelete, onReopen }: Props) {
   const [confirm, setConfirm] = useState(false);
-  const rec = useMemo(() => toRecord(s, day, note), [s, day, note]);
+  const rec = useMemo(() => toRecord(s), [s]);
 
   return (
-    <div className="screen" style={{ '--day': DAY_COLORS[day.id] } as CSSProperties}>
-      <TopBar center={<DayTag dayId={day.id} />} />
+    <div className="screen" style={{ '--day': s.day.color } as CSSProperties}>
+      <TopBar center={<DayTag label={s.day.name} color={s.day.color} />} />
       <h1 className="h-display title">Treniruotė baigta</h1>
+      <div className="saved-note">✓ Išsaugota istorijoje</div>
 
       <div className="stats">
         <div className="stat">
@@ -37,11 +36,11 @@ export default function Complete({ session: s, day, suggested, dispatch, onSave,
         </div>
       </div>
 
-      <p className="muted small">Patikrink svorius: lauką gali pataisyti, jis galioja visiems to pratimo setams.</p>
+      <p className="muted small">Svorį gali pataisyti: jis galioja visiems to pratimo setams.</p>
       <ul className="sum-list">
         {rec.exercises.map((e, i) => {
-          const ex = day.exercises[i];
-          const last = suggested[ex.id];
+          const ex = s.day.exercises[i];
+          const last = suggested[exerciseKey(ex.name)];
           return (
             <li key={e.exerciseId}>
               <div className="sum-name">
@@ -51,7 +50,7 @@ export default function Complete({ session: s, day, suggested, dispatch, onSave,
                   {e.sets.length}/{e.plannedSets} setai
                 </span>
               </div>
-              {e.sets.length > 0 && !OPTIONAL_WEIGHT.has(ex.id) && (
+              {e.sets.length > 0 && (
                 <div className="row">
                   <input
                     className="kg-input kg-small"
@@ -71,21 +70,26 @@ export default function Complete({ session: s, day, suggested, dispatch, onSave,
         })}
       </ul>
 
-      <textarea rows={3} placeholder="Bendra pastaba (nebūtina)" value={note} onChange={(e) => setNote(e.target.value)} />
+      <textarea
+        rows={3}
+        placeholder="Bendra pastaba (nebūtina)"
+        value={s.workoutNote ?? ''}
+        onChange={(e) => dispatch({ type: 'SET_WORKOUT_NOTE', value: e.target.value })}
+      />
 
       <div className="sticky-bottom">
-        <button className="btn btn-xl btn-day" onClick={() => onSave(note)}>
-          Išsaugoti treniruotę
+        <button className="btn btn-xl btn-day" onClick={onClose}>
+          Grįžti į pradžią
         </button>
         <div className="row nav-row">
           <button className="btn btn-ghost" onClick={onReopen}>
             ‹ Grįžti į treniruotę
           </button>
-          <button className="btn btn-ghost" onClick={() => setConfirm(true)}>
-            Į pradžią neišsaugojus
+          <button className="btn btn-ghost danger-text" onClick={() => setConfirm(true)}>
+            Ištrinti
           </button>
         </div>
-        {confirm && <Confirm text="Neišsaugota treniruotė bus prarasta." yes="Prarasti" no="Ne" danger onYes={onDiscard} onNo={() => setConfirm(false)} />}
+        {confirm && <Confirm text="Ištrinti šią treniruotę iš istorijos?" yes="Ištrinti" no="Ne" danger onYes={onDelete} onNo={() => setConfirm(false)} />}
       </div>
     </div>
   );
