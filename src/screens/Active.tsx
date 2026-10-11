@@ -153,6 +153,18 @@ export default function Active({ session: s, dispatch, settings, suggested, onEx
       <div className="ex-head">
         {ex.focus && <div className="muted small">{ex.focus}</div>}
         <h1 className="h-display ex-title">{ex.name}</h1>
+        {ex.choices && ex.choices.length > 1 && (
+          <div className="row wrap variant-line">
+            <span className={'variant-chip' + ((ex.choice ?? 0) > 0 ? ' on' : '')}>
+              {(ex.choice ?? 0) > 0 ? `variantas${ex.tag ? ': ' + ex.tag : ''}` : 'pagrindinis'}
+            </span>
+            {done === 0 && (
+              <button className="link small" onClick={() => dispatch({ type: 'SWAP_VARIANT', exerciseIndex: s.exerciseIndex })}>
+                ⇄ Keisti į: {ex.choices[((ex.choice ?? 0) + 1) % ex.choices.length].name}
+              </button>
+            )}
+          </div>
+        )}
       </div>
       <ExerciseImage src={ex.image} name={ex.name} className="ex-image" />
       {ex.description && <p className="ex-desc">{ex.description}</p>}

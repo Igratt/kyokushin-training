@@ -171,6 +171,14 @@ ul, ol { padding: 0; list-style: none; }
 .hist-day { font-size: 32px; color: var(--day); text-align: center; }
 .hist-main { display: grid; gap: 2px; font-weight: 600; }
 
+/* exercise variants */
+.variant-btn { display: inline-flex; align-items: center; gap: 8px; margin-top: 4px; padding: 2px 0; text-align: left; flex-wrap: wrap; }
+.variant-chip { display: inline-block; padding: 2px 8px; border-radius: 999px; background: var(--surface-2); color: var(--muted); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
+.variant-chip.on { background: var(--day); color: #0b1020; }
+.variant-swap { color: var(--day); font-size: 13px; font-weight: 700; }
+.variant-line { margin-top: 6px; gap: 6px 12px; }
+.ex-row.is-variant { border-color: color-mix(in srgb, var(--day) 55%, var(--line)); }
+
 /* exercise picture fallback (program without photos) */
 .img-ph { display: grid; place-items: center; text-align: center; padding: 10px; background: linear-gradient(160deg, var(--surface-2), var(--surface)); border: 1px solid var(--line); border-radius: var(--radius); color: var(--muted); font-family: var(--font-display); font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; overflow: hidden; }
 .ex-image.img-ph { aspect-ratio: 3 / 2; font-size: 26px; }

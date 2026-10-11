@@ -17,7 +17,20 @@
           "restSeconds": 75,
           "image": "assets/A_1.png",
           "description": "Lengvai pritūpk, mostelk rankomis ir sprogstamai pašok ant dėžės. Nusileisk minkštai abiem kojomis ir nulipk žemyn.",
-          "focus": "Maksimalus greitis, ne nuovargis."
+          "focus": "Maksimalus greitis, ne nuovargis.",
+          "variants": [
+            {
+              "id": "A1v",
+              "name": "Broad Jump",
+              "tag": "į tolį",
+              "sets": 4,
+              "reps": "3",
+              "restSeconds": 75,
+              "image": "assets/A_1v.webp",
+              "description": "Stovėk pėdų plotyje, mostelk rankomis atgal ir sprogstamai šok kuo toliau į priekį. Nusileisk minkštai ant abiejų kojų sulenktais keliais ir sustok 1–2 s.",
+              "focus": "Maksimalus atstumas, minkštas nusileidimas."
+            }
+          ]
         },
         {
           "id": "A2",
@@ -37,7 +50,20 @@
           "restSeconds": 120,
           "image": "assets/A_3.png",
           "description": "Laikyk štangą arti kojų ir stumk klubus atgal. Turi jausti galinę šlaunį ir sėdmenis, ne vien nugarą.",
-          "focus": "Nugara neutrali, klubai juda atgal."
+          "focus": "Nugara neutrali, klubai juda atgal.",
+          "variants": [
+            {
+              "id": "A3v",
+              "name": "Single-Leg RDL (kettlebell)",
+              "tag": "viena koja",
+              "sets": 3,
+              "reps": "8 / koja",
+              "restSeconds": 90,
+              "image": "assets/A_3v.webp",
+              "description": "Kettlebell laikyk priešingoje rankoje nei atraminė koja. Lenkis per klubą ir laisvą koją kelk atgal, kol liemuo beveik lygiagretus grindims, tada grįžk spausdamas sėdmenį.",
+              "focus": "Tiesi nugara, klubai lygiai, pusiausvyra."
+            }
+          ]
         },
         {
           "id": "A4",
@@ -47,7 +73,20 @@
           "restSeconds": 90,
           "image": "assets/A_4.png",
           "description": "Viena koja priekyje, kita užkelta ant suoliuko. Leiskis per priekinę koją ir laikyk liemenį stabilų.",
-          "focus": "Kontrolė ir vienos kojos stabilumas."
+          "focus": "Kontrolė ir vienos kojos stabilumas.",
+          "variants": [
+            {
+              "id": "A4v",
+              "name": "Goblet Reverse Lunge",
+              "tag": "kettlebell, atgal",
+              "sets": 3,
+              "reps": "8 / koja",
+              "restSeconds": 90,
+              "image": "assets/A_4v.webp",
+              "description": "Kettlebell laikyk prie krūtinės. Ženk viena koja atgal ir leiskis, kol galinis kelis beveik paliečia grindis, tada stumkis priekine koja į pradinę padėtį.",
+              "focus": "Liemuo vertikalus, priekinis kelis stabilus."
+            }
+          ]
         },
         {
           "id": "A5",
@@ -57,7 +96,20 @@
           "restSeconds": 75,
           "image": "assets/A_5.png",
           "description": "Viena koja ant suoliuko ar dėžės, per ją stumkis aukštyn kuo greičiau. Viršuje gali pridėti kelio pakėlimą.",
-          "focus": "Greitis svarbiau už didelį svorį."
+          "focus": "Greitis svarbiau už didelį svorį.",
+          "variants": [
+            {
+              "id": "A5v",
+              "name": "Split Squat Jump",
+              "tag": "šuoliai",
+              "sets": 3,
+              "reps": "5 / koja",
+              "restSeconds": 75,
+              "image": "assets/A_5v.webp",
+              "description": "Įtūpstas, priekinis kelis virš pėdos. Sprogstamai šok aukštyn, ore sukeisk kojas ir nusileisk į įtūpstą su kita koja priekyje.",
+              "focus": "Greitis ir minkštas nusileidimas."
+            }
+          ]
         },
         {
           "id": "A6",
@@ -67,7 +119,20 @@
           "restSeconds": 60,
           "image": "assets/A_6.png",
           "description": "Atsistok ant pakylos krašto ir kelkis ant pirštų. Lėtai nusileisk žemyn, tada stipriai kilk aukštyn.",
-          "focus": "Pilna amplitudė, kontroliuotas nusileidimas."
+          "focus": "Pilna amplitudė, kontroliuotas nusileidimas.",
+          "variants": [
+            {
+              "id": "A6v",
+              "name": "Single-Leg Calf Raise",
+              "tag": "viena koja",
+              "sets": 3,
+              "reps": "10–12 / koja",
+              "restSeconds": 60,
+              "image": "assets/A_6v.webp",
+              "description": "Stovėk viena koja ant pakylos krašto, hantelį laikyk toje pačioje pusėje, kita ranka prisilaikyk. Lėtai nusileisk žemyn ir stipriai kilk ant pirštų.",
+              "focus": "Pilna amplitudė, pauzė viršuje."
+            }
+          ]
         },
         {
           "id": "A7",
@@ -77,7 +142,20 @@
           "restSeconds": 60,
           "image": "assets/A_7.png",
           "description": "Kabėdamas ant skersinio kelk kelius arba tiesesnes kojas aukštyn. Nesisiūbuok ir neleisk judesiui virsti inercija.",
-          "focus": "Core kontrolė, ne siūbavimas."
+          "focus": "Core kontrolė, ne siūbavimas.",
+          "variants": [
+            {
+              "id": "A7v",
+              "name": "Reverse Crunch (ant suolo)",
+              "tag": "ant suolo",
+              "sets": 3,
+              "reps": "12–15",
+              "restSeconds": 60,
+              "image": "assets/A_7v.webp",
+              "description": "Gulėk ant suolo ir rankomis laikykis už jo galo virš galvos. Sulenktus kelius trauk link krūtinės, kol dubuo atsikelia nuo suolo, ir lėtai nuleisk.",
+              "focus": "Judesį daro presas, ne inercija."
+            }
+          ]
         },
         {
           "id": "A8",
@@ -87,7 +165,20 @@
           "restSeconds": 50,
           "image": "assets/A_8.png",
           "description": "Stovėk šonu prie troso ar gumos ir stumk rankas pirmyn. Užduotis – neleisti liemeniui suktis.",
-          "focus": "Anti-rotation ir stabilumas."
+          "focus": "Anti-rotation ir stabilumas.",
+          "variants": [
+            {
+              "id": "A8v",
+              "name": "Half-Kneeling Pallof Press (guma)",
+              "tag": "su guma, klūpint",
+              "sets": 3,
+              "reps": "10 / pusė",
+              "restSeconds": 50,
+              "image": "assets/A_8v.webp",
+              "description": "Klūpėk ant vieno kelio šonu į gumos tvirtinimą. Spausk rankas tiesiai priešais save, sulaikyk 2 s ir neleisk liemeniui pasisukti.",
+              "focus": "Anti-rotation, dubuo stabilus."
+            }
+          ]
         },
         {
           "id": "A9",
@@ -97,7 +188,20 @@
           "restSeconds": 45,
           "image": "assets/A_9.webp",
           "description": "Gulėk ant nugaros, keliai sulenkti, pėdos ant žemės. Lėtai kelk pečius nuo grindų įtempdamas presą, viršuje sustok sekundei ir kontroliuotai nusileisk. Kaklo netempk rankomis.",
-          "focus": "Trumpa, kontroliuota amplitudė, presas visą laiką įtemptas."
+          "focus": "Trumpa, kontroliuota amplitudė, presas visą laiką įtemptas.",
+          "variants": [
+            {
+              "id": "A9v",
+              "name": "Weighted Crunch",
+              "tag": "su svoriu",
+              "sets": 3,
+              "reps": "12–15",
+              "restSeconds": 45,
+              "image": "assets/A_9v.webp",
+              "description": "Kaip įprastas crunch, tik ant krūtinės laikyk svorio diską ar hantelį. Kelk pečius kontroliuotai ir lėtai leiskis.",
+              "focus": "Trumpa amplitudė, kontrolė."
+            }
+          ]
         }
       ]
     },
@@ -114,7 +218,20 @@
           "restSeconds": 75,
           "image": "assets/B_1.png",
           "description": "Stovėk šonu prie sienos, įsuk klubus ir sprogstamai mesk kamuolį. Jėga turi eiti iš pėdos, klubų ir liemens.",
-          "focus": "Maksimalus sprogstamumas."
+          "focus": "Maksimalus sprogstamumas.",
+          "variants": [
+            {
+              "id": "B1v",
+              "name": "Banded Rotational Punch",
+              "tag": "su guma",
+              "sets": 4,
+              "reps": "5 / pusė",
+              "restSeconds": 75,
+              "image": "assets/B_1v.webp",
+              "description": "Gumą pritvirtink už nugaros peties aukštyje. Kovinė stovėsena: sprogstamai smūgiuok į priekį sukdamas galinę pėdą ir klubus, tada kontroliuotai grįžk.",
+              "focus": "Jėga iš pėdos ir klubų, greitas smūgis."
+            }
+          ]
         },
         {
           "id": "B2",
@@ -134,7 +251,20 @@
           "restSeconds": 105,
           "image": "assets/B_3.png",
           "description": "Prisitrauk iki smakro virš skersinio ir pilnai nusileisk. Jei lengva – pridėk papildomą svorį.",
-          "focus": "Jokio siūbavimo."
+          "focus": "Jokio siūbavimo.",
+          "variants": [
+            {
+              "id": "B3v",
+              "name": "Lat Pulldown",
+              "tag": "trosu",
+              "sets": 4,
+              "reps": "6–8",
+              "restSeconds": 90,
+              "image": "assets/B_3v.webp",
+              "description": "Sėsk prie troso ir suimk rankeną plačiau nei pečiai. Trauk iki viršutinės krūtinės, alkūnes vesdamas žemyn, ir lėtai grąžink.",
+              "focus": "Nesisiūbuok, mentės žemyn."
+            }
+          ]
         },
         {
           "id": "B4",
@@ -144,7 +274,20 @@
           "restSeconds": 90,
           "image": "assets/B_4.png",
           "description": "Laikyk štangos galą prie peties ir spausk į viršų–į priekį. Stovėsena stabili, liemuo nekliba.",
-          "focus": "Spaudimas kampu ir core stabilumas."
+          "focus": "Spaudimas kampu ir core stabilumas.",
+          "variants": [
+            {
+              "id": "B4v",
+              "name": "Half-Kneeling Kettlebell Press",
+              "tag": "kettlebell, klūpint",
+              "sets": 3,
+              "reps": "6–8 / ranka",
+              "restSeconds": 90,
+              "image": "assets/B_4v.webp",
+              "description": "Klūpėk ant vieno kelio, kettlebell laikyk prie peties tos pusės, kur kelis ant žemės. Spausk tiesiai virš galvos, liemuo nekliba.",
+              "focus": "Įtemptas presas ir sėdmuo."
+            }
+          ]
         },
         {
           "id": "B5",
@@ -154,7 +297,20 @@
           "restSeconds": 90,
           "image": "assets/B_5.png",
           "description": "Krūtine atsiremk į suolą ir trauk hantelius link savęs. Gale suspausk mentes ir lėtai nuleisk.",
-          "focus": "Viršutinė nugara ir mentės."
+          "focus": "Viršutinė nugara ir mentės.",
+          "variants": [
+            {
+              "id": "B5v",
+              "name": "Seated Cable Row",
+              "tag": "trosu",
+              "sets": 3,
+              "reps": "8–10",
+              "restSeconds": 90,
+              "image": "assets/B_5v.webp",
+              "description": "Sėsk prie troso, pėdos į atramą. Trauk rankeną link pilvo, gale suspausk mentes ir lėtai ištiesk rankas.",
+              "focus": "Viršutinė nugara, liemuo nejuda."
+            }
+          ]
         },
         {
           "id": "B6",
@@ -164,7 +320,20 @@
           "restSeconds": 75,
           "image": "assets/B_6.png",
           "description": "Leiskis į atsispaudimą ir tada stipriai stumkis nuo grindų taip, kad rankos atsiplėštų.",
-          "focus": "Maksimalus greitis, ne iki failure."
+          "focus": "Maksimalus greitis, ne iki failure.",
+          "variants": [
+            {
+              "id": "B6v",
+              "name": "Banded Explosive Push-Ups",
+              "tag": "su guma",
+              "sets": 3,
+              "reps": "5",
+              "restSeconds": 75,
+              "image": "assets/B_6v.webp",
+              "description": "Gumą permesk per nugarą ir prispausk delnais prie grindų. Leiskis kontroliuotai ir sprogstamai stumkis aukštyn prieš gumos pasipriešinimą.",
+              "focus": "Greitas stūmimas, ne iki failure."
+            }
+          ]
         },
         {
           "id": "B7",
@@ -174,7 +343,20 @@
           "restSeconds": 60,
           "image": "assets/B_7.webp",
           "description": "Pasilenk per klubus su tiesia nugara, hanteliai kabo žemyn. Kelk rankas į šonus iki pečių lygio šiek tiek sulenktomis alkūnėmis, gale suspausk mentes ir lėtai nuleisk.",
-          "focus": "Galinė delta ir mentės, ne inercija."
+          "focus": "Galinė delta ir mentės, ne inercija.",
+          "variants": [
+            {
+              "id": "B7v",
+              "name": "Band Pull-Apart",
+              "tag": "su guma",
+              "sets": 3,
+              "reps": "15–20",
+              "restSeconds": 60,
+              "image": "assets/B_7v.webp",
+              "description": "Ištiestomis rankomis laikyk gumą priešais krūtinę. Tempk ją į šonus, kol guma paliečia krūtinę, suspausk mentes ir lėtai grąžink.",
+              "focus": "Galinė delta ir mentės."
+            }
+          ]
         },
         {
           "id": "B8",
@@ -184,7 +366,20 @@
           "restSeconds": 60,
           "image": "assets/B_8.png",
           "description": "Su trosu trauk rankeną įstrižai per kūną. Judesį pradeda liemuo ir presas, o ne vien rankos.",
-          "focus": "Kontroliuota rotacija."
+          "focus": "Kontroliuota rotacija.",
+          "variants": [
+            {
+              "id": "B8v",
+              "name": "Low-to-High Woodchopper",
+              "tag": "iš apačios į viršų",
+              "sets": 3,
+              "reps": "10 / pusė",
+              "restSeconds": 60,
+              "image": "assets/B_8v.webp",
+              "description": "Troso rankeną ar gumą pritvirtink žemai. Trauk ją įstrižai nuo klubo aukštyn per kūną, sukdamas liemenį ir klubus, ir kontroliuotai grąžink.",
+              "focus": "Kontroliuota rotacija."
+            }
+          ]
         },
         {
           "id": "B9",
@@ -194,7 +389,20 @@
           "restSeconds": 45,
           "image": "assets/B_9.webp",
           "description": "Atsiremk į alkūnes ir kojų pirštus, kūnas tiesus nuo galvos iki kulnų. Įtempk pilvą ir sėdmenis, neleisk klubams nukarti ar kilti.",
-          "focus": "Tiesi linija ir ramus kvėpavimas."
+          "focus": "Tiesi linija ir ramus kvėpavimas.",
+          "variants": [
+            {
+              "id": "B9v",
+              "name": "Side Plank",
+              "tag": "šoninė",
+              "sets": 3,
+              "reps": "30–45 s / pusė",
+              "restSeconds": 45,
+              "image": "assets/B_9v.webp",
+              "description": "Atsiremk į dilbį ir pėdos šoną, kūnas tiesus nuo galvos iki kulnų. Klubai aukštai, neleisk jiems nukristi.",
+              "focus": "Tiesi linija, įtemptas šonas."
+            }
+          ]
         }
       ]
     },
@@ -211,7 +419,20 @@
           "restSeconds": 75,
           "image": "assets/C_1.png",
           "description": "Pritūpk negiliai ir iš apačios sprogstamai pašok aukštyn. Nusileisk minkštai ir išlaikyk ritmą.",
-          "focus": "Greitis ir galia."
+          "focus": "Greitis ir galia.",
+          "variants": [
+            {
+              "id": "C1v",
+              "name": "Dumbbell Jump Squat",
+              "tag": "su hanteliais",
+              "sets": 4,
+              "reps": "3",
+              "restSeconds": 75,
+              "image": "assets/C_1v.webp",
+              "description": "Laikyk lengvus hantelius šonuose. Pritūpk negiliai, sprogstamai šok aukštyn ir nusileisk minkštai.",
+              "focus": "Lengvas svoris, maksimalus greitis."
+            }
+          ]
         },
         {
           "id": "C2",
@@ -241,7 +462,20 @@
           "restSeconds": 90,
           "image": "assets/C_4.png",
           "description": "Su hanteliais ženk didelį žingsnį į priekį, leiskis į įtūpstą ir keliauk tolyn išlaikydamas kontrolę.",
-          "focus": "Stabilus kelis ir liemuo."
+          "focus": "Stabilus kelis ir liemuo.",
+          "variants": [
+            {
+              "id": "C4v",
+              "name": "Lateral Lunge",
+              "tag": "į šoną",
+              "sets": 3,
+              "reps": "8 / koja",
+              "restSeconds": 90,
+              "image": "assets/C_4v.webp",
+              "description": "Kettlebell laikyk prie krūtinės. Ženk plačiai į šoną ir leiskis ant tos kojos, kita lieka tiesi, tada stumkis atgal.",
+              "focus": "Visa pėda ant žemės, nugara tiesi."
+            }
+          ]
         },
         {
           "id": "C5",
@@ -251,7 +485,20 @@
           "restSeconds": 90,
           "image": "assets/C_5.png",
           "description": "Prisitraukimai delnais į save. Leiskis pilnai žemyn ir kilk aukštyn be siūbavimo.",
-          "focus": "Pilna amplitudė."
+          "focus": "Pilna amplitudė.",
+          "variants": [
+            {
+              "id": "C5v",
+              "name": "Neutral-Grip Pull-Ups",
+              "tag": "lygiagretus suėmimas",
+              "sets": 3,
+              "reps": "6–10",
+              "restSeconds": 90,
+              "image": "assets/C_5v.webp",
+              "description": "Suimk lygiagrečias rankenas delnais vienas į kitą. Prisitrauk, kol smakras virš rankenų, ir pilnai nusileisk.",
+              "focus": "Pilna amplitudė, be siūbavimo."
+            }
+          ]
         },
         {
           "id": "C6",
@@ -261,7 +508,20 @@
           "restSeconds": 60,
           "image": "assets/C_6.png",
           "description": "Pakelk kamuolį virš galvos ir visa jėga trenk jį į grindis. Naudok visą kūną – pilvą, klubus ir rankas.",
-          "focus": "Sprogstamai, bet techniškai."
+          "focus": "Sprogstamai, bet techniškai.",
+          "variants": [
+            {
+              "id": "C6v",
+              "name": "Rotational Med Ball Slam",
+              "tag": "į šoną",
+              "sets": 4,
+              "reps": "5 / pusė",
+              "restSeconds": 60,
+              "image": "assets/C_6v.webp",
+              "description": "Pakelk kamuolį virš galvos ir sukdamas liemenį trenk jį įstrižai į grindis šalia pėdos. Keisk puses.",
+              "focus": "Sprogstamai, jėga iš liemens."
+            }
+          ]
         },
         {
           "id": "C7",
@@ -271,7 +531,20 @@
           "restSeconds": 75,
           "image": "assets/C_7.png",
           "description": "Paėmęs sunkius hantelius eik stabiliai pirmyn: krūtinė aukštai, pilvas įtemptas, pečiai nesusmukę.",
-          "focus": "Grip, core ir laikysena."
+          "focus": "Grip, core ir laikysena.",
+          "variants": [
+            {
+              "id": "C7v",
+              "name": "Suitcase Carry",
+              "tag": "viena ranka",
+              "sets": 3,
+              "reps": "30–40 m / ranka",
+              "restSeconds": 75,
+              "image": "assets/C_7v.webp",
+              "description": "Sunkų hantelį ar kettlebell neškis vienoje rankoje. Eik tiesiai, nesilenk į šoną, pečiai lygūs.",
+              "focus": "Šoninis presas, laikysena."
+            }
+          ]
         },
         {
           "id": "C8",
@@ -281,7 +554,20 @@
           "restSeconds": 60,
           "image": "assets/C_8.png",
           "description": "Atsiklaupęs ridenk ratuką pirmyn tiek, kiek gali išlaikyti tvirtą liemenį. Neleisk nugarai išsirieti.",
-          "focus": "Core ir anti-extension."
+          "focus": "Core ir anti-extension.",
+          "variants": [
+            {
+              "id": "C8v",
+              "name": "Dead Bug",
+              "tag": "ant nugaros",
+              "sets": 3,
+              "reps": "8 / pusė",
+              "restSeconds": 60,
+              "image": "assets/C_8v.webp",
+              "description": "Gulėk ant nugaros, rankos į viršų, keliai virš klubų. Lėtai tiesk priešingą ranką ir koją link grindų, juosmuo prispaustas, ir grįžk.",
+              "focus": "Juosmuo prispaustas prie grindų."
+            }
+          ]
         },
         {
           "id": "C9",
@@ -291,7 +577,20 @@
           "restSeconds": 45,
           "image": "assets/C_9.webp",
           "description": "Gulėk ant nugaros, rankos prie smilkinių. Traukdamas vieną kelį prie krūtinės suk liemenį ir priešingą alkūnę link kelio, tada keisk puses lėtai ir kontroliuotai.",
-          "focus": "Sukimas iš liemens, ne iš kaklo."
+          "focus": "Sukimas iš liemens, ne iš kaklo.",
+          "variants": [
+            {
+              "id": "C9v",
+              "name": "Russian Twist",
+              "tag": "su kamuoliu",
+              "sets": 3,
+              "reps": "12 / pusė",
+              "restSeconds": 45,
+              "image": "assets/C_9v.webp",
+              "description": "Sėdėk atsilošęs, kojos pakeltos arba ant grindų. Kamuolį sukdamas liemenį lietink prie grindų tai vienoje, tai kitoje pusėje.",
+              "focus": "Sukimas iš liemens, nugara tiesi."
+            }
+          ]
         }
       ]
     }

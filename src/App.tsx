@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactElement } from 'react';
 import { App as CapacitorApp } from '@capacitor/app';
 import type { Program, Session, Settings, WorkoutRecord } from './types';
-import { allPrograms, exerciseKey, findProgram } from './data/programs';
+import { DEFAULT_PROGRAM_ID, allPrograms, exerciseKey, findProgram } from './data/programs';
 import { isNative, restTimer, saveJsonFile } from './native';
 import { mergeHistory, storage, upsertRecord } from './storage';
 import { createSession, lastWeights, migrateSession, reduce, restTimerText, toRecord, type Action } from './workout/engine';
@@ -91,7 +91,11 @@ export default function App() {
     if (!session && (view.name === 'active' || view.name === 'complete')) setView({ name: 'home' });
   }, [session, view.name]);
 
-  const startWorkout = (dayId: string) => {
+  /** How many times this day of this program was done before: drives the alternation of exercise variants. */
+  const rotationFor = (dayId: string) =>
+    history.filter((r) => (r.programId ?? DEFAULT_PROGRAM_ID) === program.id && r.dayId === dayId && r.id !== session?.id).length;
+
+  const startWorkout = (dayId: string, choices?: number[]) => {
     const day = program.days.find((d) => d.id === dayId);
     if (!day) return;
     // A workout that is still open gets finished first; its sets are already in the history.
@@ -100,7 +104,7 @@ export default function App() {
       if (rec.totalSetsDone > 0) setHistory((h) => upsertRecord(h, rec));
     }
     restTimer.prepare();
-    setSession(createSession(program, day, { restOverrides, now: Date.now() }));
+    setSession(createSession(program, day, { restOverrides, now: Date.now(), choices }));
     setView({ name: 'active' });
   };
   const closeSession = () => {
@@ -192,11 +196,13 @@ export default function App() {
       const day = program.days.find((d) => d.id === view.dayId);
       screen = day ? (
         <Preview
+          key={program.id + day.id}
           program={program}
           day={day}
+          rotation={rotationFor(day.id)}
           restOverrides={restOverrides}
           onSetRest={setRest}
-          onStart={() => startWorkout(day.id)}
+          onStart={(choices) => startWorkout(day.id, choices)}
           onBack={() => setView({ name: 'home' })}
           active={session}
         />

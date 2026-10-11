@@ -1,5 +1,5 @@
 import type { Day, Position, Program, Session, SetLog, WorkoutRecord } from '../types';
-import { DEFAULT_PROGRAM_ID, exerciseKey } from '../data/programs';
+import { DEFAULT_PROGRAM_ID, exerciseKey, versionsOf, withChoice } from '../data/programs';
 
 /*
  * Workout state machine. Pure functions only:
@@ -22,6 +22,7 @@ export type Action =
   | { type: 'RESOLVE_WEIGHT'; exerciseId: string; value: string | null }
   | { type: 'SET_NOTE'; exerciseId: string; value: string }
   | { type: 'SET_WORKOUT_NOTE'; value: string }
+  | { type: 'SWAP_VARIANT'; exerciseIndex: number }
   | { type: 'FINISH'; now: number }
   | { type: 'REOPEN' };
 
@@ -39,12 +40,19 @@ function clone<T>(v: T): T {
   return JSON.parse(JSON.stringify(v)) as T;
 }
 
-export function createSession(program: Program, day: Day, opts: { restOverrides: Record<string, number>; now: number }): Session {
-  const snapshot = clone(day);
+export function createSession(
+  program: Program,
+  day: Day,
+  opts: { restOverrides: Record<string, number>; now: number; choices?: number[] },
+): Session {
+  // The snapshot holds the version chosen for each exercise (base or a variant) plus the alternatives.
+  const snapshot: Day = { ...clone(day), exercises: day.exercises.map((ex, i) => withChoice(clone(ex), opts.choices?.[i] ?? 0)) };
   const rest: Record<string, number> = {};
   for (const ex of snapshot.exercises) {
-    const o = opts.restOverrides[`${program.id}/${ex.id}`];
-    if (o !== undefined) rest[ex.id] = o;
+    for (const v of versionsOf(ex)) {
+      const o = opts.restOverrides[`${program.id}/${v.id}`];
+      if (o !== undefined) rest[v.id] = o;
+    }
   }
   return {
     id: newId(opts.now),
@@ -241,6 +249,17 @@ export function reduce(s: Session, a: Action): Session {
       return { ...s, notes: { ...s.notes, [a.exerciseId]: a.value } };
     case 'SET_WORKOUT_NOTE':
       return { ...s, workoutNote: a.value };
+    case 'SWAP_VARIANT': {
+      // Only before the first set of that exercise, so the logged sets always belong to one version.
+      const ex = day.exercises[a.exerciseIndex];
+      if (!ex?.choices || ex.choices.length < 2 || s.logs[a.exerciseIndex].sets.length > 0) return s;
+      const next = withChoice(ex, (ex.choice ?? 0) + 1);
+      return {
+        ...s,
+        day: { ...day, exercises: day.exercises.map((e, i) => (i === a.exerciseIndex ? next : e)) },
+        logs: s.logs.map((l, i) => (i === a.exerciseIndex ? { exerciseId: next.id, sets: [] } : l)),
+      };
+    }
     case 'FINISH': {
       if (s.phase === 'FINISHED') return s;
       const last = lastSetTime(s);

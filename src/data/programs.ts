@@ -63,6 +63,77 @@ function image(v: unknown): string | undefined {
   return /^assets\/[\w-]+\.png$/i.test(s) ? s.replace(/\.png$/i, '.webp') : s;
 }
 
+function normalizeExercise(e: unknown, label: string, fallbackId: string, ids: Set<string>, allowVariants: boolean): Exercise {
+  if (!e || typeof e !== 'object') fail(`${label} neteisingas.`);
+  const er = e as Record<string, unknown>;
+  const name = text(er.name) ?? fail(`${label} be pavadinimo („name“).`);
+  const sets = Math.round(toNumber(er.sets));
+  if (!(sets >= 1 && sets <= 20)) fail(`„${name}“: „sets“ turi būti skaičius nuo 1 iki 20.`);
+  const reps = typeof er.reps === 'number' ? String(er.reps) : text(er.reps) ?? fail(`„${name}“: trūksta „reps“.`);
+  const rest = er.restSeconds === undefined ? 90 : Math.round(toNumber(er.restSeconds));
+  if (!(rest >= 0 && rest <= 900)) fail(`„${name}“: „restSeconds“ turi būti nuo 0 iki 900.`);
+  let id = text(er.id) ?? fallbackId;
+  while (ids.has(id)) id += '_';
+  ids.add(id);
+  let variants: Exercise[] | undefined;
+  if (allowVariants && Array.isArray(er.variants) && er.variants.length > 0) {
+    if (er.variants.length > 5) fail(`„${name}“: daugiausia 5 variantai.`);
+    variants = (er.variants as unknown[]).map((v, vi) => normalizeExercise(v, `„${name}“ ${vi + 1}-asis variantas`, `${id}v${vi + 1}`, ids, false));
+  }
+  return {
+    id,
+    name,
+    sets,
+    reps,
+    restSeconds: rest,
+    image: image(er.image),
+    description: text(er.description),
+    focus: text(er.focus),
+    tag: text(er.tag),
+    variants,
+  };
+}
+
+/** One version of an exercise without the variant bookkeeping. */
+function plain(ex: Exercise): Exercise {
+  return {
+    id: ex.id,
+    name: ex.name,
+    sets: ex.sets,
+    reps: ex.reps,
+    restSeconds: ex.restSeconds,
+    image: ex.image,
+    description: ex.description,
+    focus: ex.focus,
+    tag: ex.tag,
+  };
+}
+
+/** All ways to do an exercise: the base first, then its variants. */
+export function versionsOf(ex: Exercise): Exercise[] {
+  if (ex.choices && ex.choices.length > 0) return ex.choices;
+  return [plain(ex), ...(ex.variants ?? []).map(plain)];
+}
+
+/**
+ * Which version of each exercise to use: they alternate every time the day is done again
+ * (rotation = how many times this day was done before), so the body never gets used to one method.
+ */
+export function pickChoices(day: Day, rotation: number): number[] {
+  return day.exercises.map((ex) => {
+    const n = versionsOf(ex).length;
+    return n > 1 ? rotation % n : 0;
+  });
+}
+
+/** The exercise as done in a workout: the chosen version, remembering the others so it can be swapped. */
+export function withChoice(ex: Exercise, choice: number): Exercise {
+  const versions = versionsOf(ex);
+  if (versions.length < 2) return plain(ex);
+  const c = ((choice % versions.length) + versions.length) % versions.length;
+  return { ...versions[c], choices: versions, choice: c };
+}
+
 /** Validates a program (a built-in file or one the user imports) and fills in defaults. Throws with a Lithuanian message. */
 export function normalizeProgram(raw: unknown, source: Program['source']): Program {
   if (!raw || typeof raw !== 'object' || Array.isArray(raw)) fail('Failas nėra programa: tikėtasi JSON objekto su „days“.');
@@ -80,29 +151,9 @@ export function normalizeProgram(raw: unknown, source: Program['source']): Progr
     if (!Array.isArray(dr.exercises) || dr.exercises.length === 0) fail(`Dienoje ${id} nėra pratimų („exercises“).`);
     if (dr.exercises.length > 20) fail(`Dienoje ${id} per daug pratimų (daugiausia 20).`);
     const exIds = new Set<string>();
-    const exercises: Exercise[] = (dr.exercises as unknown[]).map((e, ei) => {
-      if (!e || typeof e !== 'object') fail(`Dienos ${id} ${ei + 1}-asis pratimas neteisingas.`);
-      const er = e as Record<string, unknown>;
-      const name = text(er.name) ?? fail(`Dienos ${id} ${ei + 1}-asis pratimas be pavadinimo („name“).`);
-      const sets = Math.round(toNumber(er.sets));
-      if (!(sets >= 1 && sets <= 20)) fail(`„${name}“: „sets“ turi būti skaičius nuo 1 iki 20.`);
-      const reps = typeof er.reps === 'number' ? String(er.reps) : text(er.reps) ?? fail(`„${name}“: trūksta „reps“.`);
-      const rest = er.restSeconds === undefined ? 90 : Math.round(toNumber(er.restSeconds));
-      if (!(rest >= 0 && rest <= 900)) fail(`„${name}“: „restSeconds“ turi būti nuo 0 iki 900.`);
-      let exId = text(er.id) ?? `${id}${ei + 1}`;
-      while (exIds.has(exId)) exId += '_';
-      exIds.add(exId);
-      return {
-        id: exId,
-        name,
-        sets,
-        reps,
-        restSeconds: rest,
-        image: image(er.image),
-        description: text(er.description),
-        focus: text(er.focus),
-      };
-    });
+    const exercises: Exercise[] = (dr.exercises as unknown[]).map((e, ei) =>
+      normalizeExercise(e, `Dienos ${id} ${ei + 1}-asis pratimas`, `${id}${ei + 1}`, exIds, true),
+    );
     return { id, name: text(dr.name) ?? `${id} DIENA`, subtitle: text(dr.subtitle), color: dayColor(id, di), exercises };
   });
   return { id: text(r.id) ?? slug(programName), programName, goal: text(r.goal), focus: text(r.focus), days, source };

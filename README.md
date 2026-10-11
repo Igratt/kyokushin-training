@@ -43,12 +43,19 @@ Formatas:
       "name": "A DIENA",
       "subtitle": "Kojos",
       "exercises": [
-        { "name": "Box Jump", "sets": 4, "reps": "3", "restSeconds": 90, "image": "assets/A_1.png", "description": "…", "focus": "…" }
+        {
+          "name": "Box Jump", "sets": 4, "reps": "3", "restSeconds": 90, "image": "assets/A_1.png", "description": "…", "focus": "…",
+          "variants": [
+            { "name": "Broad Jump", "tag": "į tolį", "sets": 4, "reps": "3", "restSeconds": 75, "image": "assets/A_1v.webp", "description": "…" }
+          ]
+        }
       ]
     }
   ]
 }
 ```
+
+`variants` (nebūtina, iki 5): kiti to paties pratimo atlikimo būdai. Programa juos keičia pakaitomis: kiekvieną kartą darant tą pačią dieną imamas kitas variantas (pagal tai, kiek kartų diena jau buvo daryta), o prieš treniruotę ar iki pirmo seto variantą galima pakeisti ranka. Pagrindiniai kėlimai (Back Squat, Bench Press, Trap-Bar Deadlift, Push Press) variantų neturi, kad svoriai būtų palyginami. Variantų piešinius piešia `py tools/draw_variants.py`.
 
 Privaloma: `days`, kiekvienos dienos `exercises`, kiekvieno pratimo `name`, `sets` (1–20), `reps`. `restSeconds` numatytai 90. `image` gali rodyti į esamas nuotraukas (`assets/A_1.png` … `assets/C_9.png`) arba būti praleistas — tada rodoma kortelė su pavadinimu. Paskutinis svoris atsimenamas pagal pratimo pavadinimą, todėl tas pats pratimas kitoje programoje gauna tą patį „praeitą kartą“.
 

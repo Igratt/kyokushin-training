@@ -9,6 +9,13 @@ export interface Exercise {
   image?: string;
   description?: string;
   focus?: string;
+  /** Short label of a variant, e.g. "su guma". */
+  tag?: string;
+  /** Other ways to do the same exercise. The app alternates between the base and its variants. */
+  variants?: Exercise[];
+  /** Inside a workout: every version of this exercise (base first) and which one is being done. */
+  choices?: Exercise[];
+  choice?: number;
 }
 
 export interface Day {
