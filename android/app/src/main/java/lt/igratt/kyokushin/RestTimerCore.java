@@ -88,7 +88,8 @@ final class RestTimerCore {
         String doneTitle,
         String doneText,
         boolean sound,
-        boolean vibrate
+        boolean vibrate,
+        boolean shortTone
     ) {
         ensureChannels(ctx);
         Intent alarm = new Intent(ctx, RestAlarmReceiver.class);
@@ -96,6 +97,7 @@ final class RestTimerCore {
         alarm.putExtra("doneText", doneText);
         alarm.putExtra("sound", sound);
         alarm.putExtra("vibrate", vibrate);
+        alarm.putExtra("shortTone", shortTone);
         PendingIntent pi = PendingIntent.getBroadcast(ctx, REQ_ALARM, alarm, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
         AlarmManager am = (AlarmManager) ctx.getSystemService(Context.ALARM_SERVICE);
         if (am != null) {
@@ -148,7 +150,8 @@ final class RestTimerCore {
     static void fire(Context ctx, Intent intent, BroadcastReceiver.PendingResult pending) {
         NotificationManagerCompat nm = NotificationManagerCompat.from(ctx);
         nm.cancel(ID_COUNTDOWN);
-        if (intent.getBooleanExtra("vibrate", true)) vibrate(ctx);
+        boolean shortTone = intent.getBooleanExtra("shortTone", false);
+        if (intent.getBooleanExtra("vibrate", true)) vibrate(ctx, shortTone);
         if (!foreground && canNotify(ctx)) {
             ensureChannels(ctx);
             NotificationCompat.Builder b = new NotificationCompat.Builder(ctx, CH_DONE)
@@ -167,11 +170,11 @@ final class RestTimerCore {
                 // ignore
             }
         }
-        if (intent.getBooleanExtra("sound", true)) playBeep(ctx, pending);
+        if (intent.getBooleanExtra("sound", true)) playBeep(ctx, pending, shortTone ? R.raw.stretch_end : R.raw.rest_end);
         else if (pending != null) pending.finish();
     }
 
-    private static void vibrate(Context ctx) {
+    private static void vibrate(Context ctx, boolean shortTone) {
         Vibrator v;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             VibratorManager vm = (VibratorManager) ctx.getSystemService(Context.VIBRATOR_MANAGER_SERVICE);
@@ -180,15 +183,15 @@ final class RestTimerCore {
             v = (Vibrator) ctx.getSystemService(Context.VIBRATOR_SERVICE);
         }
         if (v == null || !v.hasVibrator()) return;
-        long[] pattern = { 0, 400, 150, 400, 150, 900 };
+        long[] pattern = shortTone ? new long[] { 0, 180, 100, 180 } : new long[] { 0, 400, 150, 400, 150, 900 };
         // Alarm usage: Android lets alarm vibrations through while the app is in the background.
         AudioAttributes attrs = new AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_ALARM).build();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) v.vibrate(VibrationEffect.createWaveform(pattern, -1), attrs);
         else v.vibrate(pattern, -1, attrs);
     }
 
-    /** Plays res/raw/rest_end.wav on the media stream (same volume as music; music ducks briefly). */
-    private static void playBeep(Context ctx, BroadcastReceiver.PendingResult pending) {
+    /** Plays a res/raw beep on the media stream (same volume as music; music ducks briefly). */
+    private static void playBeep(Context ctx, BroadcastReceiver.PendingResult pending, int rawRes) {
         final AudioManager am = (AudioManager) ctx.getSystemService(Context.AUDIO_SERVICE);
         final AudioAttributes attrs = new AudioAttributes.Builder()
             .setUsage(AudioAttributes.USAGE_MEDIA)
@@ -214,7 +217,7 @@ final class RestTimerCore {
         new Handler(Looper.getMainLooper()).postDelayed(done, 8000L);
         try {
             mp.setAudioAttributes(attrs);
-            AssetFileDescriptor afd = ctx.getResources().openRawResourceFd(R.raw.rest_end);
+            AssetFileDescriptor afd = ctx.getResources().openRawResourceFd(rawRes);
             mp.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
             afd.close();
             mp.setOnCompletionListener(p -> done.run());

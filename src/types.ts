@@ -18,6 +18,20 @@ export interface Exercise {
   choice?: number;
 }
 
+/** A stretch for the cool-down after the workout. */
+export interface Stretch {
+  id: string;
+  name: string;
+  /** Hold time in seconds, per side. */
+  hold: number;
+  /** 2 = done on the left and then the right side. */
+  sides: 1 | 2;
+  image?: string;
+  description?: string;
+  /** Why it matters for karate / the gym. */
+  focus?: string;
+}
+
 export interface Day {
   id: DayId;
   name: string;
@@ -25,6 +39,17 @@ export interface Day {
   /** Accent colour of the day (A blue, B orange, C green, other days from a palette). */
   color: string;
   exercises: Exercise[];
+  stretches?: Stretch[];
+}
+
+/** Progress of the cool-down. Like the rest timer, it runs on an absolute end timestamp. */
+export interface StretchRun {
+  /** Index into stretchSteps(day): every side of every stretch is one step. */
+  index: number;
+  phase: 'prep' | 'hold';
+  endsAt: number;
+  /** Length of the current phase in seconds (for the ring). */
+  total: number;
 }
 
 export interface Program {
@@ -85,6 +110,10 @@ export interface Session {
   lastActionAt: number;
   /** Exercise whose "what weight did you use?" dialog is open (set right after its last set). */
   pendingWeightFor?: string | null;
+  /** Cool-down in progress (null when not stretching). */
+  stretch?: StretchRun | null;
+  /** The cool-down was done to the end. */
+  stretched?: boolean;
 }
 
 export interface RecordExercise {
@@ -112,6 +141,8 @@ export interface WorkoutRecord {
   note?: string;
   /** False while the workout is still running (it is saved after every set). Older records have no flag. */
   completed?: boolean;
+  /** The cool-down stretches were done. */
+  stretched?: boolean;
   updatedAt?: string;
 }
 

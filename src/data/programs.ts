@@ -1,4 +1,4 @@
-import type { Day, Exercise, Program } from '../types';
+import type { Day, Exercise, Program, Stretch } from '../types';
 
 /*
  * Training programs. Every JSON file in ./programs is a built-in program, in the same format as the
@@ -94,6 +94,43 @@ function normalizeExercise(e: unknown, label: string, fallbackId: string, ids: S
   };
 }
 
+function normalizeStretch(e: unknown, label: string, fallbackId: string): Stretch {
+  if (!e || typeof e !== 'object') fail(`${label} neteisingas.`);
+  const er = e as Record<string, unknown>;
+  const name = text(er.name) ?? fail(`${label} be pavadinimo („name“).`);
+  const hold = er.hold === undefined ? 30 : Math.round(toNumber(er.hold));
+  if (!(hold >= 5 && hold <= 300)) fail(`„${name}“: „hold“ turi būti nuo 5 iki 300 sekundžių.`);
+  const sides = er.sides === undefined ? 1 : Math.round(toNumber(er.sides));
+  if (sides !== 1 && sides !== 2) fail(`„${name}“: „sides“ turi būti 1 arba 2.`);
+  return {
+    id: text(er.id) ?? fallbackId,
+    name,
+    hold,
+    sides: sides as 1 | 2,
+    image: image(er.image),
+    description: text(er.description),
+    focus: text(er.focus),
+  };
+}
+
+/** Every side of every cool-down stretch, in order. side: 0 = whole body, 1 = left, 2 = right. */
+export function stretchSteps(day: Day): { stretch: Stretch; side: 0 | 1 | 2 }[] {
+  const out: { stretch: Stretch; side: 0 | 1 | 2 }[] = [];
+  for (const st of day.stretches ?? []) {
+    if (st.sides === 2) out.push({ stretch: st, side: 1 }, { stretch: st, side: 2 });
+    else out.push({ stretch: st, side: 0 });
+  }
+  return out;
+}
+
+/** Seconds of preparation before each hold. */
+export const STRETCH_PREP_SECONDS = 5;
+
+export function stretchMinutes(day: Day): number {
+  const seconds = stretchSteps(day).reduce((n, s) => n + s.stretch.hold + STRETCH_PREP_SECONDS, 0);
+  return Math.max(1, Math.round(seconds / 60));
+}
+
 /** One version of an exercise without the variant bookkeeping. */
 function plain(ex: Exercise): Exercise {
   return {
@@ -154,7 +191,12 @@ export function normalizeProgram(raw: unknown, source: Program['source']): Progr
     const exercises: Exercise[] = (dr.exercises as unknown[]).map((e, ei) =>
       normalizeExercise(e, `Dienos ${id} ${ei + 1}-asis pratimas`, `${id}${ei + 1}`, exIds, true),
     );
-    return { id, name: text(dr.name) ?? `${id} DIENA`, subtitle: text(dr.subtitle), color: dayColor(id, di), exercises };
+    let stretches: Stretch[] | undefined;
+    if (Array.isArray(dr.stretches) && dr.stretches.length > 0) {
+      if (dr.stretches.length > 15) fail(`Dienoje ${id} per daug tempimo pratimų (daugiausia 15).`);
+      stretches = (dr.stretches as unknown[]).map((st, si) => normalizeStretch(st, `Dienos ${id} ${si + 1}-asis tempimas`, `${id}S${si + 1}`));
+    }
+    return { id, name: text(dr.name) ?? `${id} DIENA`, subtitle: text(dr.subtitle), color: dayColor(id, di), exercises, stretches };
   });
   return { id: text(r.id) ?? slug(programName), programName, goal: text(r.goal), focus: text(r.focus), days, source };
 }

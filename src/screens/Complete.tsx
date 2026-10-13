@@ -1,6 +1,6 @@
 import { useMemo, useState, type CSSProperties } from 'react';
 import type { Session } from '../types';
-import { exerciseKey } from '../data/programs';
+import { exerciseKey, plural, stretchMinutes, stretchSteps } from '../data/programs';
 import { formatDuration, formatWeight, toRecord, type Action } from '../workout/engine';
 import { Confirm, DayTag, TopBar } from '../ui';
 
@@ -11,11 +11,13 @@ interface Props {
   onClose: () => void;
   onDelete: () => void;
   onReopen: () => void;
+  onStretch: () => void;
 }
 
-export default function Complete({ session: s, suggested, dispatch, onClose, onDelete, onReopen }: Props) {
+export default function Complete({ session: s, suggested, dispatch, onClose, onDelete, onReopen, onStretch }: Props) {
   const [confirm, setConfirm] = useState(false);
   const rec = useMemo(() => toRecord(s), [s]);
+  const stretchCount = s.day.stretches?.length ?? 0;
 
   return (
     <div className="screen" style={{ '--day': s.day.color } as CSSProperties}>
@@ -35,6 +37,23 @@ export default function Complete({ session: s, suggested, dispatch, onClose, onD
           <div className="muted small">setų atlikta</div>
         </div>
       </div>
+
+      {stretchCount > 0 && stretchSteps(s.day).length > 0 && (
+        <section className="card stretch-card">
+          <div className="row between">
+            <div>
+              <div className="stretch-card-title h-display">Tempimas</div>
+              <div className="muted small">
+                {stretchCount} {plural(stretchCount, 'pratimas', 'pratimai', 'pratimų')} · apie {stretchMinutes(s.day)} min · karatė ir salė
+              </div>
+            </div>
+            {s.stretched && <span className="status-pill live">atlikta</span>}
+          </div>
+          <button className={'btn ' + (s.stretched ? 'btn-outline' : 'btn-day')} onClick={onStretch}>
+            {s.stretched ? 'Tempti dar kartą' : 'Pradėti tempimą'}
+          </button>
+        </section>
+      )}
 
       <p className="muted small">Svorį gali pataisyti: jis galioja visiems to pratimo setams.</p>
       <ul className="sum-list">

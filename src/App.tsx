@@ -4,7 +4,10 @@ import type { Program, Session, Settings, WorkoutRecord } from './types';
 import { DEFAULT_PROGRAM_ID, allPrograms, exerciseKey, findProgram } from './data/programs';
 import { isNative, restTimer, saveJsonFile } from './native';
 import { mergeHistory, storage, upsertRecord } from './storage';
-import { createSession, lastWeights, migrateSession, reduce, restTimerText, toRecord, type Action } from './workout/engine';
+import { createSession, lastWeights, migrateSession, reduce, restTimerText, stretchTimerText, toRecord, type Action } from './workout/engine';
+import { primeAudio } from './hooks';
+import type { RestTimerOptions } from './native';
+import Stretch from './screens/Stretch';
 import Home from './screens/Home';
 import Preview from './screens/Preview';
 import Active from './screens/Active';
@@ -20,7 +23,8 @@ type View =
   | { name: 'complete' }
   | { name: 'history' }
   | { name: 'historyDetail'; id: string }
-  | { name: 'settings' };
+  | { name: 'settings' }
+  | { name: 'stretch' };
 
 export default function App() {
   const [imported, setImported] = useState<Program[]>(() => storage.loadPrograms());
@@ -68,15 +72,23 @@ export default function App() {
   }, []);
   const suggested = useMemo(() => lastWeights(history, session?.id), [history, session?.id]);
 
-  // Android app: countdown in the notification shade and an alarm that rings even when the app is hidden.
+  // Android app: countdown in the notification shade and an alarm that rings even when the app is hidden,
+  // for rests between sets and for every stretch hold of the cool-down.
   const timerKey = useRef('boot');
   useEffect(() => {
     const s = session;
+    const flags = { sound: settings.sound, vibrate: settings.vibrate };
+    let spec: { key: string; opts: RestTimerOptions } | null = null;
     if (s && s.phase === 'RESTING' && s.restEndsAt && s.restTarget && s.restEndsAt > Date.now()) {
-      const key = `${s.id}:${s.restEndsAt}:${settings.sound}:${settings.vibrate}`;
+      spec = { key: `rest:${s.id}:${s.restEndsAt}`, opts: { endAt: s.restEndsAt, ...restTimerText(s), ...flags, tone: 'rest' } };
+    } else if (s?.stretch && s.stretch.phase === 'hold' && s.stretch.endsAt > Date.now()) {
+      spec = { key: `stretch:${s.id}:${s.stretch.index}:${s.stretch.endsAt}`, opts: { endAt: s.stretch.endsAt, ...stretchTimerText(s), ...flags, tone: 'short' } };
+    }
+    if (spec) {
+      const key = `${spec.key}:${settings.sound}:${settings.vibrate}`;
       if (timerKey.current === key) return;
       timerKey.current = key;
-      restTimer.start({ endAt: s.restEndsAt, ...restTimerText(s), sound: settings.sound, vibrate: settings.vibrate });
+      restTimer.start(spec.opts);
     } else if (timerKey.current !== '') {
       timerKey.current = '';
       restTimer.cancel();
@@ -88,8 +100,19 @@ export default function App() {
     if (session?.phase === 'FINISHED' && view.name === 'active') setView({ name: 'complete' });
   }, [session?.phase, view.name]);
   useEffect(() => {
-    if (!session && (view.name === 'active' || view.name === 'complete')) setView({ name: 'home' });
+    if (!session && (view.name === 'active' || view.name === 'complete' || view.name === 'stretch')) setView({ name: 'home' });
   }, [session, view.name]);
+  // Cool-down finished or left: back to the summary.
+  useEffect(() => {
+    if (view.name === 'stretch' && session && !session.stretch) setView({ name: 'complete' });
+  }, [session, view.name]);
+
+  const startStretch = () => {
+    primeAudio();
+    restTimer.prepare();
+    dispatch({ type: 'STRETCH_START', now: Date.now() });
+    setView({ name: 'stretch' });
+  };
 
   /** How many times this day of this program was done before: drives the alternation of exercise variants. */
   const rotationFor = (dayId: string) =>
@@ -178,6 +201,10 @@ export default function App() {
         setView({ name: 'history' });
         return;
       }
+      if (v.name === 'stretch') {
+        dispatch({ type: 'STRETCH_EXIT' });
+        return;
+      }
       if (v.name === 'complete') {
         setSession(null);
         setView({ name: 'home' });
@@ -229,7 +256,15 @@ export default function App() {
             dispatch({ type: 'REOPEN' });
             setView({ name: 'active' });
           }}
+          onStretch={startStretch}
         />
+      ) : (
+        <></>
+      );
+      break;
+    case 'stretch':
+      screen = session?.stretch ? (
+        <Stretch session={session} dispatch={dispatch} settings={settings} onExit={() => dispatch({ type: 'STRETCH_EXIT' })} />
       ) : (
         <></>
       );

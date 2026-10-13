@@ -44,7 +44,8 @@ public class RestTimerPlugin extends Plugin {
             call.getString("doneTitle", "Poilsis baigėsi"),
             call.getString("doneText", ""),
             Boolean.TRUE.equals(call.getBoolean("sound", true)),
-            Boolean.TRUE.equals(call.getBoolean("vibrate", true))
+            Boolean.TRUE.equals(call.getBoolean("vibrate", true)),
+            "short".equals(call.getString("tone", "rest"))
         );
         call.resolve();
     }

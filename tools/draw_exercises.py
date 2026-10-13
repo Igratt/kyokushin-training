@@ -40,7 +40,17 @@ class Pic:
         self.img = Image.new("RGB", (W * S, H * S), NAVY)
         self.d = ImageDraw.Draw(self.img)
         self.ox = 0
+        self.pw = PANEL_W
         self.k, self.fs, self.fd = 1.0, None, None
+
+    def full(self, floor_y):
+        """One panel across the whole picture (used for single-pose stretches)."""
+        self.ox, self.pw, self.fs = 0, W, None
+        for y in range(H * S):
+            t = y / (H * S)
+            self.d.line([(0, y), (W * S - 1, y)], fill=tuple(int(PANEL_TOP[k] + (PANEL_BOT[k] - PANEL_TOP[k]) * t) for k in range(3)))
+        self.d.rectangle([0, floor_y * S, W * S - 1, H * S], fill=FLOOR)
+        self.d.line([(0, floor_y * S), (W * S - 1, floor_y * S)], fill=FLOOR_LINE, width=2 * S)
 
     def view(self, floor_src, floor_dst, k):
         """Figures are designed with the floor at y=floor_src; draw them k times larger with the floor at floor_dst."""
@@ -48,6 +58,7 @@ class Pic:
 
     def panel(self, i, floor_y):
         self.ox = 0 if i == 0 else PANEL_W + GAP
+        self.pw = PANEL_W
         self.fs = None
         x0, x1 = self.ox * S, (self.ox + PANEL_W) * S - 1
         for y in range(H * S):
@@ -59,7 +70,7 @@ class Pic:
     def P(self, p, raw=False):
         x, y = p
         if self.fs is not None and not raw:
-            x = PANEL_W / 2 + (x - PANEL_W / 2) * self.k
+            x = self.pw / 2 + (x - self.pw / 2) * self.k
             y = self.fd + (y - self.fs) * self.k
         return ((self.ox + x) * S, y * S)
 
@@ -117,7 +128,7 @@ class Pic:
                    (bx - length * math.cos(ang + 0.5), by - length * math.sin(ang + 0.5))], col)
 
     def mark(self, ok):
-        c = (PANEL_W - 26, 30)
+        c = (self.pw - 26, 30)
         white = (255, 255, 255)
         self.dot(c, 15, GREEN if ok else RED, raw=True)
         if ok:
@@ -128,7 +139,7 @@ class Pic:
             self.capsule((c[0] - 6, c[1] + 6), (c[0] + 6, c[1] - 6), 3.6, white, raw=True)
 
     def label(self, s):
-        self.text((PANEL_W - 14, 26), s, 11, (150, 162, 196), anchor="rs")
+        self.text((self.pw - 14, 26), s, 11, (150, 162, 196), anchor="rs")
 
     def caption(self, s, col=TEXT):
         self.text((14, 328), s, 13.5, col, anchor="ls")

@@ -203,6 +203,62 @@
             }
           ]
         }
+      ],
+      "stretches": [
+        {
+          "id": "S_hip_flexor",
+          "name": "Kneeling Hip Flexor Stretch",
+          "hold": 45,
+          "sides": 2,
+          "image": "assets/S_hip_flexor.webp",
+          "description": "Atsiklaupk ant vieno kelio, kita koja priekyje. Įtempk sėdmenį ir stumk klubus pirmyn, kol pajusi tempimą galinės kojos šlaunies priekyje. Tos pusės ranką kelk aukštyn.",
+          "focus": "aukštiems spyriams ir gilesnei stovėsenai, po pritūpimų"
+        },
+        {
+          "id": "S_pigeon",
+          "name": "Pigeon Stretch",
+          "hold": 45,
+          "sides": 2,
+          "image": "assets/S_pigeon.webp",
+          "description": "Priekinė koja sulenkta priešais tave, galinė ištiesta atgal. Klubai lygiai, lėtai leiskis žemyn ir kvėpuok į sėdmenį.",
+          "focus": "klubų sukimui: mawashi geri ir ura mawashi"
+        },
+        {
+          "id": "S_hamstring",
+          "name": "Seated Hamstring Stretch",
+          "hold": 45,
+          "sides": 1,
+          "image": "assets/S_hamstring.webp",
+          "description": "Sėdėk tiesiomis kojomis, pirštai į viršų. Lenkis pirmyn per klubus tiesia nugara ir siek pėdų, kol pajusi tempimą šlaunies gale.",
+          "focus": "mae geri ir kakato geri, po RDL"
+        },
+        {
+          "id": "S_butterfly",
+          "name": "Butterfly Stretch",
+          "hold": 45,
+          "sides": 1,
+          "image": "assets/S_butterfly.webp",
+          "description": "Sėdėk tiesia nugara, padus suglausk ir pritrauk pėdas arčiau savęs. Alkūnėmis švelniai spausk kelius žemyn.",
+          "focus": "yoko geri ir kiba dachi"
+        },
+        {
+          "id": "S_straddle",
+          "name": "Straddle Stretch",
+          "hold": 45,
+          "sides": 1,
+          "image": "assets/S_straddle.webp",
+          "description": "Sėdėk kojas išskėtęs kuo plačiau, keliai į viršų. Lenkis pirmyn tiesia nugara, rankas slinkdamas grindimis.",
+          "focus": "šoniniam špagatui ir aukštiems spyriams"
+        },
+        {
+          "id": "S_calf",
+          "name": "Wall Calf Stretch",
+          "hold": 30,
+          "sides": 2,
+          "image": "assets/S_calf.webp",
+          "description": "Rankomis atsiremk į sieną, galinė koja tiesi, kulnas prie grindų. Lėtai stumk klubus link sienos.",
+          "focus": "blauzdoms ir Achilui po šuolių, judėjimui ant pirštų"
+        }
       ]
     },
     {
@@ -404,6 +460,62 @@
             }
           ]
         }
+      ],
+      "stretches": [
+        {
+          "id": "S_doorway",
+          "name": "Doorway Chest Stretch",
+          "hold": 45,
+          "sides": 1,
+          "image": "assets/S_doorway.webp",
+          "description": "Dilbius padėk ant durų staktos, alkūnės pečių aukštyje. Ženk žingsnį pirmyn, kol pajusi tempimą krūtinėje.",
+          "focus": "krūtinei po spaudimų, laisvesniam smūgiui"
+        },
+        {
+          "id": "S_cross_body",
+          "name": "Cross-Body Shoulder Stretch",
+          "hold": 30,
+          "sides": 2,
+          "image": "assets/S_cross_body.webp",
+          "description": "Ištiestą ranką trauk per krūtinę, kita ranka prispausk ją ties alkūne. Petys žemai, ne prie ausies.",
+          "focus": "pečiams ir galinei deltai po traukimų"
+        },
+        {
+          "id": "S_triceps",
+          "name": "Overhead Triceps Stretch",
+          "hold": 30,
+          "sides": 2,
+          "image": "assets/S_triceps.webp",
+          "description": "Pakelk ranką, sulenk alkūnę ir delną nuleisk už galvos. Kita ranka švelniai trauk alkūnę žemyn.",
+          "focus": "tricepsui po spaudimų ir smūgių"
+        },
+        {
+          "id": "S_thread",
+          "name": "Thread the Needle",
+          "hold": 30,
+          "sides": 2,
+          "image": "assets/S_thread.webp",
+          "description": "Atsiremk keturiomis. Vieną ranką pakišk po kūnu į kitą pusę ir nuleisk petį bei skruostą ant grindų, kita ranka siek lubų.",
+          "focus": "krūtinės ląstos sukimui: smūgiams ir blokams"
+        },
+        {
+          "id": "S_child",
+          "name": "Child's Pose",
+          "hold": 45,
+          "sides": 1,
+          "image": "assets/S_child.webp",
+          "description": "Atsisėsk ant kulnų, kelius praskėsk ir ištiesk rankas toli pirmyn. Pasistumk rankomis į vieną, paskui į kitą šoną.",
+          "focus": "nugaros plačiausiesiems ir juosmeniui"
+        },
+        {
+          "id": "S_wrist",
+          "name": "Kneeling Wrist Stretch",
+          "hold": 30,
+          "sides": 1,
+          "image": "assets/S_wrist.webp",
+          "description": "Atsiremk keturiomis, delnai ant grindų, pirštai atgal į kelius. Lėtai sėskis atgal, kol pajusi tempimą dilbiuose.",
+          "focus": "riešams ir dilbiams: smūgiams ir atsispaudimams ant kumščių"
+        }
       ]
     },
     {
@@ -591,6 +703,71 @@
               "focus": "Sukimas iš liemens, nugara tiesi."
             }
           ]
+        }
+      ],
+      "stretches": [
+        {
+          "id": "S_wgs",
+          "name": "World's Greatest Stretch",
+          "hold": 30,
+          "sides": 2,
+          "image": "assets/S_wgs.webp",
+          "description": "Gilus įtūpstas, galinė koja tiesi. Ranką padėk prie priekinės pėdos, kitą kelk į lubas ir sukis krūtine į tą pusę.",
+          "focus": "klubams ir krūtinės ląstai, visam kūnui"
+        },
+        {
+          "id": "S_hip_flexor",
+          "name": "Kneeling Hip Flexor Stretch",
+          "hold": 30,
+          "sides": 2,
+          "image": "assets/S_hip_flexor.webp",
+          "description": "Atsiklaupk ant vieno kelio, kita koja priekyje. Įtempk sėdmenį ir stumk klubus pirmyn, kol pajusi tempimą galinės kojos šlaunies priekyje. Tos pusės ranką kelk aukštyn.",
+          "focus": "aukštiems spyriams ir gilesnei stovėsenai, po pritūpimų"
+        },
+        {
+          "id": "S_pigeon",
+          "name": "Pigeon Stretch",
+          "hold": 30,
+          "sides": 2,
+          "image": "assets/S_pigeon.webp",
+          "description": "Priekinė koja sulenkta priešais tave, galinė ištiesta atgal. Klubai lygiai, lėtai leiskis žemyn ir kvėpuok į sėdmenį.",
+          "focus": "klubų sukimui: mawashi geri ir ura mawashi"
+        },
+        {
+          "id": "S_hamstring",
+          "name": "Seated Hamstring Stretch",
+          "hold": 45,
+          "sides": 1,
+          "image": "assets/S_hamstring.webp",
+          "description": "Sėdėk tiesiomis kojomis, pirštai į viršų. Lenkis pirmyn per klubus tiesia nugara ir siek pėdų, kol pajusi tempimą šlaunies gale.",
+          "focus": "mae geri ir kakato geri, po RDL"
+        },
+        {
+          "id": "S_cobra",
+          "name": "Cobra Stretch",
+          "hold": 30,
+          "sides": 1,
+          "image": "assets/S_cobra.webp",
+          "description": "Gulėk ant pilvo, delnai po pečiais. Stumk krūtinę aukštyn, klubai lieka ant grindų, pečiai žemyn nuo ausų.",
+          "focus": "presui ir klubų lenkiamiesiems po pilvo pratimų"
+        },
+        {
+          "id": "S_child",
+          "name": "Child's Pose",
+          "hold": 45,
+          "sides": 1,
+          "image": "assets/S_child.webp",
+          "description": "Atsisėsk ant kulnų, kelius praskėsk ir ištiesk rankas toli pirmyn. Pasistumk rankomis į vieną, paskui į kitą šoną.",
+          "focus": "nugaros plačiausiesiems ir juosmeniui"
+        },
+        {
+          "id": "S_straddle",
+          "name": "Straddle Stretch",
+          "hold": 45,
+          "sides": 1,
+          "image": "assets/S_straddle.webp",
+          "description": "Sėdėk kojas išskėtęs kuo plačiau, keliai į viršų. Lenkis pirmyn tiesia nugara, rankas slinkdamas grindimis.",
+          "focus": "šoniniam špagatui ir aukštiems spyriams"
         }
       ]
     }

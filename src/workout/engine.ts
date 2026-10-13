@@ -1,5 +1,5 @@
 import type { Day, Position, Program, Session, SetLog, WorkoutRecord } from '../types';
-import { DEFAULT_PROGRAM_ID, exerciseKey, versionsOf, withChoice } from '../data/programs';
+import { DEFAULT_PROGRAM_ID, STRETCH_PREP_SECONDS, exerciseKey, stretchSteps, versionsOf, withChoice } from '../data/programs';
 
 /*
  * Workout state machine. Pure functions only:
@@ -23,6 +23,12 @@ export type Action =
   | { type: 'SET_NOTE'; exerciseId: string; value: string }
   | { type: 'SET_WORKOUT_NOTE'; value: string }
   | { type: 'SWAP_VARIANT'; exerciseIndex: number }
+  | { type: 'STRETCH_START'; now: number }
+  | { type: 'STRETCH_ADVANCE'; now: number }
+  | { type: 'STRETCH_SKIP'; now: number }
+  | { type: 'STRETCH_BACK'; now: number }
+  | { type: 'STRETCH_ADD'; seconds: number; now: number }
+  | { type: 'STRETCH_EXIT' }
   | { type: 'FINISH'; now: number }
   | { type: 'REOPEN' };
 
@@ -88,6 +94,11 @@ export function migrateSession(raw: unknown, programs: Program[]): Session | nul
     day = clone(fromProgram);
   }
   if (!day.color) day = { ...day, color: program?.days.find((d) => d.id === day?.id)?.color ?? '#3B82F6' };
+  // Workouts started before the cool-down existed still get the day's stretches.
+  if (!day.stretches?.length) {
+    const fromProgram = program?.days.find((d) => d.id === day?.id)?.stretches;
+    if (fromProgram?.length) day = { ...day, stretches: clone(fromProgram) };
+  }
   const oldLogs = s.logs;
   const logs = day.exercises.map((ex, i) => {
     const found = oldLogs[i]?.exerciseId === ex.id ? oldLogs[i] : oldLogs.find((l) => l?.exerciseId === ex.id);
@@ -119,6 +130,8 @@ export function migrateSession(raw: unknown, programs: Program[]): Session | nul
     restOverrides: s.restOverrides ?? {},
     lastActionAt: s.lastActionAt ?? 0,
     pendingWeightFor: s.pendingWeightFor && day.exercises.some((e) => e.id === s.pendingWeightFor) ? s.pendingWeightFor : null,
+    stretch: s.stretch && typeof s.stretch.endsAt === 'number' ? s.stretch : null,
+    stretched: s.stretched,
   };
 }
 
@@ -148,6 +161,13 @@ function nextIncompleteAfter(s: Session, from: number): number | null {
 function positionFor(s: Session, exerciseIndex: number): Position {
   const done = s.logs[exerciseIndex].sets.length;
   return { exerciseIndex, setIndex: Math.min(done, s.day.exercises[exerciseIndex].sets - 1) };
+}
+
+/** Cool-down: go to step `index` (a short "get ready" phase first), or finish after the last step. */
+function stretchStep(s: Session, index: number, now: number): Session {
+  const steps = stretchSteps(s.day);
+  if (index >= steps.length) return { ...s, stretch: null, stretched: true };
+  return { ...s, stretch: { index: Math.max(0, index), phase: 'prep', endsAt: now + STRETCH_PREP_SECONDS * 1000, total: STRETCH_PREP_SECONDS } };
 }
 
 function lastSetTime(s: Session): string {
@@ -249,6 +269,28 @@ export function reduce(s: Session, a: Action): Session {
       return { ...s, notes: { ...s.notes, [a.exerciseId]: a.value } };
     case 'SET_WORKOUT_NOTE':
       return { ...s, workoutNote: a.value };
+    case 'STRETCH_START':
+      return stretchSteps(day).length ? stretchStep(s, 0, a.now) : s;
+    case 'STRETCH_ADVANCE': {
+      const st = s.stretch;
+      if (!st || a.now < st.endsAt - 300) return s;
+      if (st.phase === 'prep') {
+        const hold = stretchSteps(day)[st.index]?.stretch.hold ?? 30;
+        return { ...s, stretch: { ...st, phase: 'hold', endsAt: a.now + hold * 1000, total: hold } };
+      }
+      return stretchStep(s, st.index + 1, a.now);
+    }
+    case 'STRETCH_SKIP':
+      return s.stretch ? stretchStep(s, s.stretch.index + 1, a.now) : s;
+    case 'STRETCH_BACK':
+      return s.stretch ? stretchStep(s, s.stretch.index - 1, a.now) : s;
+    case 'STRETCH_ADD': {
+      const st = s.stretch;
+      if (!st || st.phase !== 'hold') return s;
+      return { ...s, stretch: { ...st, endsAt: st.endsAt + a.seconds * 1000, total: st.total + a.seconds } };
+    }
+    case 'STRETCH_EXIT':
+      return { ...s, stretch: null };
     case 'SWAP_VARIANT': {
       // Only before the first set of that exercise, so the logged sets always belong to one version.
       const ex = day.exercises[a.exerciseIndex];
@@ -313,7 +355,24 @@ export function toRecord(s: Session): WorkoutRecord {
     })),
     note: s.workoutNote?.trim() || undefined,
     completed: s.phase === 'FINISHED',
+    stretched: s.stretched || undefined,
     updatedAt: new Date().toISOString(),
+  };
+}
+
+/** Texts for the Android notification while a stretch is held. */
+export function stretchTimerText(s: Session): { title: string; text: string; doneTitle: string; doneText: string } {
+  const steps = stretchSteps(s.day);
+  const i = s.stretch?.index ?? 0;
+  const cur = steps[i];
+  const next = steps[i + 1];
+  const sideText = (side: number) => (side === 1 ? ' (kairė)' : side === 2 ? ' (dešinė)' : '');
+  const nextText = next ? `Toliau: ${next.stretch.name}${sideText(next.side)}` : 'Paskutinis tempimas';
+  return {
+    title: `Tempimas · ${cur ? cur.stretch.name + sideText(cur.side) : ''}`,
+    text: nextText,
+    doneTitle: next ? 'Keisk' : 'Tempimas baigtas',
+    doneText: nextText,
   };
 }
 

@@ -50,6 +50,7 @@ export default function History(p: Props) {
           {formatDate(rec.finishedAt)} {status(rec)}
         </h1>
         {rec.programName && <p className="muted small">{rec.programName}</p>}
+        {rec.stretched && <p className="small saved-note">✓ Tempimas atliktas</p>}
         <div className="stats">
           <div className="stat">
             <div className="h-display stat-num">{formatDuration(rec.durationSec)}</div>

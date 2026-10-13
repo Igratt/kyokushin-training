@@ -32,6 +32,8 @@ export interface RestTimerOptions {
   doneText: string;
   sound: boolean;
   vibrate: boolean;
+  /** 'rest' = the full end-of-rest alarm, 'short' = a quick double beep (stretch holds). */
+  tone?: 'rest' | 'short';
 }
 
 interface RestTimerPlugin {

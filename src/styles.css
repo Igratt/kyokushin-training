@@ -171,6 +171,19 @@ ul, ol { padding: 0; list-style: none; }
 .hist-day { font-size: 32px; color: var(--day); text-align: center; }
 .hist-main { display: grid; gap: 2px; font-weight: 600; }
 
+/* cool-down stretching */
+.stretch-card { gap: 12px; }
+.stretch-card-title { font-size: 22px; }
+.stretch .stretch-image { max-height: 30vh; }
+.stretch-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.stretch-timer { display: grid; grid-template-columns: 132px minmax(0, 1fr); gap: 14px; align-items: center; }
+.ring-wrap.small { width: 132px; }
+.ring-wrap.small .ring-time { font-size: 34px; }
+.ring-wrap.prep .ring-fg { stroke: var(--muted); }
+.stretch-info { display: grid; gap: 6px; min-width: 0; }
+.stretch-info .rest-label { font-family: var(--font-display); font-size: 22px; font-weight: 700; text-transform: uppercase; }
+.stretch-info .ex-desc { font-size: 14px; }
+
 /* exercise variants */
 .variant-btn { display: inline-flex; align-items: center; gap: 8px; margin-top: 4px; padding: 2px 0; text-align: left; flex-wrap: wrap; }
 .variant-chip { display: inline-block; padding: 2px 8px; border-radius: 999px; background: var(--surface-2); color: var(--muted); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }

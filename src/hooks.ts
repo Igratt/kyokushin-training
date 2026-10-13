@@ -93,29 +93,58 @@ export function useInstallPrompt() {
   return { canInstall: !!deferred && !installed, promptInstall, isIOS, isStandalone, installed };
 }
 
+/* One audio context for the whole app: browsers only start it from a user gesture, so any tap
+   (set done, start stretching) primes it and every screen can beep afterwards. */
+let sharedCtx: AudioContext | null = null;
+
+export function primeAudio(): void {
+  try {
+    const Ctx = window.AudioContext || (window as Window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+    if (!Ctx) return;
+    if (!sharedCtx) sharedCtx = new Ctx();
+    if (sharedCtx.state === 'suspended') sharedCtx.resume().catch(() => undefined);
+  } catch {
+    /* no audio */
+  }
+}
+
 /**
- * End-of-rest alarm. Audio contexts only start from a user gesture, so `prime()` is called
- * on the "set done" tap and `fire()` later plays the beeps.
+ * Alarm beeps. `prime()` is called on a tap (e.g. "set done") and `fire()` later plays the beeps.
  */
 export function useAlarm() {
-  const ctxRef = useRef<AudioContext | null>(null);
-  const prime = useCallback(() => {
-    try {
-      const Ctx = window.AudioContext || (window as Window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
-      if (!Ctx) return;
-      if (!ctxRef.current) ctxRef.current = new Ctx();
-      if (ctxRef.current.state === 'suspended') ctxRef.current.resume().catch(() => undefined);
-    } catch {
-      /* no audio */
-    }
-  }, []);
-  const fire = useCallback((settings: Settings) => {
-    if (settings.vibrate && 'vibrate' in navigator) {
+  const ctxRef = { get current() { return sharedCtx; } };
+  const prime = useCallback(primeAudio, []);
+  /** kind: 'rest' = full end-of-rest alarm, 'short' = quick double beep (end of a stretch), 'tick' = one soft beep (start of a hold). */
+  const fire = useCallback((settings: Settings, kind: 'rest' | 'short' | 'tick' = 'rest') => {
+    if (settings.vibrate && 'vibrate' in navigator && kind !== 'tick') {
       try {
-        navigator.vibrate([400, 150, 400, 150, 900]);
+        navigator.vibrate(kind === 'rest' ? [400, 150, 400, 150, 900] : [180, 100, 180]);
       } catch {
         /* ignore */
       }
+    }
+    if (settings.sound && ctxRef.current && kind !== 'rest') {
+      try {
+        const ctx = ctxRef.current;
+        const t0 = ctx.currentTime;
+        const LEVEL = kind === 'tick' ? 0.3 : 0.5;
+        const offsets = kind === 'tick' ? [0] : [0, 0.2];
+        for (const o of offsets) {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'square';
+          osc.frequency.value = kind === 'tick' ? 880 : 1318;
+          gain.gain.setValueAtTime(0.0001, t0 + o);
+          gain.gain.exponentialRampToValueAtTime(LEVEL, t0 + o + 0.01);
+          gain.gain.exponentialRampToValueAtTime(0.0001, t0 + o + 0.13);
+          osc.connect(gain).connect(ctx.destination);
+          osc.start(t0 + o);
+          osc.stop(t0 + o + 0.16);
+        }
+      } catch {
+        /* ignore */
+      }
+      return;
     }
     if (settings.sound && ctxRef.current) {
       try {

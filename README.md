@@ -55,6 +55,8 @@ Formatas:
 }
 ```
 
+`stretches` (nebūtina, prie dienos, iki 15): tempimas po treniruotės. Kiekvienas: `name`, `hold` (sekundės vienai pusei, 5–300), `sides` (1 arba 2), `image`, `description`, `focus`. Pvz. `{ "name": "Pigeon Stretch", "hold": 45, "sides": 2, "image": "assets/S_pigeon.webp", "description": "…", "focus": "mawashi geri" }`. Po treniruotės suvestinėje atsiranda „Pradėti tempimą“: 5 s pasiruošimas, laikymas, trumpas signalas, kita pusė ar kitas pratimas. Piešinius piešia `py tools/draw_stretches.py`, programos tempimą įrašo `py tools/add_stretches.py`.
+
 `variants` (nebūtina, iki 5): kiti to paties pratimo atlikimo būdai. Programa juos keičia pakaitomis: kiekvieną kartą darant tą pačią dieną imamas kitas variantas (pagal tai, kiek kartų diena jau buvo daryta), o prieš treniruotę ar iki pirmo seto variantą galima pakeisti ranka. Pagrindiniai kėlimai (Back Squat, Bench Press, Trap-Bar Deadlift, Push Press) variantų neturi, kad svoriai būtų palyginami. Variantų piešinius piešia `py tools/draw_variants.py`.
 
 Privaloma: `days`, kiekvienos dienos `exercises`, kiekvieno pratimo `name`, `sets` (1–20), `reps`. `restSeconds` numatytai 90. `image` gali rodyti į esamas nuotraukas (`assets/A_1.png` … `assets/C_9.png`) arba būti praleistas — tada rodoma kortelė su pavadinimu. Paskutinis svoris atsimenamas pagal pratimo pavadinimą, todėl tas pats pratimas kitoje programoje gauna tą patį „praeitą kartą“.

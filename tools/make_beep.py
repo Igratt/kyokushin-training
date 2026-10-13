@@ -26,30 +26,36 @@ def tone(freq, dur):
     return out
 
 
-def main():
-    total = 3.8
+def render(path, total, level, events):
+    """events: (start seconds, samples). Normalises the mix to `level` and writes a 16-bit mono WAV."""
     buf = [0.0] * int(RATE * total)
-
-    def put(start, samples):
+    for start, samples in events:
         s = int(RATE * start)
         for i, v in enumerate(samples):
             if s + i < len(buf):
                 buf[s + i] += v
-
-    short, long_ = tone(1046, 0.24), tone(1318, 0.7)
-    for base in (0.0, 2.0):
-        for o in (0.0, 0.32, 0.64):
-            put(base + o, short)
-        put(base + 1.0, long_)
     peak = max(abs(v) for v in buf) or 1.0
-    scale = LEVEL / peak
-    os.makedirs(os.path.dirname(OUT), exist_ok=True)
-    with wave.open(OUT, "wb") as w:
+    scale = level / peak
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    with wave.open(path, "wb") as w:
         w.setnchannels(1)
         w.setsampwidth(2)
         w.setframerate(RATE)
         w.writeframes(b"".join(struct.pack("<h", int(max(-1.0, min(1.0, v * scale)) * 32767)) for v in buf))
-    print("wrote", os.path.normpath(OUT), os.path.getsize(OUT), "bytes")
+    print("wrote", os.path.normpath(path), os.path.getsize(path), "bytes")
+
+
+def main():
+    short, long_ = tone(1046, 0.24), tone(1318, 0.7)
+    events = []
+    for base in (0.0, 2.0):
+        for o in (0.0, 0.32, 0.64):
+            events.append((base + o, short))
+        events.append((base + 1.0, long_))
+    render(OUT, 3.8, LEVEL, events)
+    # end of a stretch hold: a quick double beep, same as the in-app 'short' beep (src/hooks.ts)
+    blip = tone(1318, 0.13)
+    render(os.path.join(os.path.dirname(OUT), "stretch_end.wav"), 0.45, 0.5, [(0.0, blip), (0.2, blip)])
 
 
 if __name__ == "__main__":
