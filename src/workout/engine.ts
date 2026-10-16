@@ -1,4 +1,4 @@
-import type { Day, Position, Program, Session, SetLog, WorkoutRecord } from '../types';
+import type { Day, Position, Program, Session, SetLog, WorkRun, WorkoutRecord } from '../types';
 import { DEFAULT_PROGRAM_ID, STRETCH_PREP_SECONDS, exerciseKey, stretchSteps, versionsOf, withChoice } from '../data/programs';
 
 /*
@@ -29,12 +29,20 @@ export type Action =
   | { type: 'STRETCH_BACK'; now: number }
   | { type: 'STRETCH_ADD'; seconds: number; now: number }
   | { type: 'STRETCH_EXIT' }
+  | { type: 'WORK_START'; now: number }
+  | { type: 'WORK_ADVANCE'; now: number }
+  | { type: 'WORK_ADD'; seconds: number; now: number }
+  | { type: 'WORK_STOP' }
   | { type: 'FINISH'; now: number }
   | { type: 'REOPEN' };
 
 const DOUBLE_TAP_MS = 700;
 /** Finishing a workout long after its last set (e.g. the next day) dates it to that last set. */
 const STALE_FINISH_MS = 30 * 60 * 1000;
+/** Seconds of "get ready" before a timed set (plank) and between its two sides. */
+export const WORK_PREP_SECONDS = 5;
+/** A timed-set phase that ended this long ago was not followed (phone put away): drop the timer instead of logging the set. */
+const STALE_WORK_MS = 60 * 1000;
 
 const NO_REST = { restEndsAt: null, restSeconds: null, restTarget: null, restLabel: null } as const;
 
@@ -132,6 +140,7 @@ export function migrateSession(raw: unknown, programs: Program[]): Session | nul
     pendingWeightFor: s.pendingWeightFor && day.exercises.some((e) => e.id === s.pendingWeightFor) ? s.pendingWeightFor : null,
     stretch: s.stretch && typeof s.stretch.endsAt === 'number' ? s.stretch : null,
     stretched: s.stretched,
+    work: s.work && typeof s.work.endsAt === 'number' && s.phase === 'ACTIVE_SET' && !resting ? s.work : null,
   };
 }
 
@@ -163,6 +172,52 @@ function positionFor(s: Session, exerciseIndex: number): Position {
   return { exerciseIndex, setIndex: Math.min(done, s.day.exercises[exerciseIndex].sets - 1) };
 }
 
+function workPrep(side: 0 | 1 | 2, now: number): WorkRun {
+  return { phase: 'prep', side, endsAt: now + WORK_PREP_SECONDS * 1000, total: WORK_PREP_SECONDS };
+}
+
+/** Timed exercise (plank): start its timer for the current set; otherwise make sure no timer is running. */
+function autoWork(s: Session, now: number): Session {
+  const ex = s.day.exercises[s.exerciseIndex];
+  if (!ex.seconds || s.logs[s.exerciseIndex].sets.length >= ex.sets) return { ...s, work: null };
+  return { ...s, work: workPrep(ex.sides === 2 ? 1 : 0, now) };
+}
+
+/** Logs the current set and starts the rest, or finishes the workout after the very last set. */
+function completeSet(s: Session, now: number, perSetWeight?: string): Session {
+  const ex = s.day.exercises[s.exerciseIndex];
+  const log = s.logs[s.exerciseIndex];
+  if (log.sets.length >= ex.sets) return s;
+  // The weight is asked once per exercise (pendingWeightFor); a value typed for this set wins.
+  const perSetKg = parseWeight(perSetWeight);
+  const setLog: SetLog = {
+    set: log.sets.length + 1,
+    reps: ex.reps,
+    weightKg: perSetKg,
+    perSet: perSetKg !== null,
+    completedAt: new Date(now).toISOString(),
+  };
+  const newLog = { ...log, sets: [...log.sets, setLog] };
+  const logs = s.logs.map((l, i) => (i === s.exerciseIndex ? newLog : l));
+  const exerciseDone = newLog.sets.length >= ex.sets;
+  const base: Session = { ...s, logs, lastActionAt: now, pendingWeightFor: exerciseDone ? ex.id : null, work: null };
+  let target: Position | null = null;
+  let label: 'set' | 'exercise' | null = null;
+  if (!exerciseDone) {
+    target = { exerciseIndex: s.exerciseIndex, setIndex: newLog.sets.length };
+    label = 'set';
+  } else {
+    const next = nextIncompleteAfter(base, s.exerciseIndex);
+    if (next !== null) {
+      target = { exerciseIndex: next, setIndex: logs[next].sets.length };
+      label = 'exercise';
+    }
+  }
+  if (!target) return { ...base, phase: 'FINISHED', finishedAt: new Date(now).toISOString(), ...NO_REST };
+  const rest = restFor(s, s.exerciseIndex);
+  return { ...base, phase: 'RESTING', restEndsAt: now + rest * 1000, restSeconds: rest, restTarget: target, restLabel: label };
+}
+
 /** Cool-down: go to step `index` (a short "get ready" phase first), or finish after the last step. */
 function stretchStep(s: Session, index: number, now: number): Session {
   const steps = stretchSteps(s.day);
@@ -182,43 +237,36 @@ export function reduce(s: Session, a: Action): Session {
     case 'COMPLETE_SET': {
       if (s.phase !== 'ACTIVE_SET' || s.pendingWeightFor) return s;
       if (a.now - s.lastActionAt < DOUBLE_TAP_MS) return s;
-      const ex = day.exercises[s.exerciseIndex];
-      const log = s.logs[s.exerciseIndex];
-      if (log.sets.length >= ex.sets) return s;
-      // The weight is asked once per exercise (pendingWeightFor); a value typed for this set wins.
-      const perSetKg = parseWeight(a.perSetWeight);
-      const setLog: SetLog = {
-        set: log.sets.length + 1,
-        reps: ex.reps,
-        weightKg: perSetKg,
-        perSet: perSetKg !== null,
-        completedAt: new Date(a.now).toISOString(),
-      };
-      const newLog = { ...log, sets: [...log.sets, setLog] };
-      const logs = s.logs.map((l, i) => (i === s.exerciseIndex ? newLog : l));
-      const exerciseDone = newLog.sets.length >= ex.sets;
-      const base: Session = { ...s, logs, lastActionAt: a.now, pendingWeightFor: exerciseDone ? ex.id : null };
-      let target: Position | null = null;
-      let label: 'set' | 'exercise' | null = null;
-      if (!exerciseDone) {
-        target = { exerciseIndex: s.exerciseIndex, setIndex: newLog.sets.length };
-        label = 'set';
-      } else {
-        const next = nextIncompleteAfter(base, s.exerciseIndex);
-        if (next !== null) {
-          target = { exerciseIndex: next, setIndex: logs[next].sets.length };
-          label = 'exercise';
-        }
-      }
-      if (!target) return { ...base, phase: 'FINISHED', finishedAt: new Date(a.now).toISOString(), ...NO_REST };
-      const rest = restFor(s, s.exerciseIndex);
-      return { ...base, phase: 'RESTING', restEndsAt: a.now + rest * 1000, restSeconds: rest, restTarget: target, restLabel: label };
+      return completeSet(s, a.now, a.perSetWeight);
     }
     case 'REST_DONE':
     case 'SKIP_REST': {
       if (s.phase !== 'RESTING' || !s.restTarget) return s;
-      return { ...s, phase: 'ACTIVE_SET', exerciseIndex: s.restTarget.exerciseIndex, setIndex: s.restTarget.setIndex, ...NO_REST, lastActionAt: a.now };
+      const next: Session = { ...s, phase: 'ACTIVE_SET', exerciseIndex: s.restTarget.exerciseIndex, setIndex: s.restTarget.setIndex, ...NO_REST, lastActionAt: a.now };
+      // A timed exercise (plank) starts its own timer here: "get ready", then the hold.
+      return autoWork(next, a.now);
     }
+    case 'WORK_START': {
+      if (s.phase !== 'ACTIVE_SET' || s.pendingWeightFor || s.work) return s;
+      return autoWork(s, a.now);
+    }
+    case 'WORK_ADVANCE': {
+      const w = s.work;
+      if (!w || s.phase !== 'ACTIVE_SET' || a.now < w.endsAt - 300) return s;
+      if (a.now - w.endsAt > STALE_WORK_MS) return { ...s, work: null };
+      const hold = day.exercises[s.exerciseIndex].seconds ?? 30;
+      // The next phase starts exactly when the previous one ended, so polling lag never stretches a hold.
+      if (w.phase === 'prep') return { ...s, work: { ...w, phase: 'hold', endsAt: w.endsAt + hold * 1000, total: hold } };
+      if (w.side === 1) return { ...s, work: workPrep(2, w.endsAt) };
+      return completeSet(s, a.now);
+    }
+    case 'WORK_ADD': {
+      const w = s.work;
+      if (!w || w.phase !== 'hold') return s;
+      return { ...s, work: { ...w, endsAt: w.endsAt + a.seconds * 1000, total: w.total + a.seconds } };
+    }
+    case 'WORK_STOP':
+      return s.work ? { ...s, work: null } : s;
     case 'ADJUST_REST': {
       if (s.phase !== 'RESTING' || s.restEndsAt === null) return s;
       const endsAt = Math.max(a.now + 1000, s.restEndsAt + a.deltaSec * 1000);
@@ -227,11 +275,11 @@ export function reduce(s: Session, a: Action): Session {
     }
     case 'PREV_EXERCISE': {
       if (s.phase !== 'ACTIVE_SET' || s.exerciseIndex === 0) return s;
-      return { ...s, ...positionFor(s, s.exerciseIndex - 1) };
+      return { ...s, ...positionFor(s, s.exerciseIndex - 1), work: null };
     }
     case 'NEXT_EXERCISE': {
       if (s.phase !== 'ACTIVE_SET' || s.exerciseIndex >= day.exercises.length - 1) return s;
-      return { ...s, ...positionFor(s, s.exerciseIndex + 1) };
+      return { ...s, ...positionFor(s, s.exerciseIndex + 1), work: null };
     }
     case 'UNDO_SET': {
       let bestIdx = -1;
@@ -252,6 +300,7 @@ export function reduce(s: Session, a: Action): Session {
         exerciseIndex: bestIdx,
         setIndex: logs[bestIdx].sets.length,
         ...NO_REST,
+        work: null,
         finishedAt: undefined,
         lastActionAt: a.now,
         pendingWeightFor: s.pendingWeightFor === logs[bestIdx].exerciseId ? null : s.pendingWeightFor ?? null,
@@ -300,17 +349,18 @@ export function reduce(s: Session, a: Action): Session {
         ...s,
         day: { ...day, exercises: day.exercises.map((e, i) => (i === a.exerciseIndex ? next : e)) },
         logs: s.logs.map((l, i) => (i === a.exerciseIndex ? { exerciseId: next.id, sets: [] } : l)),
+        work: a.exerciseIndex === s.exerciseIndex ? null : s.work ?? null,
       };
     }
     case 'FINISH': {
       if (s.phase === 'FINISHED') return s;
       const last = lastSetTime(s);
       const finishedAt = last && a.now - Date.parse(last) > STALE_FINISH_MS ? last : new Date(a.now).toISOString();
-      return { ...s, phase: 'FINISHED', finishedAt, ...NO_REST };
+      return { ...s, phase: 'FINISHED', finishedAt, ...NO_REST, work: null };
     }
     case 'REOPEN': {
       if (s.phase !== 'FINISHED') return s;
-      return { ...s, phase: 'ACTIVE_SET', finishedAt: undefined, ...positionFor(s, s.exerciseIndex) };
+      return { ...s, phase: 'ACTIVE_SET', finishedAt: undefined, ...positionFor(s, s.exerciseIndex), work: null };
     }
     default:
       return s;
@@ -373,6 +423,21 @@ export function stretchTimerText(s: Session): { title: string; text: string; don
     text: nextText,
     doneTitle: next ? 'Keisk' : 'Tempimas baigtas',
     doneText: nextText,
+  };
+}
+
+/** Texts for the Android notification while a timed set (plank) is held. */
+export function workTimerText(s: Session): { title: string; text: string; doneTitle: string; doneText: string } {
+  const ex = s.day.exercises[s.exerciseIndex];
+  const setText = `setas ${s.logs[s.exerciseIndex].sets.length + 1}/${ex.sets}`;
+  const side = s.work?.side ?? 0;
+  const sideText = side === 1 ? ' (kairė)' : side === 2 ? ' (dešinė)' : '';
+  const more = side === 1;
+  return {
+    title: `Laikyk · ${ex.name}${sideText}`,
+    text: setText,
+    doneTitle: more ? 'Keisk pusę' : 'Setas atliktas',
+    doneText: more ? `${ex.name} · dešinė pusė` : `${ex.name} · ${setText} · poilsis`,
   };
 }
 

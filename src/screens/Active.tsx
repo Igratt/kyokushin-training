@@ -19,7 +19,9 @@ const RING = 2 * Math.PI * 54;
 export default function Active({ session: s, dispatch, settings, suggested, onExit }: Props) {
   const day = s.day;
   const resting = s.phase === 'RESTING';
-  const now = useNow(resting, 200);
+  // Timer of a timed set (plank): "get ready" → hold (→ other side) → the set logs itself.
+  const work = s.phase === 'ACTIVE_SET' ? s.work ?? null : null;
+  const now = useNow(resting || !!work, 200);
   const alarm = useAlarm();
   const fs = useFullscreen();
   useWakeLock(true);
@@ -28,10 +30,14 @@ export default function Active({ session: s, dispatch, settings, suggested, onEx
   const [perSetOpen, setPerSetOpen] = useState(false);
   const [perSetText, setPerSetText] = useState('');
   const firedFor = useRef<number | null>(null);
+  const workFired = useRef('');
 
   const ex = day.exercises[s.exerciseIndex];
   const done = s.logs[s.exerciseIndex].sets.length;
   const allDone = done >= ex.sets;
+  const timed = !!ex.seconds;
+  const workLeftMs = work ? Math.max(0, work.endsAt - now) : 0;
+  const workFrac = work ? Math.min(1, Math.max(0, 1 - workLeftMs / Math.max(1, work.total * 1000))) : 0;
   const prog = progress(s);
   const color = day.color;
   const lastW = suggested[exerciseKey(ex.name)];
@@ -55,11 +61,27 @@ export default function Active({ session: s, dispatch, settings, suggested, onEx
     }
   }, [now, resting, s.restEndsAt, alarm, settings, dispatch]);
 
+  // Timed set: a soft tick when the hold starts, a short beep when it ends (the Android app beeps natively,
+  // also with the screen off). The engine then switches side or logs the set and starts the rest.
+  useEffect(() => {
+    if (!work || now < work.endsAt) return;
+    const key = `${work.phase}:${work.side}:${work.endsAt}`;
+    if (workFired.current === key) return;
+    workFired.current = key;
+    if (work.phase === 'prep') alarm.fire(settings, 'tick');
+    else if (!nativeTimer) alarm.fire(settings, 'short');
+    dispatch({ type: 'WORK_ADVANCE', now: Date.now() });
+  }, [now, work, alarm, settings, dispatch]);
+
   const completeSet = () => {
     alarm.prime();
     dispatch({ type: 'COMPLETE_SET', now: Date.now(), perSetWeight: perSetOpen ? perSetText : undefined });
     setPerSetText('');
     setPerSetOpen(false);
+  };
+  const startWork = () => {
+    alarm.prime();
+    dispatch({ type: 'WORK_START', now: Date.now() });
   };
 
   const topBar = (
@@ -147,6 +169,51 @@ export default function Active({ session: s, dispatch, settings, suggested, onEx
     );
   }
 
+  // Timed set in progress: the same big ring as the rest, so the count is readable from the floor.
+  if (work) {
+    const prep = work.phase === 'prep';
+    const leftSec = Math.min(work.total, Math.ceil(workLeftMs / 1000));
+    return (
+      <div className="screen active" style={{ '--day': color } as CSSProperties}>
+        {topBar}
+        <div className="rest-view" id="work-timer">
+          <div className="rest-label">
+            {prep ? (work.side === 2 ? 'Keisk pusę' : 'Pasiruošk') : 'Laikyk'}
+            {work.side > 0 && <span className="variant-chip on side-chip">{work.side === 1 ? 'Kairė pusė' : 'Dešinė pusė'}</span>}
+          </div>
+          <div className={'ring-wrap' + (prep ? ' prep' : '')}>
+            <svg viewBox="0 0 120 120" className="ring" aria-hidden="true">
+              <circle cx="60" cy="60" r="54" className="ring-bg" />
+              <circle cx="60" cy="60" r="54" className="ring-fg" style={{ strokeDasharray: RING, strokeDashoffset: RING * workFrac }} />
+            </svg>
+            <div className="ring-time h-display">{prep ? leftSec : formatClock(leftSec)}</div>
+          </div>
+          <div className="next-card">
+            <ExerciseImage src={ex.image} name={ex.name} className="next-img" />
+            <div>
+              <div className="muted small">Pratimas su laiku</div>
+              <div className="next-name">{ex.name}</div>
+              <div className="muted small">
+                setas {done + 1}/{ex.sets} · {ex.seconds} s{ex.sides === 2 ? ' / pusė' : ''}
+              </div>
+            </div>
+          </div>
+          <div className="row rest-btns">
+            <button className="btn btn-ghost grow" disabled={prep} onClick={() => dispatch({ type: 'WORK_ADD', seconds: 15, now: Date.now() })}>
+              +15 s
+            </button>
+            <button className="btn btn-ghost grow" onClick={() => dispatch({ type: 'WORK_STOP' })}>
+              Stabdyti
+            </button>
+          </div>
+          <button className="btn btn-xl btn-day" id="set-done" onClick={completeSet}>
+            ✓ Setas atliktas
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="screen active" style={{ '--day': color } as CSSProperties}>
       {topBar}
@@ -179,7 +246,9 @@ export default function Active({ session: s, dispatch, settings, suggested, onEx
           <span className="h-display big">{allDone ? 'Visi setai atlikti' : `Setas ${done + 1} / ${ex.sets}`}</span>
           <span className="h-display big reps">{ex.reps}</span>
         </div>
-        <div className="muted small">Poilsis po seto: {restFor(s, s.exerciseIndex)} s</div>
+        <div className="muted small">
+          {timed ? `Laikmatis: ${ex.seconds} s${ex.sides === 2 ? ' / pusė' : ''} · ` : ''}Poilsis po seto: {restFor(s, s.exerciseIndex)} s
+        </div>
       </div>
 
       {perSetOpen ? (
@@ -199,6 +268,11 @@ export default function Active({ session: s, dispatch, settings, suggested, onEx
           {!allDone && (
             <button className="link small" onClick={() => setPerSetOpen(true)}>
               + svoris šiam setui
+            </button>
+          )}
+          {timed && !work && !allDone && (
+            <button className="link small" id="set-done-manual" onClick={completeSet}>
+              ✓ atlikta be laikmačio
             </button>
           )}
         </div>
@@ -238,6 +312,10 @@ export default function Active({ session: s, dispatch, settings, suggested, onEx
               Baigti treniruotę
             </button>
           )
+        ) : timed && !work ? (
+          <button className="btn btn-xl btn-day" id="work-start" onClick={startWork}>
+            ▶ Pradėti laikmatį · {ex.seconds} s{ex.sides === 2 ? ' / pusė' : ''}
+          </button>
         ) : (
           <button className="btn btn-xl btn-day" id="set-done" onClick={completeSet}>
             ✓ Setas atliktas

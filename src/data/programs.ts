@@ -72,6 +72,11 @@ function normalizeExercise(e: unknown, label: string, fallbackId: string, ids: S
   const reps = typeof er.reps === 'number' ? String(er.reps) : text(er.reps) ?? fail(`„${name}“: trūksta „reps“.`);
   const rest = er.restSeconds === undefined ? 90 : Math.round(toNumber(er.restSeconds));
   if (!(rest >= 0 && rest <= 900)) fail(`„${name}“: „restSeconds“ turi būti nuo 0 iki 900.`);
+  // Timed exercise (plank): the app runs a hold timer of `seconds` per set, on both sides when `sides` is 2.
+  const seconds = er.seconds === undefined ? undefined : Math.round(toNumber(er.seconds));
+  if (seconds !== undefined && !(seconds >= 5 && seconds <= 900)) fail(`„${name}“: „seconds“ turi būti nuo 5 iki 900.`);
+  const sides = er.sides === undefined ? undefined : Math.round(toNumber(er.sides));
+  if (sides !== undefined && sides !== 1 && sides !== 2) fail(`„${name}“: „sides“ turi būti 1 arba 2.`);
   let id = text(er.id) ?? fallbackId;
   while (ids.has(id)) id += '_';
   ids.add(id);
@@ -86,6 +91,8 @@ function normalizeExercise(e: unknown, label: string, fallbackId: string, ids: S
     sets,
     reps,
     restSeconds: rest,
+    seconds,
+    sides: sides as 1 | 2 | undefined,
     image: image(er.image),
     description: text(er.description),
     focus: text(er.focus),
@@ -139,6 +146,8 @@ function plain(ex: Exercise): Exercise {
     sets: ex.sets,
     reps: ex.reps,
     restSeconds: ex.restSeconds,
+    seconds: ex.seconds,
+    sides: ex.sides,
     image: ex.image,
     description: ex.description,
     focus: ex.focus,

@@ -6,6 +6,10 @@ export interface Exercise {
   sets: number;
   reps: string;
   restSeconds: number;
+  /** Timed exercise (plank etc.): seconds to hold per set. The app runs that timer itself after the rest. */
+  seconds?: number;
+  /** 2 = the hold is done on the left and then on the right side (side plank). */
+  sides?: 1 | 2;
   image?: string;
   description?: string;
   focus?: string;
@@ -47,6 +51,16 @@ export interface StretchRun {
   /** Index into stretchSteps(day): every side of every stretch is one step. */
   index: number;
   phase: 'prep' | 'hold';
+  endsAt: number;
+  /** Length of the current phase in seconds (for the ring). */
+  total: number;
+}
+
+/** Timer of a timed set (plank): "get ready" → hold (→ other side); the set completes itself at the end. */
+export interface WorkRun {
+  phase: 'prep' | 'hold';
+  /** 0 = one block, 1 = left side, 2 = right side. */
+  side: 0 | 1 | 2;
   endsAt: number;
   /** Length of the current phase in seconds (for the ring). */
   total: number;
@@ -114,6 +128,8 @@ export interface Session {
   stretch?: StretchRun | null;
   /** The cool-down was done to the end. */
   stretched?: boolean;
+  /** Running timer of a timed set (null when none). */
+  work?: WorkRun | null;
 }
 
 export interface RecordExercise {

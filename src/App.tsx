@@ -4,7 +4,7 @@ import type { Program, Session, Settings, WorkoutRecord } from './types';
 import { DEFAULT_PROGRAM_ID, allPrograms, exerciseKey, findProgram } from './data/programs';
 import { isNative, restTimer, saveJsonFile } from './native';
 import { mergeHistory, storage, upsertRecord } from './storage';
-import { createSession, lastWeights, migrateSession, reduce, restTimerText, stretchTimerText, toRecord, type Action } from './workout/engine';
+import { createSession, lastWeights, migrateSession, reduce, restTimerText, stretchTimerText, toRecord, workTimerText, type Action } from './workout/engine';
 import { primeAudio } from './hooks';
 import type { RestTimerOptions } from './native';
 import Stretch from './screens/Stretch';
@@ -73,7 +73,7 @@ export default function App() {
   const suggested = useMemo(() => lastWeights(history, session?.id), [history, session?.id]);
 
   // Android app: countdown in the notification shade and an alarm that rings even when the app is hidden,
-  // for rests between sets and for every stretch hold of the cool-down.
+  // for rests between sets, for the hold of a timed set (plank) and for every stretch hold of the cool-down.
   const timerKey = useRef('boot');
   useEffect(() => {
     const s = session;
@@ -81,6 +81,8 @@ export default function App() {
     let spec: { key: string; opts: RestTimerOptions } | null = null;
     if (s && s.phase === 'RESTING' && s.restEndsAt && s.restTarget && s.restEndsAt > Date.now()) {
       spec = { key: `rest:${s.id}:${s.restEndsAt}`, opts: { endAt: s.restEndsAt, ...restTimerText(s), ...flags, tone: 'rest' } };
+    } else if (s && s.phase === 'ACTIVE_SET' && s.work?.phase === 'hold' && s.work.endsAt > Date.now()) {
+      spec = { key: `work:${s.id}:${s.exerciseIndex}:${s.work.side}:${s.work.endsAt}`, opts: { endAt: s.work.endsAt, ...workTimerText(s), ...flags, tone: 'short' } };
     } else if (s?.stretch && s.stretch.phase === 'hold' && s.stretch.endsAt > Date.now()) {
       spec = { key: `stretch:${s.id}:${s.stretch.index}:${s.stretch.endsAt}`, opts: { endAt: s.stretch.endsAt, ...stretchTimerText(s), ...flags, tone: 'short' } };
     }
