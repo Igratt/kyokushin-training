@@ -22,7 +22,10 @@ APK: https://github.com/Igratt/kyokushin-training/releases/latest/download/Kyoku
 
 ## Programos
 
-Kiekvienas JSON failas aplanke `src/data/programs/` yra programa, rodoma Nustatymai → Programa. Naują programą pridėti:
+Kiekvienas JSON failas aplanke `src/data/programs/` yra programa, rodoma Nustatymai → Programa.
+
+- `kyokushin-mix.json`: pagrindinė, 3 dienos (karatė + salė).
+- `hard-gym.json`: 4 dienos tik sporto salei, pvz. karatė pertraukai (viršus / apačia po du kartus, jėga + masė). Ją sugeneruoja `py tools/make_hard_gym.py`: perima Kyokushin programos pratimų aprašymus ir nuotraukas, naujus piešinius ima iš `py tools/draw_gym.py`, o nuotraukas, kurių kampo numeris nesutampa su nauja vieta, nukopijuoja su teisingu numeriu (`tools/rebadge.py`). Naują programą pridėti:
 
 1. Įdėk naują `.json` failą į `src/data/programs/` (formatas toks pat kaip `kyokushin-mix.json`).
 2. `npm run deploy` — programa atsiras telefone kitą kartą atidarius.
