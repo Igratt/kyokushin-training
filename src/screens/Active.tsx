@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import type { Session, Settings } from '../types';
-import { exerciseKey } from '../data/programs';
-import { effectiveSets, formatClock, formatWeight, progress, restFor, type Action } from '../workout/engine';
+import { exerciseKey, plural } from '../data/programs';
+import { effectiveSets, formatClock, formatKg, formatShortDate, formatWeight, progress, restFor, type Action, type LastPerformance } from '../workout/engine';
 import { useAlarm, useFullscreen, useNow, useWakeLock } from '../hooks';
 import { isNative, nativeTimer } from '../native';
 import { Confirm, DayTag, ExerciseImage, ProgressBar, TopBar } from '../ui';
@@ -11,12 +11,27 @@ interface Props {
   dispatch: (a: Action) => void;
   settings: Settings;
   suggested: Record<string, number>;
+  /** Last time each exercise was done (by name). */
+  last: Record<string, LastPerformance>;
   onExit: () => void;
 }
 
 const RING = 2 * Math.PI * 54;
 
-export default function Active({ session: s, dispatch, settings, suggested, onExit }: Props) {
+/** "40 kg · 4 setai", "40 · 40 · 42,5 kg" or "svoris neįrašytas". */
+function lastText(p: LastPerformance, timed: boolean, knownKg: number | undefined): string {
+  const n = p.weights.length;
+  const sets = `${n} ${plural(n, 'setas', 'setai', 'setų')}`;
+  const kg = p.weights.filter((w): w is number => w !== null);
+  if (kg.length === 0) {
+    if (timed) return sets;
+    return knownKg !== undefined ? `svoris neįrašytas · paskutinis įrašytas ${formatWeight(knownKg)}` : `${sets}, svoris neįrašytas`;
+  }
+  if (kg.length === n && kg.every((w) => w === kg[0])) return `${formatKg(kg[0])} kg · ${sets}`;
+  return p.weights.map((w) => (w === null ? '—' : formatKg(w))).join(' · ') + ' kg';
+}
+
+export default function Active({ session: s, dispatch, settings, suggested, last, onExit }: Props) {
   const day = s.day;
   const resting = s.phase === 'RESTING';
   // Timer of a timed set (plank): "get ready" → hold (→ other side) → the set logs itself.
@@ -41,6 +56,7 @@ export default function Active({ session: s, dispatch, settings, suggested, onEx
   const prog = progress(s);
   const color = day.color;
   const lastW = suggested[exerciseKey(ex.name)];
+  const lastPerf = last[exerciseKey(ex.name)];
   const exWeightText = s.weights[ex.id] ?? '';
   const doneSets = effectiveSets(s, s.exerciseIndex);
 
@@ -249,6 +265,15 @@ export default function Active({ session: s, dispatch, settings, suggested, onEx
         <div className="muted small">
           {timed ? `Laikmatis: ${ex.seconds} s${ex.sides === 2 ? ' / pusė' : ''} · ` : ''}Poilsis po seto: {restFor(s, s.exerciseIndex)} s
         </div>
+        <div className="last-line" id="last-line">
+          {lastPerf ? (
+            <>
+              Praeitą kartą ({formatShortDate(lastPerf.date)}): <b>{lastText(lastPerf, timed, lastW)}</b>
+            </>
+          ) : (
+            <span className="muted">Praeitą kartą: dar nedarei</span>
+          )}
+        </div>
       </div>
 
       {perSetOpen ? (
@@ -260,11 +285,7 @@ export default function Active({ session: s, dispatch, settings, suggested, onEx
         </div>
       ) : (
         <div className="row wrap weight-line">
-          {exWeightText ? (
-            <span className="muted small">Svoris: {exWeightText} kg</span>
-          ) : lastW !== undefined ? (
-            <span className="muted small">Praeitą kartą: {formatWeight(lastW)}</span>
-          ) : null}
+          {exWeightText ? <span className="muted small">Šiandien: {exWeightText} kg</span> : null}
           {!allDone && (
             <button className="link small" onClick={() => setPerSetOpen(true)}>
               + svoris šiam setui

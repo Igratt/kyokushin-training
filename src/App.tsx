@@ -4,7 +4,7 @@ import type { Program, Session, Settings, WorkoutRecord } from './types';
 import { DEFAULT_PROGRAM_ID, allPrograms, exerciseKey, findProgram } from './data/programs';
 import { isNative, restTimer, saveJsonFile } from './native';
 import { mergeHistory, storage, upsertRecord } from './storage';
-import { createSession, lastWeights, migrateSession, reduce, restTimerText, stretchTimerText, toRecord, workTimerText, type Action } from './workout/engine';
+import { createSession, lastPerformance, lastWeights, migrateSession, reduce, restTimerText, stretchTimerText, toRecord, workTimerText, type Action } from './workout/engine';
 import { primeAudio } from './hooks';
 import type { RestTimerOptions } from './native';
 import Stretch from './screens/Stretch';
@@ -71,6 +71,7 @@ export default function App() {
     setSession((s) => (s ? reduce(s, a) : s));
   }, []);
   const suggested = useMemo(() => lastWeights(history, session?.id), [history, session?.id]);
+  const lastPerf = useMemo(() => lastPerformance(history, session?.id), [history, session?.id]);
 
   // Android app: countdown in the notification shade and an alarm that rings even when the app is hidden,
   // for rests between sets, for the hold of a timed set (plank) and for every stretch hold of the cool-down.
@@ -241,7 +242,11 @@ export default function App() {
       break;
     }
     case 'active':
-      screen = session ? <Active session={session} dispatch={dispatch} settings={settings} suggested={suggested} onExit={() => setView({ name: 'home' })} /> : <></>;
+      screen = session ? (
+        <Active session={session} dispatch={dispatch} settings={settings} suggested={suggested} last={lastPerf} onExit={() => setView({ name: 'home' })} />
+      ) : (
+        <></>
+      );
       break;
     case 'complete':
       screen = session ? (

@@ -456,6 +456,35 @@ export function lastWeights(history: WorkoutRecord[], excludeId?: string): Recor
   return out;
 }
 
+/** How an exercise went the last time it was done. */
+export interface LastPerformance {
+  /** When that workout ended (ISO). */
+  date: string;
+  /** Weight of each set (null = not entered). */
+  weights: (number | null)[];
+}
+
+/** The last time each exercise was done (by name, across days and programs), whether or not a weight was entered. */
+export function lastPerformance(history: WorkoutRecord[], excludeId?: string): Record<string, LastPerformance> {
+  const out: Record<string, LastPerformance> = {};
+  const sorted = history.filter((r) => r.id !== excludeId).sort((a, b) => b.finishedAt.localeCompare(a.finishedAt));
+  for (const rec of sorted) {
+    for (const ex of rec.exercises) {
+      const key = exerciseKey(ex.name);
+      if (out[key] || ex.sets.length === 0) continue;
+      out[key] = { date: rec.finishedAt, weights: ex.sets.map((st) => st.weightKg) };
+    }
+  }
+  return out;
+}
+
+/** "10-14" */
+export function formatShortDate(iso: string): string {
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return '';
+  return String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+}
+
 export function lastDoneByDay(history: WorkoutRecord[], programId: string): Record<string, string> {
   const out: Record<string, string> = {};
   for (const r of history) {
