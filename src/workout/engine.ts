@@ -1,4 +1,4 @@
-import type { Day, Position, Program, Session, SetLog, WorkRun, WorkoutRecord } from '../types';
+import type { Day, Exercise, GuidedList, Position, Program, Session, SetLog, WorkRun, WorkoutRecord } from '../types';
 import { DEFAULT_PROGRAM_ID, STRETCH_PREP_SECONDS, exerciseKey, stretchSteps, versionsOf, withChoice } from '../data/programs';
 
 /*
@@ -23,7 +23,7 @@ export type Action =
   | { type: 'SET_NOTE'; exerciseId: string; value: string }
   | { type: 'SET_WORKOUT_NOTE'; value: string }
   | { type: 'SWAP_VARIANT'; exerciseIndex: number }
-  | { type: 'STRETCH_START'; now: number }
+  | { type: 'STRETCH_START'; now: number; list?: GuidedList }
   | { type: 'STRETCH_ADVANCE'; now: number }
   | { type: 'STRETCH_SKIP'; now: number }
   | { type: 'STRETCH_BACK'; now: number }
@@ -102,10 +102,14 @@ export function migrateSession(raw: unknown, programs: Program[]): Session | nul
     day = clone(fromProgram);
   }
   if (!day.color) day = { ...day, color: program?.days.find((d) => d.id === day?.id)?.color ?? '#3B82F6' };
-  // Workouts started before the cool-down existed still get the day's stretches.
+  // Workouts started before the cool-down / warm-up existed still get the day's lists.
   if (!day.stretches?.length) {
     const fromProgram = program?.days.find((d) => d.id === day?.id)?.stretches;
     if (fromProgram?.length) day = { ...day, stretches: clone(fromProgram) };
+  }
+  if (!day.warmup?.length) {
+    const fromProgram = program?.days.find((d) => d.id === day?.id)?.warmup;
+    if (fromProgram?.length) day = { ...day, warmup: clone(fromProgram) };
   }
   const oldLogs = s.logs;
   const logs = day.exercises.map((ex, i) => {
@@ -140,6 +144,7 @@ export function migrateSession(raw: unknown, programs: Program[]): Session | nul
     pendingWeightFor: s.pendingWeightFor && day.exercises.some((e) => e.id === s.pendingWeightFor) ? s.pendingWeightFor : null,
     stretch: s.stretch && typeof s.stretch.endsAt === 'number' ? s.stretch : null,
     stretched: s.stretched,
+    warmedUp: s.warmedUp,
     work: s.work && typeof s.work.endsAt === 'number' && s.phase === 'ACTIVE_SET' && !resting ? s.work : null,
   };
 }
@@ -218,11 +223,22 @@ function completeSet(s: Session, now: number, perSetWeight?: string): Session {
   return { ...base, phase: 'RESTING', restEndsAt: now + rest * 1000, restSeconds: rest, restTarget: target, restLabel: label };
 }
 
-/** Cool-down: go to step `index` (a short "get ready" phase first), or finish after the last step. */
-function stretchStep(s: Session, index: number, now: number): Session {
-  const steps = stretchSteps(s.day);
-  if (index >= steps.length) return { ...s, stretch: null, stretched: true };
-  return { ...s, stretch: { index: Math.max(0, index), phase: 'prep', endsAt: now + STRETCH_PREP_SECONDS * 1000, total: STRETCH_PREP_SECONDS } };
+/** Warm-up / cool-down: go to step `index` (a short "get ready" phase first), or finish after the last step. */
+function stretchStep(s: Session, list: GuidedList, index: number, now: number): Session {
+  const steps = stretchSteps(s.day, list);
+  if (index >= steps.length) return list === 'warmup' ? { ...s, stretch: null, warmedUp: true } : { ...s, stretch: null, stretched: true };
+  return {
+    ...s,
+    stretch: { list, index: Math.max(0, index), phase: 'prep', endsAt: now + STRETCH_PREP_SECONDS * 1000, total: STRETCH_PREP_SECONDS },
+  };
+}
+
+/** Name of side 1 / side 2 of a two-sided item: the side to start with comes first. */
+export function sideName(side: number, startSide?: Exercise['startSide']): string {
+  if (side !== 1 && side !== 2) return '';
+  const first = startSide === 'right' ? 'dešinė' : 'kairė';
+  const second = startSide === 'right' ? 'kairė' : 'dešinė';
+  return side === 1 ? first : second;
 }
 
 function lastSetTime(s: Session): string {
@@ -318,21 +334,24 @@ export function reduce(s: Session, a: Action): Session {
       return { ...s, notes: { ...s.notes, [a.exerciseId]: a.value } };
     case 'SET_WORKOUT_NOTE':
       return { ...s, workoutNote: a.value };
-    case 'STRETCH_START':
-      return stretchSteps(day).length ? stretchStep(s, 0, a.now) : s;
+    case 'STRETCH_START': {
+      const list = a.list ?? 'cooldown';
+      return stretchSteps(day, list).length ? stretchStep({ ...s, work: null }, list, 0, a.now) : s;
+    }
     case 'STRETCH_ADVANCE': {
       const st = s.stretch;
       if (!st || a.now < st.endsAt - 300) return s;
+      const list = st.list ?? 'cooldown';
       if (st.phase === 'prep') {
-        const hold = stretchSteps(day)[st.index]?.stretch.hold ?? 30;
+        const hold = stretchSteps(day, list)[st.index]?.stretch.hold ?? 30;
         return { ...s, stretch: { ...st, phase: 'hold', endsAt: a.now + hold * 1000, total: hold } };
       }
-      return stretchStep(s, st.index + 1, a.now);
+      return stretchStep(s, list, st.index + 1, a.now);
     }
     case 'STRETCH_SKIP':
-      return s.stretch ? stretchStep(s, s.stretch.index + 1, a.now) : s;
+      return s.stretch ? stretchStep(s, s.stretch.list ?? 'cooldown', s.stretch.index + 1, a.now) : s;
     case 'STRETCH_BACK':
-      return s.stretch ? stretchStep(s, s.stretch.index - 1, a.now) : s;
+      return s.stretch ? stretchStep(s, s.stretch.list ?? 'cooldown', s.stretch.index - 1, a.now) : s;
     case 'STRETCH_ADD': {
       const st = s.stretch;
       if (!st || st.phase !== 'hold') return s;
@@ -406,23 +425,25 @@ export function toRecord(s: Session): WorkoutRecord {
     note: s.workoutNote?.trim() || undefined,
     completed: s.phase === 'FINISHED',
     stretched: s.stretched || undefined,
+    warmedUp: s.warmedUp || undefined,
     updatedAt: new Date().toISOString(),
   };
 }
 
-/** Texts for the Android notification while a stretch is held. */
+/** Texts for the Android notification while a warm-up or cool-down item is held. */
 export function stretchTimerText(s: Session): { title: string; text: string; doneTitle: string; doneText: string } {
-  const steps = stretchSteps(s.day);
+  const warm = s.stretch?.list === 'warmup';
+  const steps = stretchSteps(s.day, warm ? 'warmup' : 'cooldown');
   const i = s.stretch?.index ?? 0;
   const cur = steps[i];
   const next = steps[i + 1];
-  const sideText = (side: number) => (side === 1 ? ' (kairė)' : side === 2 ? ' (dešinė)' : '');
-  const nextText = next ? `Toliau: ${next.stretch.name}${sideText(next.side)}` : 'Paskutinis tempimas';
+  const sideText = (side: number) => (side ? ` (${sideName(side)})` : '');
+  const nextText = next ? `Toliau: ${next.stretch.name}${sideText(next.side)}` : warm ? 'Paskutinis apšilimo pratimas' : 'Paskutinis tempimas';
   return {
-    title: `Tempimas · ${cur ? cur.stretch.name + sideText(cur.side) : ''}`,
+    title: `${warm ? 'Apšilimas' : 'Tempimas'} · ${cur ? cur.stretch.name + sideText(cur.side) : ''}`,
     text: nextText,
-    doneTitle: next ? 'Keisk' : 'Tempimas baigtas',
-    doneText: nextText,
+    doneTitle: next ? 'Keisk' : warm ? 'Apšilimas baigtas' : 'Tempimas baigtas',
+    doneText: next ? nextText : warm ? 'Laikas treniruotei' : nextText,
   };
 }
 
@@ -431,13 +452,13 @@ export function workTimerText(s: Session): { title: string; text: string; doneTi
   const ex = s.day.exercises[s.exerciseIndex];
   const setText = `setas ${s.logs[s.exerciseIndex].sets.length + 1}/${ex.sets}`;
   const side = s.work?.side ?? 0;
-  const sideText = side === 1 ? ' (kairė)' : side === 2 ? ' (dešinė)' : '';
+  const sideText = side ? ` (${sideName(side, ex.startSide)})` : '';
   const more = side === 1;
   return {
     title: `Laikyk · ${ex.name}${sideText}`,
     text: setText,
     doneTitle: more ? 'Keisk pusę' : 'Setas atliktas',
-    doneText: more ? `${ex.name} · dešinė pusė` : `${ex.name} · ${setText} · poilsis`,
+    doneText: more ? `${ex.name} · ${sideName(2, ex.startSide)} pusė` : `${ex.name} · ${setText} · poilsis`,
   };
 }
 

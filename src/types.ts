@@ -10,6 +10,8 @@ export interface Exercise {
   seconds?: number;
   /** 2 = the hold is done on the left and then on the right side (side plank). */
   sides?: 1 | 2;
+  /** One-sided exercise: start with this (weaker) side, then do the same reps with the other one. */
+  startSide?: 'left' | 'right';
   image?: string;
   description?: string;
   focus?: string;
@@ -43,12 +45,19 @@ export interface Day {
   /** Accent colour of the day (A blue, B orange, C green, other days from a palette). */
   color: string;
   exercises: Exercise[];
+  /** Guided warm-up before the workout (hip mobility), run like the cool-down. */
+  warmup?: Stretch[];
   stretches?: Stretch[];
 }
 
-/** Progress of the cool-down. Like the rest timer, it runs on an absolute end timestamp. */
+/** The guided timer lists of a day: the warm-up before and the cool-down after the workout. */
+export type GuidedList = 'warmup' | 'cooldown';
+
+/** Progress of the warm-up or cool-down. Like the rest timer, it runs on an absolute end timestamp. */
 export interface StretchRun {
-  /** Index into stretchSteps(day): every side of every stretch is one step. */
+  /** Which list is running. Sessions saved before the warm-up existed have none: the cool-down. */
+  list?: GuidedList;
+  /** Index into stretchSteps(day, list): every side of every item is one step. */
   index: number;
   phase: 'prep' | 'hold';
   endsAt: number;
@@ -128,6 +137,8 @@ export interface Session {
   stretch?: StretchRun | null;
   /** The cool-down was done to the end. */
   stretched?: boolean;
+  /** The warm-up was done to the end. */
+  warmedUp?: boolean;
   /** Running timer of a timed set (null when none). */
   work?: WorkRun | null;
 }
@@ -159,6 +170,8 @@ export interface WorkoutRecord {
   completed?: boolean;
   /** The cool-down stretches were done. */
   stretched?: boolean;
+  /** The warm-up was done. */
+  warmedUp?: boolean;
   updatedAt?: string;
 }
 

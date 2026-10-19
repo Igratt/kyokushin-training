@@ -61,7 +61,8 @@
               "restSeconds": 90,
               "image": "assets/A_3v.webp",
               "description": "Kettlebell laikyk priešingoje rankoje nei atraminė koja. Lenkis per klubą ir laisvą koją kelk atgal, kol liemuo beveik lygiagretus grindims, tada grįžk spausdamas sėdmenį.",
-              "focus": "Tiesi nugara, klubai lygiai, pusiausvyra."
+              "focus": "Tiesi nugara, klubai lygiai, pusiausvyra.",
+              "startSide": "left"
             }
           ]
         },
@@ -84,9 +85,11 @@
               "restSeconds": 90,
               "image": "assets/A_4v.webp",
               "description": "Kettlebell laikyk prie krūtinės. Ženk viena koja atgal ir leiskis, kol galinis kelis beveik paliečia grindis, tada stumkis priekine koja į pradinę padėtį.",
-              "focus": "Liemuo vertikalus, priekinis kelis stabilus."
+              "focus": "Liemuo vertikalus, priekinis kelis stabilus.",
+              "startSide": "left"
             }
-          ]
+          ],
+          "startSide": "left"
         },
         {
           "id": "A5",
@@ -109,7 +112,8 @@
               "description": "Įtūpstas, priekinis kelis virš pėdos. Sprogstamai šok aukštyn, ore sukeisk kojas ir nusileisk į įtūpstą su kita koja priekyje.",
               "focus": "Greitis ir minkštas nusileidimas."
             }
-          ]
+          ],
+          "startSide": "left"
         },
         {
           "id": "A6",
@@ -130,7 +134,8 @@
               "restSeconds": 60,
               "image": "assets/A_6v.webp",
               "description": "Stovėk viena koja ant pakylos krašto, hantelį laikyk toje pačioje pusėje, kita ranka prisilaikyk. Lėtai nusileisk žemyn ir stipriai kilk ant pirštų.",
-              "focus": "Pilna amplitudė, pauzė viršuje."
+              "focus": "Pilna amplitudė, pauzė viršuje.",
+              "startSide": "left"
             }
           ]
         },
@@ -202,6 +207,74 @@
               "focus": "Trumpa amplitudė, kontrolė."
             }
           ]
+        },
+        {
+          "id": "A10",
+          "name": "Copenhagen Plank",
+          "sets": 3,
+          "reps": "20 s / pusė",
+          "seconds": 20,
+          "sides": 2,
+          "restSeconds": 45,
+          "image": "assets/A_10.webp",
+          "description": "Šoninė planka ant dilbio: viršutinės kojos vidinė pusė ant suolo, apatinė koja laisva po suolu. Pakelk klubus, kad kūnas būtų tiesus, ir išlaikyk. Per sunku: dėk ant suolo kelį, ne pėdą.",
+          "focus": "Pritraukiamieji raumenys: stabilesnis dubuo, mažiau kirkšnies traumų."
+        }
+      ],
+      "warmup": [
+        {
+          "id": "W_hip_cars",
+          "name": "Hip CARs (klubo sukimai)",
+          "hold": 30,
+          "sides": 2,
+          "image": "assets/W_hip_cars.webp",
+          "description": "Stovėk ant vienos kojos ir prisilaikyk. Kitą kelį pakelk ir lėtai brėžk kuo didesnį ratą: pirmyn, į šoną, atgal ir žemyn. Liemuo nejuda, juda tik klubas.",
+          "focus": "valdomas judesys per visą klubo amplitudę"
+        },
+        {
+          "id": "W_leg_swings",
+          "name": "Leg Swings (kojos mostai)",
+          "hold": 30,
+          "sides": 2,
+          "image": "assets/W_leg_swings.webp",
+          "description": "Prisilaikyk ir mosuok tiesia koja pirmyn ir atgal, po to į šonus priešais save. Kas kartą šiek tiek aukščiau, liemuo tiesus.",
+          "focus": "dinamiškas klubų apšilimas prieš sunkius pratimus ir spyrius"
+        },
+        {
+          "id": "W_9090",
+          "name": "90/90 Hip Switch",
+          "hold": 45,
+          "sides": 1,
+          "image": "assets/W_9090.webp",
+          "description": "Sėsk ant grindų, abu keliai sulenkti 90°: viena koja priekyje, kita šone. Nekeldamas pėdų lėtai versk kelius į kitą pusę ir atgal. Nugara tiesi, rankomis gali atsiremti.",
+          "focus": "klubo vidinė ir išorinė rotacija"
+        },
+        {
+          "id": "W_cossack",
+          "name": "Cossack Squat (savo svoris)",
+          "hold": 45,
+          "sides": 1,
+          "image": "assets/W_cossack.webp",
+          "description": "Plačiai išsižergk. Leiskis ant vienos kojos, kita lieka tiesi, pirštai į viršų. Pakaitomis į abi puses, kulnas prie žemės, kiek leidžia klubai.",
+          "focus": "pritraukiamieji raumenys ir šoninis mobilumas"
+        },
+        {
+          "id": "W_wgs",
+          "name": "World's Greatest Stretch",
+          "hold": 30,
+          "sides": 2,
+          "image": "assets/W_wgs.webp",
+          "description": "Didelis įtūpstas, ranka į grindis prie priekinės pėdos, kita ranka sukasi į lubas. Judėk ritmingai: alkūnė link pėdos, sukimas į viršų.",
+          "focus": "klubų lenkiamieji ir krūtinės pasukimas"
+        },
+        {
+          "id": "W_deep_squat",
+          "name": "Deep Squat Hold (gilus pritūpimas)",
+          "hold": 45,
+          "sides": 1,
+          "image": "assets/W_deep_squat.webp",
+          "description": "Leiskis į gilų pritūpimą, kulnai prie žemės. Alkūnėmis švelniai stumk kelius į šonus ir lėtai linguok iš kairės į dešinę.",
+          "focus": "klubų ir čiurnų mobilumas pritūpimui"
         }
       ],
       "stretches": [
@@ -341,9 +414,11 @@
               "restSeconds": 90,
               "image": "assets/B_4v.webp",
               "description": "Klūpėk ant vieno kelio, kettlebell laikyk prie peties tos pusės, kur kelis ant žemės. Spausk tiesiai virš galvos, liemuo nekliba.",
-              "focus": "Įtemptas presas ir sėdmuo."
+              "focus": "Įtemptas presas ir sėdmuo.",
+              "startSide": "right"
             }
-          ]
+          ],
+          "startSide": "right"
         },
         {
           "id": "B5",
@@ -462,6 +537,75 @@
               "focus": "Tiesi linija, įtemptas šonas."
             }
           ]
+        },
+        {
+          "id": "B10",
+          "name": "Standing Kick Hold",
+          "sets": 3,
+          "reps": "15 s / koja",
+          "seconds": 15,
+          "sides": 2,
+          "restSeconds": 45,
+          "startSide": "left",
+          "image": "assets/B_10.webp",
+          "description": "Stovėk tiesiai, rankos sargyboje. Pakelk tiesią koją priešais save kuo aukščiau, nesilenkdamas atgal, ir išlaikyk. Pradžioje gali prisilaikyti sienos.",
+          "focus": "Aktyvus lankstumas: klubo lenkiamųjų jėga aukštiems spyriams."
+        }
+      ],
+      "warmup": [
+        {
+          "id": "W_hip_cars",
+          "name": "Hip CARs (klubo sukimai)",
+          "hold": 30,
+          "sides": 2,
+          "image": "assets/W_hip_cars.webp",
+          "description": "Stovėk ant vienos kojos ir prisilaikyk. Kitą kelį pakelk ir lėtai brėžk kuo didesnį ratą: pirmyn, į šoną, atgal ir žemyn. Liemuo nejuda, juda tik klubas.",
+          "focus": "valdomas judesys per visą klubo amplitudę"
+        },
+        {
+          "id": "W_leg_swings",
+          "name": "Leg Swings (kojos mostai)",
+          "hold": 30,
+          "sides": 2,
+          "image": "assets/W_leg_swings.webp",
+          "description": "Prisilaikyk ir mosuok tiesia koja pirmyn ir atgal, po to į šonus priešais save. Kas kartą šiek tiek aukščiau, liemuo tiesus.",
+          "focus": "dinamiškas klubų apšilimas prieš sunkius pratimus ir spyrius"
+        },
+        {
+          "id": "W_9090",
+          "name": "90/90 Hip Switch",
+          "hold": 45,
+          "sides": 1,
+          "image": "assets/W_9090.webp",
+          "description": "Sėsk ant grindų, abu keliai sulenkti 90°: viena koja priekyje, kita šone. Nekeldamas pėdų lėtai versk kelius į kitą pusę ir atgal. Nugara tiesi, rankomis gali atsiremti.",
+          "focus": "klubo vidinė ir išorinė rotacija"
+        },
+        {
+          "id": "W_cossack",
+          "name": "Cossack Squat (savo svoris)",
+          "hold": 45,
+          "sides": 1,
+          "image": "assets/W_cossack.webp",
+          "description": "Plačiai išsižergk. Leiskis ant vienos kojos, kita lieka tiesi, pirštai į viršų. Pakaitomis į abi puses, kulnas prie žemės, kiek leidžia klubai.",
+          "focus": "pritraukiamieji raumenys ir šoninis mobilumas"
+        },
+        {
+          "id": "W_wgs",
+          "name": "World's Greatest Stretch",
+          "hold": 30,
+          "sides": 2,
+          "image": "assets/W_wgs.webp",
+          "description": "Didelis įtūpstas, ranka į grindis prie priekinės pėdos, kita ranka sukasi į lubas. Judėk ritmingai: alkūnė link pėdos, sukimas į viršų.",
+          "focus": "klubų lenkiamieji ir krūtinės pasukimas"
+        },
+        {
+          "id": "W_deep_squat",
+          "name": "Deep Squat Hold (gilus pritūpimas)",
+          "hold": 45,
+          "sides": 1,
+          "image": "assets/W_deep_squat.webp",
+          "description": "Leiskis į gilų pritūpimą, kulnai prie žemės. Alkūnėmis švelniai stumk kelius į šonus ir lėtai linguok iš kairės į dešinę.",
+          "focus": "klubų ir čiurnų mobilumas pritūpimui"
         }
       ],
       "stretches": [
@@ -588,9 +732,11 @@
               "restSeconds": 90,
               "image": "assets/C_4v.webp",
               "description": "Kettlebell laikyk prie krūtinės. Ženk plačiai į šoną ir leiskis ant tos kojos, kita lieka tiesi, tada stumkis atgal.",
-              "focus": "Visa pėda ant žemės, nugara tiesi."
+              "focus": "Visa pėda ant žemės, nugara tiesi.",
+              "startSide": "left"
             }
-          ]
+          ],
+          "startSide": "left"
         },
         {
           "id": "C5",
@@ -706,6 +852,73 @@
               "focus": "Sukimas iš liemens, nugara tiesi."
             }
           ]
+        },
+        {
+          "id": "C10",
+          "name": "Cossack Squat (kettlebell)",
+          "sets": 3,
+          "reps": "6 / pusė",
+          "restSeconds": 60,
+          "startSide": "left",
+          "image": "assets/C_10.webp",
+          "description": "Kettlebell prie krūtinės, plačiai išsižergk. Leiskis ant vienos kojos kuo žemiau, kita tiesi, pirštai į viršų. Kulnas prie žemės, krūtinė pakelta.",
+          "focus": "Dubens mobilumas su svoriu: jėga amplitudės gale."
+        }
+      ],
+      "warmup": [
+        {
+          "id": "W_hip_cars",
+          "name": "Hip CARs (klubo sukimai)",
+          "hold": 30,
+          "sides": 2,
+          "image": "assets/W_hip_cars.webp",
+          "description": "Stovėk ant vienos kojos ir prisilaikyk. Kitą kelį pakelk ir lėtai brėžk kuo didesnį ratą: pirmyn, į šoną, atgal ir žemyn. Liemuo nejuda, juda tik klubas.",
+          "focus": "valdomas judesys per visą klubo amplitudę"
+        },
+        {
+          "id": "W_leg_swings",
+          "name": "Leg Swings (kojos mostai)",
+          "hold": 30,
+          "sides": 2,
+          "image": "assets/W_leg_swings.webp",
+          "description": "Prisilaikyk ir mosuok tiesia koja pirmyn ir atgal, po to į šonus priešais save. Kas kartą šiek tiek aukščiau, liemuo tiesus.",
+          "focus": "dinamiškas klubų apšilimas prieš sunkius pratimus ir spyrius"
+        },
+        {
+          "id": "W_9090",
+          "name": "90/90 Hip Switch",
+          "hold": 45,
+          "sides": 1,
+          "image": "assets/W_9090.webp",
+          "description": "Sėsk ant grindų, abu keliai sulenkti 90°: viena koja priekyje, kita šone. Nekeldamas pėdų lėtai versk kelius į kitą pusę ir atgal. Nugara tiesi, rankomis gali atsiremti.",
+          "focus": "klubo vidinė ir išorinė rotacija"
+        },
+        {
+          "id": "W_cossack",
+          "name": "Cossack Squat (savo svoris)",
+          "hold": 45,
+          "sides": 1,
+          "image": "assets/W_cossack.webp",
+          "description": "Plačiai išsižergk. Leiskis ant vienos kojos, kita lieka tiesi, pirštai į viršų. Pakaitomis į abi puses, kulnas prie žemės, kiek leidžia klubai.",
+          "focus": "pritraukiamieji raumenys ir šoninis mobilumas"
+        },
+        {
+          "id": "W_wgs",
+          "name": "World's Greatest Stretch",
+          "hold": 30,
+          "sides": 2,
+          "image": "assets/W_wgs.webp",
+          "description": "Didelis įtūpstas, ranka į grindis prie priekinės pėdos, kita ranka sukasi į lubas. Judėk ritmingai: alkūnė link pėdos, sukimas į viršų.",
+          "focus": "klubų lenkiamieji ir krūtinės pasukimas"
+        },
+        {
+          "id": "W_deep_squat",
+          "name": "Deep Squat Hold (gilus pritūpimas)",
+          "hold": 45,
+          "sides": 1,
+          "image": "assets/W_deep_squat.webp",
+          "description": "Leiskis į gilų pritūpimą, kulnai prie žemės. Alkūnėmis švelniai stumk kelius į šonus ir lėtai linguok iš kairės į dešinę.",
+          "focus": "klubų ir čiurnų mobilumas pritūpimui"
         }
       ],
       "stretches": [

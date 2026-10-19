@@ -1,7 +1,7 @@
 import { useEffect, useRef, type CSSProperties } from 'react';
 import type { Session, Settings } from '../types';
 import { stretchSteps } from '../data/programs';
-import { formatClock, type Action } from '../workout/engine';
+import { formatClock, sideName, type Action } from '../workout/engine';
 import { useAlarm, useNow, useWakeLock } from '../hooks';
 import { nativeTimer } from '../native';
 import { DayTag, ExerciseImage, ProgressBar, TopBar } from '../ui';
@@ -14,22 +14,26 @@ interface Props {
 }
 
 const RING = 2 * Math.PI * 54;
-const SIDE = ['', 'Kairė pusė', 'Dešinė pusė'];
+const sideLabel = (side: number) => (side ? sideName(side).replace(/^./, (c) => c.toUpperCase()) + ' pusė' : '');
 
-/** Guided cool-down: get ready (5 s) → hold → next side / next stretch, with a short beep in between. */
+/**
+ * Guided warm-up (before the workout) or cool-down (after it):
+ * get ready (5 s) → hold → next side / next item, with a short beep in between.
+ */
 export default function Stretch({ session: s, dispatch, settings, onExit }: Props) {
   const run = s.stretch;
   const now = useNow(!!run, 200);
   const alarm = useAlarm();
   useWakeLock(true);
   const firedFor = useRef<string>('');
-  const steps = stretchSteps(s.day);
+  const warm = run?.list === 'warmup';
+  const steps = stretchSteps(s.day, warm ? 'warmup' : 'cooldown');
 
   // Phase over: hold starts after "get ready" (soft tick), next step after a hold (short beep; the
   // Android app beeps natively, also with the screen off).
   useEffect(() => {
     if (!run || now < run.endsAt) return;
-    const key = `${run.index}:${run.phase}:${run.endsAt}`;
+    const key = `${run.list ?? 'cooldown'}:${run.index}:${run.phase}:${run.endsAt}`;
     if (firedFor.current === key) return;
     firedFor.current = key;
     if (run.phase === 'prep') alarm.fire(settings, 'tick');
@@ -46,12 +50,13 @@ export default function Stretch({ session: s, dispatch, settings, onExit }: Prop
   const frac = Math.min(1, Math.max(0, 1 - remainingMs / Math.max(1, run.total * 1000)));
   const prep = run.phase === 'prep';
   const color = s.day.color;
+  const title = warm ? 'Apšilimas' : 'Tempimas';
 
   return (
     <div className="screen active stretch" style={{ '--day': color } as CSSProperties}>
       <TopBar
         left={
-          <button className="btn-icon" onClick={onExit} aria-label="Baigti tempimą">
+          <button className="btn-icon" onClick={onExit} aria-label={warm ? 'Baigti apšilimą' : 'Baigti tempimą'}>
             ✕
           </button>
         }
@@ -59,7 +64,7 @@ export default function Stretch({ session: s, dispatch, settings, onExit }: Prop
           <span className="top-center">
             <DayTag label={s.day.name} color={color} />
             <span className="top-ex">
-              Tempimas {run.index + 1}/{steps.length}
+              {title} {run.index + 1}/{steps.length}
             </span>
           </span>
         }
@@ -68,7 +73,7 @@ export default function Stretch({ session: s, dispatch, settings, onExit }: Prop
       <ExerciseImage src={st.image} name={st.name} className="ex-image stretch-image" />
       <div className="stretch-head">
         <h1 className="h-display ex-title">{st.name}</h1>
-        {step.side > 0 && <span className="variant-chip on">{SIDE[step.side]}</span>}
+        {step.side > 0 && <span className="variant-chip on">{sideLabel(step.side)}</span>}
       </div>
 
       <div className="stretch-timer">
@@ -80,16 +85,22 @@ export default function Stretch({ session: s, dispatch, settings, onExit }: Prop
           <div className="ring-time h-display">{prep ? Math.ceil(remainingMs / 1000) : formatClock(Math.ceil(remainingMs / 1000))}</div>
         </div>
         <div className="stretch-info">
-          <div className="rest-label">{prep ? (step.side === 2 ? 'Keisk pusę' : 'Pasiruošk') : 'Laikyk'}</div>
+          <div className="rest-label">{prep ? (step.side === 2 ? 'Keisk pusę' : 'Pasiruošk') : warm ? 'Daryk' : 'Laikyk'}</div>
           {st.description && <p className="ex-desc">{st.description}</p>}
           {st.focus && <div className="muted small">Kam: {st.focus}</div>}
         </div>
       </div>
-      <div className="muted small">{next ? `Toliau: ${next.stretch.name}${next.side ? ' · ' + SIDE[next.side].toLowerCase() : ''}` : 'Paskutinis tempimas'}</div>
+      <div className="muted small">
+        {next
+          ? `Toliau: ${next.stretch.name}${next.side ? ' · ' + sideLabel(next.side).toLowerCase() : ''}`
+          : warm
+            ? 'Paskutinis apšilimo pratimas, toliau treniruotė'
+            : 'Paskutinis tempimas'}
+      </div>
 
       <div className="sticky-bottom">
-        <button className="btn btn-xl btn-day" onClick={() => dispatch({ type: 'STRETCH_SKIP', now: Date.now() })}>
-          {next ? 'Kitas ›' : 'Baigti tempimą'}
+        <button className="btn btn-xl btn-day" id="stretch-next" onClick={() => dispatch({ type: 'STRETCH_SKIP', now: Date.now() })}>
+          {next ? 'Kitas ›' : warm ? 'Į treniruotę ›' : 'Baigti tempimą'}
         </button>
         <div className="row nav-row">
           <button className="btn btn-ghost" disabled={run.index === 0} onClick={() => dispatch({ type: 'STRETCH_BACK', now: Date.now() })}>

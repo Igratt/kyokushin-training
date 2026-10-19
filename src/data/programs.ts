@@ -1,4 +1,4 @@
-import type { Day, Exercise, Program, Stretch } from '../types';
+import type { Day, Exercise, GuidedList, Program, Stretch } from '../types';
 
 /*
  * Training programs. Every JSON file in ./programs is a built-in program, in the same format as the
@@ -77,6 +77,8 @@ function normalizeExercise(e: unknown, label: string, fallbackId: string, ids: S
   if (seconds !== undefined && !(seconds >= 5 && seconds <= 900)) fail(`„${name}“: „seconds“ turi būti nuo 5 iki 900.`);
   const sides = er.sides === undefined ? undefined : Math.round(toNumber(er.sides));
   if (sides !== undefined && sides !== 1 && sides !== 2) fail(`„${name}“: „sides“ turi būti 1 arba 2.`);
+  const startSide = er.startSide === undefined ? undefined : er.startSide;
+  if (startSide !== undefined && startSide !== 'left' && startSide !== 'right') fail(`„${name}“: „startSide“ turi būti "left" arba "right".`);
   let id = text(er.id) ?? fallbackId;
   while (ids.has(id)) id += '_';
   ids.add(id);
@@ -93,6 +95,7 @@ function normalizeExercise(e: unknown, label: string, fallbackId: string, ids: S
     restSeconds: rest,
     seconds,
     sides: sides as 1 | 2 | undefined,
+    startSide: startSide as 'left' | 'right' | undefined,
     image: image(er.image),
     description: text(er.description),
     focus: text(er.focus),
@@ -120,10 +123,10 @@ function normalizeStretch(e: unknown, label: string, fallbackId: string): Stretc
   };
 }
 
-/** Every side of every cool-down stretch, in order. side: 0 = whole body, 1 = left, 2 = right. */
-export function stretchSteps(day: Day): { stretch: Stretch; side: 0 | 1 | 2 }[] {
+/** Every side of every item of the cool-down (or the warm-up), in order. side: 0 = whole body, 1 = left, 2 = right. */
+export function stretchSteps(day: Day, list: GuidedList = 'cooldown'): { stretch: Stretch; side: 0 | 1 | 2 }[] {
   const out: { stretch: Stretch; side: 0 | 1 | 2 }[] = [];
-  for (const st of day.stretches ?? []) {
+  for (const st of (list === 'warmup' ? day.warmup : day.stretches) ?? []) {
     if (st.sides === 2) out.push({ stretch: st, side: 1 }, { stretch: st, side: 2 });
     else out.push({ stretch: st, side: 0 });
   }
@@ -133,8 +136,8 @@ export function stretchSteps(day: Day): { stretch: Stretch; side: 0 | 1 | 2 }[] 
 /** Seconds of preparation before each hold. */
 export const STRETCH_PREP_SECONDS = 5;
 
-export function stretchMinutes(day: Day): number {
-  const seconds = stretchSteps(day).reduce((n, s) => n + s.stretch.hold + STRETCH_PREP_SECONDS, 0);
+export function stretchMinutes(day: Day, list: GuidedList = 'cooldown'): number {
+  const seconds = stretchSteps(day, list).reduce((n, s) => n + s.stretch.hold + STRETCH_PREP_SECONDS, 0);
   return Math.max(1, Math.round(seconds / 60));
 }
 
@@ -148,6 +151,7 @@ function plain(ex: Exercise): Exercise {
     restSeconds: ex.restSeconds,
     seconds: ex.seconds,
     sides: ex.sides,
+    startSide: ex.startSide,
     image: ex.image,
     description: ex.description,
     focus: ex.focus,
@@ -205,7 +209,12 @@ export function normalizeProgram(raw: unknown, source: Program['source']): Progr
       if (dr.stretches.length > 15) fail(`Dienoje ${id} per daug tempimo pratimų (daugiausia 15).`);
       stretches = (dr.stretches as unknown[]).map((st, si) => normalizeStretch(st, `Dienos ${id} ${si + 1}-asis tempimas`, `${id}S${si + 1}`));
     }
-    return { id, name: text(dr.name) ?? `${id} DIENA`, subtitle: text(dr.subtitle), color: dayColor(id, di), exercises, stretches };
+    let warmup: Stretch[] | undefined;
+    if (Array.isArray(dr.warmup) && dr.warmup.length > 0) {
+      if (dr.warmup.length > 15) fail(`Dienoje ${id} per daug apšilimo pratimų (daugiausia 15).`);
+      warmup = (dr.warmup as unknown[]).map((st, si) => normalizeStretch(st, `Dienos ${id} ${si + 1}-asis apšilimo pratimas`, `${id}W${si + 1}`));
+    }
+    return { id, name: text(dr.name) ?? `${id} DIENA`, subtitle: text(dr.subtitle), color: dayColor(id, di), exercises, warmup, stretches };
   });
   return { id: text(r.id) ?? slug(programName), programName, goal: text(r.goal), focus: text(r.focus), days, source };
 }

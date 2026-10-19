@@ -1,7 +1,18 @@
 import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import type { Session, Settings } from '../types';
-import { exerciseKey, plural } from '../data/programs';
-import { effectiveSets, formatClock, formatKg, formatShortDate, formatWeight, progress, restFor, type Action, type LastPerformance } from '../workout/engine';
+import { exerciseKey, plural, stretchMinutes, stretchSteps } from '../data/programs';
+import {
+  effectiveSets,
+  formatClock,
+  formatKg,
+  formatShortDate,
+  formatWeight,
+  progress,
+  restFor,
+  sideName,
+  type Action,
+  type LastPerformance,
+} from '../workout/engine';
 import { useAlarm, useFullscreen, useNow, useWakeLock } from '../hooks';
 import { isNative, nativeTimer } from '../native';
 import { Confirm, DayTag, ExerciseImage, ProgressBar, TopBar } from '../ui';
@@ -13,6 +24,8 @@ interface Props {
   suggested: Record<string, number>;
   /** Last time each exercise was done (by name). */
   last: Record<string, LastPerformance>;
+  /** Start the guided warm-up of the day. */
+  onWarmup: () => void;
   onExit: () => void;
 }
 
@@ -31,7 +44,7 @@ function lastText(p: LastPerformance, timed: boolean, knownKg: number | undefine
   return p.weights.map((w) => (w === null ? '—' : formatKg(w))).join(' · ') + ' kg';
 }
 
-export default function Active({ session: s, dispatch, settings, suggested, last, onExit }: Props) {
+export default function Active({ session: s, dispatch, settings, suggested, last, onWarmup, onExit }: Props) {
   const day = s.day;
   const resting = s.phase === 'RESTING';
   // Timer of a timed set (plank): "get ready" → hold (→ other side) → the set logs itself.
@@ -195,7 +208,9 @@ export default function Active({ session: s, dispatch, settings, suggested, last
         <div className="rest-view" id="work-timer">
           <div className="rest-label">
             {prep ? (work.side === 2 ? 'Keisk pusę' : 'Pasiruošk') : 'Laikyk'}
-            {work.side > 0 && <span className="variant-chip on side-chip">{work.side === 1 ? 'Kairė pusė' : 'Dešinė pusė'}</span>}
+            {work.side > 0 && (
+              <span className="variant-chip on side-chip">{sideName(work.side, ex.startSide).replace(/^./, (c) => c.toUpperCase())} pusė</span>
+            )}
           </div>
           <div className={'ring-wrap' + (prep ? ' prep' : '')}>
             <svg viewBox="0 0 120 120" className="ring" aria-hidden="true">
@@ -230,9 +245,28 @@ export default function Active({ session: s, dispatch, settings, suggested, last
     );
   }
 
+  // The day's warm-up is offered until the first set is done.
+  const warmSteps = stretchSteps(day, 'warmup');
+  const showWarm = warmSteps.length > 0 && prog.done === 0 && !s.warmedUp;
+  const warmNames = (day.warmup ?? []).map((w) => w.name.replace(/\s*\(.*\)$/, ''));
+
   return (
     <div className="screen active" style={{ '--day': color } as CSSProperties}>
       {topBar}
+      {showWarm && (
+        <section className="card warm-card" id="warm-card">
+          <div>
+            <div className="stretch-card-title h-display">Apšilimas · ~{stretchMinutes(day, 'warmup')} min</div>
+            <div className="muted small">
+              {warmNames.slice(0, 3).join(', ')}
+              {warmNames.length > 3 ? ` ir dar ${warmNames.length - 3}` : ''}
+            </div>
+          </div>
+          <button className="btn btn-day" id="warm-start" onClick={onWarmup}>
+            Pradėti apšilimą
+          </button>
+        </section>
+      )}
       <div className="ex-head">
         {ex.focus && <div className="muted small">{ex.focus}</div>}
         <h1 className="h-display ex-title">{ex.name}</h1>
@@ -262,6 +296,11 @@ export default function Active({ session: s, dispatch, settings, suggested, last
           <span className="h-display big">{allDone ? 'Visi setai atlikti' : `Setas ${done + 1} / ${ex.sets}`}</span>
           <span className="h-display big reps">{ex.reps}</span>
         </div>
+        {ex.startSide && (
+          <div className="side-line" id="side-line">
+            Pradėk {ex.startSide === 'left' ? 'kaire' : 'dešine'} puse (silpnesnė), {ex.startSide === 'left' ? 'dešine' : 'kaire'} – tiek pat kartojimų
+          </div>
+        )}
         <div className="muted small">
           {timed ? `Laikmatis: ${ex.seconds} s${ex.sides === 2 ? ' / pusė' : ''} · ` : ''}Poilsis po seto: {restFor(s, s.exerciseIndex)} s
         </div>

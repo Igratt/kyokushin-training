@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactElement } from 'react';
 import { App as CapacitorApp } from '@capacitor/app';
-import type { Program, Session, Settings, WorkoutRecord } from './types';
+import type { GuidedList, Program, Session, Settings, WorkoutRecord } from './types';
 import { DEFAULT_PROGRAM_ID, allPrograms, exerciseKey, findProgram } from './data/programs';
 import { isNative, restTimer, saveJsonFile } from './native';
 import { mergeHistory, storage, upsertRecord } from './storage';
@@ -24,7 +24,7 @@ type View =
   | { name: 'history' }
   | { name: 'historyDetail'; id: string }
   | { name: 'settings' }
-  | { name: 'stretch' };
+  | { name: 'stretch'; list: GuidedList };
 
 export default function App() {
   const [imported, setImported] = useState<Program[]>(() => storage.loadPrograms());
@@ -105,16 +105,16 @@ export default function App() {
   useEffect(() => {
     if (!session && (view.name === 'active' || view.name === 'complete' || view.name === 'stretch')) setView({ name: 'home' });
   }, [session, view.name]);
-  // Cool-down finished or left: back to the summary.
+  // Warm-up finished or left: on to the workout. Cool-down finished or left: back to the summary.
   useEffect(() => {
-    if (view.name === 'stretch' && session && !session.stretch) setView({ name: 'complete' });
-  }, [session, view.name]);
+    if (view.name === 'stretch' && session && !session.stretch) setView(view.list === 'warmup' ? { name: 'active' } : { name: 'complete' });
+  }, [session, view]);
 
-  const startStretch = () => {
+  const startStretch = (list: GuidedList) => {
     primeAudio();
     restTimer.prepare();
-    dispatch({ type: 'STRETCH_START', now: Date.now() });
-    setView({ name: 'stretch' });
+    dispatch({ type: 'STRETCH_START', now: Date.now(), list });
+    setView({ name: 'stretch', list });
   };
 
   /** How many times this day of this program was done before: drives the alternation of exercise variants. */
@@ -243,7 +243,15 @@ export default function App() {
     }
     case 'active':
       screen = session ? (
-        <Active session={session} dispatch={dispatch} settings={settings} suggested={suggested} last={lastPerf} onExit={() => setView({ name: 'home' })} />
+        <Active
+          session={session}
+          dispatch={dispatch}
+          settings={settings}
+          suggested={suggested}
+          last={lastPerf}
+          onWarmup={() => startStretch('warmup')}
+          onExit={() => setView({ name: 'home' })}
+        />
       ) : (
         <></>
       );
@@ -263,7 +271,7 @@ export default function App() {
             dispatch({ type: 'REOPEN' });
             setView({ name: 'active' });
           }}
-          onStretch={startStretch}
+          onStretch={() => startStretch('cooldown')}
         />
       ) : (
         <></>
@@ -319,7 +327,15 @@ export default function App() {
           session={session}
           history={history}
           onPickDay={(d) => setView({ name: 'preview', dayId: d })}
-          onResume={() => setView(session?.phase === 'FINISHED' ? { name: 'complete' } : { name: 'active' })}
+          onResume={() =>
+            setView(
+              session?.stretch
+                ? { name: 'stretch', list: session.stretch.list ?? 'cooldown' }
+                : session?.phase === 'FINISHED'
+                  ? { name: 'complete' }
+                  : { name: 'active' },
+            )
+          }
           onFinishActive={() => {
             dispatch({ type: 'FINISH', now: Date.now() });
             setView({ name: 'complete' });
