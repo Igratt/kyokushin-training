@@ -56,20 +56,21 @@
               "id": "A3v",
               "name": "Single-Leg RDL (kettlebell)",
               "tag": "viena koja",
-              "sets": 3,
+              "sets": 4,
               "reps": "8 / koja",
               "restSeconds": 90,
               "image": "assets/A_3v.webp",
               "description": "Kettlebell laikyk priešingoje rankoje nei atraminė koja. Lenkis per klubą ir laisvą koją kelk atgal, kol liemuo beveik lygiagretus grindims, tada grįžk spausdamas sėdmenį.",
               "focus": "Tiesi nugara, klubai lygiai, pusiausvyra.",
-              "startSide": "left"
+              "startSide": "left",
+              "bonusSets": 1
             }
           ]
         },
         {
           "id": "A4",
           "name": "Bulgarian Split Squat",
-          "sets": 3,
+          "sets": 4,
           "reps": "8 / koja",
           "restSeconds": 90,
           "image": "assets/A_4.png",
@@ -80,21 +81,23 @@
               "id": "A4v",
               "name": "Goblet Reverse Lunge",
               "tag": "kettlebell, atgal",
-              "sets": 3,
+              "sets": 4,
               "reps": "8 / koja",
               "restSeconds": 90,
               "image": "assets/A_4v.webp",
               "description": "Kettlebell laikyk prie krūtinės. Ženk viena koja atgal ir leiskis, kol galinis kelis beveik paliečia grindis, tada stumkis priekine koja į pradinę padėtį.",
               "focus": "Liemuo vertikalus, priekinis kelis stabilus.",
-              "startSide": "left"
+              "startSide": "left",
+              "bonusSets": 1
             }
           ],
-          "startSide": "left"
+          "startSide": "left",
+          "bonusSets": 1
         },
         {
           "id": "A5",
           "name": "Explosive Step-Up",
-          "sets": 3,
+          "sets": 4,
           "reps": "5 / koja",
           "restSeconds": 75,
           "image": "assets/A_5.png",
@@ -113,7 +116,8 @@
               "focus": "Greitis ir minkštas nusileidimas."
             }
           ],
-          "startSide": "left"
+          "startSide": "left",
+          "bonusSets": 1
         },
         {
           "id": "A6",
@@ -129,13 +133,14 @@
               "id": "A6v",
               "name": "Single-Leg Calf Raise",
               "tag": "viena koja",
-              "sets": 3,
+              "sets": 4,
               "reps": "10–12 / koja",
               "restSeconds": 60,
               "image": "assets/A_6v.webp",
               "description": "Stovėk viena koja ant pakylos krašto, hantelį laikyk toje pačioje pusėje, kita ranka prisilaikyk. Lėtai nusileisk žemyn ir stipriai kilk ant pirštų.",
               "focus": "Pilna amplitudė, pauzė viršuje.",
-              "startSide": "left"
+              "startSide": "left",
+              "bonusSets": 1
             }
           ]
         },
@@ -218,7 +223,22 @@
           "restSeconds": 45,
           "image": "assets/A_10.webp",
           "description": "Šoninė planka ant dilbio: viršutinės kojos vidinė pusė ant suolo, apatinė koja laisva po suolu. Pakelk klubus, kad kūnas būtų tiesus, ir išlaikyk. Per sunku: dėk ant suolo kelį, ne pėdą.",
-          "focus": "Pritraukiamieji raumenys: stabilesnis dubuo, mažiau kirkšnies traumų."
+          "focus": "Pritraukiamieji raumenys: stabilesnis dubuo, mažiau kirkšnies traumų.",
+          "variants": [
+            {
+              "id": "A10v",
+              "name": "90/90 Hip Lift",
+              "tag": "kūno svoris",
+              "sets": 4,
+              "reps": "6 / pusė",
+              "restSeconds": 45,
+              "startSide": "left",
+              "image": "assets/A_10v.webp",
+              "description": "Sėsk ant grindų, abu keliai sulenkti 90°: viena koja priekyje, kita šone. Įtempk sėdmenis ir kelk užpakalį nuo žemės, keliai lieka ant grindų. Pauzė viršuje, lėtai žemyn. Jei nepavyksta pakelti: atsiremk rankomis už nugaros ir kelk tiek, kiek gali, arba tik įtempk sėdmenį 5 s.",
+              "focus": "Klubo rotacija su jėga: sėdmenys ir pritraukiamieji amplitudės gale.",
+              "bonusSets": 1
+            }
+          ]
         }
       ],
       "warmup": [
@@ -398,7 +418,7 @@
         {
           "id": "B4",
           "name": "Landmine Press",
-          "sets": 3,
+          "sets": 4,
           "reps": "6–8 / ranka",
           "restSeconds": 90,
           "image": "assets/B_4.png",
@@ -409,16 +429,18 @@
               "id": "B4v",
               "name": "Half-Kneeling Kettlebell Press",
               "tag": "kettlebell, klūpint",
-              "sets": 3,
+              "sets": 4,
               "reps": "6–8 / ranka",
               "restSeconds": 90,
               "image": "assets/B_4v.webp",
               "description": "Klūpėk ant vieno kelio, kettlebell laikyk prie peties tos pusės, kur kelis ant žemės. Spausk tiesiai virš galvos, liemuo nekliba.",
               "focus": "Įtemptas presas ir sėdmuo.",
-              "startSide": "right"
+              "startSide": "right",
+              "bonusSets": 1
             }
           ],
-          "startSide": "right"
+          "startSide": "right",
+          "bonusSets": 1
         },
         {
           "id": "B5",
@@ -541,7 +563,7 @@
         {
           "id": "B10",
           "name": "Standing Kick Hold",
-          "sets": 3,
+          "sets": 4,
           "reps": "15 s / koja",
           "seconds": 15,
           "sides": 2,
@@ -549,7 +571,23 @@
           "startSide": "left",
           "image": "assets/B_10.webp",
           "description": "Stovėk tiesiai, rankos sargyboje. Pakelk tiesią koją priešais save kuo aukščiau, nesilenkdamas atgal, ir išlaikyk. Pradžioje gali prisilaikyti sienos.",
-          "focus": "Aktyvus lankstumas: klubo lenkiamųjų jėga aukštiems spyriams."
+          "focus": "Aktyvus lankstumas: klubo lenkiamųjų jėga aukštiems spyriams.",
+          "variants": [
+            {
+              "id": "B10v",
+              "name": "Hip Airplane",
+              "tag": "kūno svoris",
+              "sets": 4,
+              "reps": "5 / koja",
+              "restSeconds": 45,
+              "startSide": "left",
+              "image": "assets/B_10v.webp",
+              "description": "Stovėk ant vienos kojos, pasilenk kaip vienos kojos RDL, kita koja tiesi atgal, rankos į šonus. Lėtai suk klubus į išorę (laisvos kojos pusė kyla), tada į vidų, kol dubuo lygus. Kelis nejuda.",
+              "focus": "Klubo rotacija ir pusiausvyra: sėdmuo valdo kelį.",
+              "bonusSets": 1
+            }
+          ],
+          "bonusSets": 1
         }
       ],
       "warmup": [
@@ -716,7 +754,7 @@
         {
           "id": "C4",
           "name": "Walking Lunges",
-          "sets": 3,
+          "sets": 4,
           "reps": "8 / koja",
           "restSeconds": 90,
           "image": "assets/C_4.png",
@@ -727,16 +765,18 @@
               "id": "C4v",
               "name": "Lateral Lunge",
               "tag": "į šoną",
-              "sets": 3,
+              "sets": 4,
               "reps": "8 / koja",
               "restSeconds": 90,
               "image": "assets/C_4v.webp",
               "description": "Kettlebell laikyk prie krūtinės. Ženk plačiai į šoną ir leiskis ant tos kojos, kita lieka tiesi, tada stumkis atgal.",
               "focus": "Visa pėda ant žemės, nugara tiesi.",
-              "startSide": "left"
+              "startSide": "left",
+              "bonusSets": 1
             }
           ],
-          "startSide": "left"
+          "startSide": "left",
+          "bonusSets": 1
         },
         {
           "id": "C5",
@@ -856,13 +896,28 @@
         {
           "id": "C10",
           "name": "Cossack Squat (kettlebell)",
-          "sets": 3,
+          "sets": 4,
           "reps": "6 / pusė",
           "restSeconds": 60,
           "startSide": "left",
           "image": "assets/C_10.webp",
           "description": "Kettlebell prie krūtinės, plačiai išsižergk. Leiskis ant vienos kojos kuo žemiau, kita tiesi, pirštai į viršų. Kulnas prie žemės, krūtinė pakelta.",
-          "focus": "Dubens mobilumas su svoriu: jėga amplitudės gale."
+          "focus": "Dubens mobilumas su svoriu: jėga amplitudės gale.",
+          "variants": [
+            {
+              "id": "C10v",
+              "name": "Kiba Dachi Hold",
+              "tag": "kūno svoris",
+              "sets": 3,
+              "reps": "45 s",
+              "seconds": 45,
+              "restSeconds": 45,
+              "image": "assets/C_10v.webp",
+              "description": "Plati stovėsena, pėdos lygiagrečios, šlaunys beveik lygiagrečios žemei. Keliai stumiami į išorę virš pėdų, kumščiai prie klubų, nugara tiesi. Laikyk ir ramiai kvėpuok.",
+              "focus": "Karatė stovėsena: klubų ir šlaunų jėga be svorio."
+            }
+          ],
+          "bonusSets": 1
         }
       ],
       "warmup": [

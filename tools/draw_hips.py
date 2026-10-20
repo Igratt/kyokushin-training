@@ -230,8 +230,84 @@ def c10():
     pic.save("C_10.webp")
 
 
+# ------------------------------------------------------------------ bodyweight mobility-strength variants (exercise 10v)
+def seated_9090(pic, c, lift):
+    """90/90 sit, front view; lift > 0 raises the pelvis off the floor while the knees stay down."""
+    l_hip, r_hip = (c - 12, 276 - lift), (c + 12, 276 - lift)
+    l_sh, r_sh = (c - 24, 226 - lift), (c + 24, 226 - lift)
+    l_knee, l_ankle = (c - 52, 291), (c - 8, 295)
+    r_knee, r_ankle = (c + 56, 289), (c + 76, 281)
+    hands = ((c - 34, 278 - lift * 0.4), (c + 36, 278 - lift * 0.4))
+    front(pic, l_hip, r_hip, l_sh, r_sh, (c, 204 - lift), l_hip, r_ankle, hands[0], hands[1],
+          l_elbow=(-12, 0), r_elbow=(12, 0), feet=False, arms_behind=True, l_knee_pt=l_hip, r_knee_pt=r_knee)
+    pic.capsule((r_ankle[0], r_ankle[1] + 1), (r_ankle[0] + 12, r_ankle[1] - 3), W_FOOT + 1, FAR)
+    pic.capsule(l_hip, l_knee, W_THIGH + 1, NEAR)
+    pic.capsule(l_knee, l_ankle, W_SHIN + 1, NEAR)
+    pic.capsule((l_ankle[0] - 2, l_ankle[1] + 1), (l_ankle[0] + 15, l_ankle[1] - 1), W_FOOT + 1, NEAR)
+
+
+def a10v():
+    """90/90 hip lift: from the 90/90 sit, push the hips up off the floor."""
+    pic, acc = Pic(), ACCENT["A"]
+    for i, lift in enumerate((0, 26)):
+        pic.panel(i, 300)
+        pic.view(300, 300, 1.25)
+        seated_9090(pic, PCX, lift)
+        if lift:
+            pic.arrow((PCX - 48, 290), (PCX - 54, 262), (PCX - 36, 240), acc)
+        pic.caption("1 · Sėsk 90/90, keliai sulenkti" if not lift else "2 · Kelk užpakalį nuo žemės")
+    pic.badge(10)
+    pic.save("A_10v.webp")
+
+
+def b10v():
+    """Hip airplane: single-leg hinge, arms out, then rotate the pelvis open and back."""
+    pic, acc = Pic(), ACCENT["B"]
+    for i in range(2):
+        standing_view(pic, i, 1.1)
+        hip = (118, 206)
+        ankle = (124, 292)
+        f_ankle = go(hip, 172, 86) if i == 0 else go(hip, 160, 86)
+        hands = ((176, 190), (66, 214)) if i == 0 else ((172, 170), (74, 234))
+        j = side(hip, ankle, f_ankle, hands[0], hands[1], torso_ang=6, head_ang=2,
+                 knee=(6, 0), f_knee=(0, 20), n_toe=-10, f_toe=0, elbow=(0, -14), f_elbow=(0, 14))
+        side_figure(pic, j)
+        if i:
+            arc_arrow(pic, (hip[0], hip[1] + 2), 30, 24, 250, -40, acc)
+        pic.caption("1 · Pasilenk, rankos į šonus" if not i else "2 · Suk klubą į išorę ir atgal")
+    pic.badge(10)
+    pic.save("B_10v.webp")
+
+
+def c10v():
+    """Kiba dachi hold: wide horse stance, thighs near parallel, knees out over the toes (vs. knees caving in)."""
+    pic = Pic()
+    for i, bad in enumerate((False, True)):
+        standing_view(pic, i, 1.1)
+        c = PCX
+        spread = 78
+        knee_x = 62 if not bad else 34
+        l_knee, r_knee = (c - knee_x, 256), (c + knee_x, 256)
+        front(pic, (c - 14, 236), (c + 14, 236), (c - 28, 182), (c + 28, 182), (c, 162), (c - spread, 292), (c + spread, 292),
+              (c - 26, 238), (c + 26, 238), l_elbow=(-14, 6), r_elbow=(14, 6), l_knee_pt=l_knee, r_knee_pt=r_knee)
+        for s in (-1, 1):
+            pic.dot((c + s * 26, 238), 7.5, NEAR)
+        if not bad:
+            pic.path([(c - spread - 4, 300), (c - spread - 4, 236)], GREEN, 2.4, dashed=True)
+            pic.path([(c + spread + 4, 300), (c + spread + 4, 236)], GREEN, 2.4, dashed=True)
+            pic.mark(True)
+            pic.caption("Teisingai: keliai virš pėdų, kumščiai prie klubų", GREEN)
+        else:
+            pic.arrow((c - 24, 230), (c - 14, 248), (c - 30, 262), RED, 3)
+            pic.arrow((c + 24, 230), (c + 14, 248), (c + 30, 262), RED, 3)
+            pic.mark(False)
+            pic.caption("Neteisingai: keliai krenta į vidų", RED)
+    pic.badge(10)
+    pic.save("C_10v.webp")
+
+
 ALL = dict(hip_cars=hip_cars, leg_swings=leg_swings, ninety_ninety=ninety_ninety, cossack=cossack, deep_squat=deep_squat,
-           wgs=wgs, a10=a10, b10=b10, c10=c10)
+           wgs=wgs, a10=a10, b10=b10, c10=c10, a10v=a10v, b10v=b10v, c10v=c10v)
 
 if __name__ == "__main__":
     for key in sys.argv[1:] or list(ALL):

@@ -1,6 +1,6 @@
 import { useState, type CSSProperties } from 'react';
 import type { Day, Program, Session } from '../types';
-import { pickChoices, plural, versionsOf } from '../data/programs';
+import { pickChoices, plural, setsText, versionsOf } from '../data/programs';
 import { progress } from '../workout/engine';
 import { Confirm, DayTag, ExerciseImage, TopBar } from '../ui';
 
@@ -65,9 +65,7 @@ export default function Preview(p: Props) {
                   <span className="num">{i + 1}</span>
                   {ex.name}
                 </div>
-                <div className="muted small">
-                  {ex.sets} × {ex.reps}
-                </div>
+                <div className="muted small">{setsText(ex)}</div>
                 {versions.length > 1 && (
                   <button className="variant-btn" onClick={() => swap(i)} aria-label={`Keisti variantą: ${ex.name}`}>
                     <span className={'variant-chip' + (isVariant ? ' on' : '')}>{isVariant ? `variantas${ex.tag ? ': ' + ex.tag : ''}` : 'pagrindinis'}</span>

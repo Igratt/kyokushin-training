@@ -1,5 +1,5 @@
 import type { Day, Exercise, GuidedList, Position, Program, Session, SetLog, WorkRun, WorkoutRecord } from '../types';
-import { DEFAULT_PROGRAM_ID, STRETCH_PREP_SECONDS, exerciseKey, stretchSteps, versionsOf, withChoice } from '../data/programs';
+import { DEFAULT_PROGRAM_ID, STRETCH_PREP_SECONDS, exerciseKey, isBonusSet, stretchSteps, versionsOf, withChoice } from '../data/programs';
 
 /*
  * Workout state machine. Pure functions only:
@@ -273,7 +273,9 @@ export function reduce(s: Session, a: Action): Session {
       const hold = day.exercises[s.exerciseIndex].seconds ?? 30;
       // The next phase starts exactly when the previous one ended, so polling lag never stretches a hold.
       if (w.phase === 'prep') return { ...s, work: { ...w, phase: 'hold', endsAt: w.endsAt + hold * 1000, total: hold } };
-      if (w.side === 1) return { ...s, work: workPrep(2, w.endsAt) };
+      // A weak-side-only set stops after the first side.
+      const bonus = isBonusSet(day.exercises[s.exerciseIndex], s.logs[s.exerciseIndex].sets.length);
+      if (w.side === 1 && !bonus) return { ...s, work: workPrep(2, w.endsAt) };
       return completeSet(s, a.now);
     }
     case 'WORK_ADD': {

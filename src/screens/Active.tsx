@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import type { Session, Settings } from '../types';
-import { exerciseKey, plural, stretchMinutes, stretchSteps } from '../data/programs';
+import { exerciseKey, isBonusSet, plural, stretchMinutes, stretchSteps } from '../data/programs';
 import {
   effectiveSets,
   formatClock,
@@ -289,7 +289,7 @@ export default function Active({ session: s, dispatch, settings, suggested, last
       <div className="set-info">
         <div className="set-dots" aria-hidden="true">
           {Array.from({ length: ex.sets }, (_, i) => (
-            <span key={i} className={'dot' + (i < done ? ' on' : !allDone && i === done ? ' cur' : '')} />
+            <span key={i} className={'dot' + (isBonusSet(ex, i) ? ' bonus' : '') + (i < done ? ' on' : !allDone && i === done ? ' cur' : '')} />
           ))}
         </div>
         <div className="set-line">
@@ -298,7 +298,9 @@ export default function Active({ session: s, dispatch, settings, suggested, last
         </div>
         {ex.startSide && (
           <div className="side-line" id="side-line">
-            Pradėk {ex.startSide === 'left' ? 'kaire' : 'dešine'} puse (silpnesnė), {ex.startSide === 'left' ? 'dešine' : 'kaire'} – tiek pat kartojimų
+            {!allDone && isBonusSet(ex, done)
+              ? `Papildomas setas: tik ${ex.startSide === 'left' ? 'kairė' : 'dešinė'} pusė (silpnesnė)`
+              : `Pradėk ${ex.startSide === 'left' ? 'kaire' : 'dešine'} puse (silpnesnė), ${ex.startSide === 'left' ? 'dešine' : 'kaire'} – tiek pat kartojimų`}
           </div>
         )}
         <div className="muted small">

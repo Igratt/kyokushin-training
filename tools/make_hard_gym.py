@@ -35,6 +35,7 @@ for d in mix["days"]:
 stretches_of = {d["id"]: d.get("stretches", []) for d in mix["days"]}
 
 KEEP = ("name", "tag", "image", "description", "focus", "seconds", "sides", "startSide")
+BONUS_SETS = 1  # extra set for the weaker side on every one-sided exercise
 copies = []
 
 
@@ -91,7 +92,7 @@ B = [
     reuse("A2", "B", 2, 4, "4–6", 180),
     with_variants(reuse("A3", "B", 3, 3, "6–8", 120), reuse("A3v", "B", 3, 3, "8 / koja", 90, True)),
     with_variants(reuse("A4", "B", 4, 3, "8 / koja", 90), reuse("A4v", "B", 4, 3, "8 / koja", 90, True)),
-    reuse("A10", "B", 5, 3, "20 s / pusė", 45),
+    with_variants(reuse("A10", "B", 5, 3, "20 s / pusė", 45), reuse("A10v", "B", 5, 3, "6 / pusė", 45, True)),
     with_variants(reuse("A6", "B", 6, 4, "10–12", 60), reuse("A6v", "B", 6, 3, "10–12 / koja", 60, True)),
     with_variants(reuse("C8", "B", 7, 3, "8–12", 60), reuse("C8v", "B", 7, 3, "8 / pusė", 60, True)),
 ]
@@ -118,8 +119,8 @@ D = [
         "Viršutinė nugara ant suolo krašto, pėdos ant žemės, štanga per klubus (su minkšta apsauga). Kelk klubus, kol kūnas tiesus nuo pečių iki kelių, viršuje 1 s suspausk sėdmenis.",
         "Sėdmenys ir dubens jėga."),
     with_variants(reuse("C4", "D", 4, 3, "10 / koja", 90), reuse("C4v", "D", 4, 3, "8 / koja", 90, True)),
-    reuse("C10", "D", 5, 3, "6 / pusė", 60),
-    reuse("A3v", "D", 6, 3, "8 / koja", 75),
+    with_variants(reuse("C10", "D", 5, 3, "6 / pusė", 60), reuse("C10v", "D", 5, 3, "45 s", 45, True)),
+    with_variants(reuse("A3v", "D", 6, 3, "8 / koja", 75), reuse("B10v", "D", 6, 3, "5 / koja", 45, True)),
     with_variants(reuse("C7", "D", 7, 3, "30–40 m", 75), reuse("C7v", "D", 7, 3, "30 m / ranka", 75, True)),
     with_variants(reuse("A8", "D", 8, 3, "10 / pusė", 50), reuse("A8v", "D", 8, 3, "10 / pusė", 50, True)),
 ]
@@ -131,7 +132,7 @@ program = {
     "focus": "Sporto salė: jėga + masė",
     "goal": "Karatė pertraukai: 4 dienos, viršus ir apačia po du kartus. Sunkūs pagrindiniai kėlimai po 4–6 kartus, "
             "pagalbiniai po 8–15 ir po vieną sprogstamą pratimą, kad neprarastum greičio. Prieš kiekvieną treniruotę "
-            "dubens apšilimas, vienpusiai pratimai pradedami silpnesne puse.",
+            "dubens apšilimas, vienpusiai pratimai pradedami silpnesne puse ir gauna papildomą setą tik jai.",
     "days": [
         {"id": "A", "name": "A DIENA", "subtitle": "Viršus · jėga", "warmup": WARMUP, "exercises": A, "stretches": UPPER},
         {"id": "B", "name": "B DIENA", "subtitle": "Apačia · jėga", "warmup": WARMUP, "exercises": B, "stretches": LOWER},
@@ -142,6 +143,12 @@ program = {
 
 
 def main():
+    for day in program["days"]:
+        for e in day["exercises"]:
+            for v in [e] + e.get("variants", []):
+                if v.get("startSide") and not v.get("bonusSets"):
+                    v["sets"] = v["sets"] + BONUS_SETS
+                    v["bonusSets"] = BONUS_SETS
     for src, dst, n in copies:
         rebadge(os.path.join(ROOT, "public", src), os.path.join(ROOT, "public", dst), n)
         print("copied", src, "->", dst, "#", n)

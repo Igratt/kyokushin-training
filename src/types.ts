@@ -12,6 +12,8 @@ export interface Exercise {
   sides?: 1 | 2;
   /** One-sided exercise: start with this (weaker) side, then do the same reps with the other one. */
   startSide?: 'left' | 'right';
+  /** The last N of `sets` are done with the weaker side only (to even out an imbalance). */
+  bonusSets?: number;
   image?: string;
   description?: string;
   focus?: string;

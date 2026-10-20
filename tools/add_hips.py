@@ -31,20 +31,39 @@ WARMUP = [
          focus="klubų ir čiurnų mobilumas pritūpimui"),
 ]
 
+# Every hip slot has a weighted/strength version and a bodyweight mobility-strength variant; the app alternates them.
+HIP_VARIANT = {
+    "A": dict(id="A10v", name="90/90 Hip Lift", tag="kūno svoris", sets=3, reps="6 / pusė", restSeconds=45, startSide="left",
+              image="assets/A_10v.webp",
+              description="Sėsk ant grindų, abu keliai sulenkti 90°: viena koja priekyje, kita šone. Įtempk sėdmenis ir kelk užpakalį nuo žemės, keliai lieka ant grindų. Pauzė viršuje, lėtai žemyn. Jei nepavyksta pakelti: atsiremk rankomis už nugaros ir kelk tiek, kiek gali, arba tik įtempk sėdmenį 5 s.",
+              focus="Klubo rotacija su jėga: sėdmenys ir pritraukiamieji amplitudės gale."),
+    "B": dict(id="B10v", name="Hip Airplane", tag="kūno svoris", sets=3, reps="5 / koja", restSeconds=45, startSide="left",
+              image="assets/B_10v.webp",
+              description="Stovėk ant vienos kojos, pasilenk kaip vienos kojos RDL, kita koja tiesi atgal, rankos į šonus. Lėtai suk klubus į išorę (laisvos kojos pusė kyla), tada į vidų, kol dubuo lygus. Kelis nejuda.",
+              focus="Klubo rotacija ir pusiausvyra: sėdmuo valdo kelį."),
+    "C": dict(id="C10v", name="Kiba Dachi Hold", tag="kūno svoris", sets=3, reps="45 s", seconds=45, restSeconds=45,
+              image="assets/C_10v.webp",
+              description="Plati stovėsena, pėdos lygiagrečios, šlaunys beveik lygiagrečios žemei. Keliai stumiami į išorę virš pėdų, kumščiai prie klubų, nugara tiesi. Laikyk ir ramiai kvėpuok.",
+              focus="Karatė stovėsena: klubų ir šlaunų jėga be svorio."),
+}
+
 HIP_EXERCISE = {
     "A": dict(id="A10", name="Copenhagen Plank", sets=3, reps="20 s / pusė", seconds=20, sides=2, restSeconds=45,
               image="assets/A_10.webp",
               description="Šoninė planka ant dilbio: viršutinės kojos vidinė pusė ant suolo, apatinė koja laisva po suolu. Pakelk klubus, kad kūnas būtų tiesus, ir išlaikyk. Per sunku: dėk ant suolo kelį, ne pėdą.",
-              focus="Pritraukiamieji raumenys: stabilesnis dubuo, mažiau kirkšnies traumų."),
+              focus="Pritraukiamieji raumenys: stabilesnis dubuo, mažiau kirkšnies traumų.", variants=[HIP_VARIANT["A"]]),
     "B": dict(id="B10", name="Standing Kick Hold", sets=3, reps="15 s / koja", seconds=15, sides=2, restSeconds=45,
               startSide="left", image="assets/B_10.webp",
               description="Stovėk tiesiai, rankos sargyboje. Pakelk tiesią koją priešais save kuo aukščiau, nesilenkdamas atgal, ir išlaikyk. Pradžioje gali prisilaikyti sienos.",
-              focus="Aktyvus lankstumas: klubo lenkiamųjų jėga aukštiems spyriams."),
+              focus="Aktyvus lankstumas: klubo lenkiamųjų jėga aukštiems spyriams.", variants=[HIP_VARIANT["B"]]),
     "C": dict(id="C10", name="Cossack Squat (kettlebell)", sets=3, reps="6 / pusė", restSeconds=60, startSide="left",
               image="assets/C_10.webp",
               description="Kettlebell prie krūtinės, plačiai išsižergk. Leiskis ant vienos kojos kuo žemiau, kita tiesi, pirštai į viršų. Kulnas prie žemės, krūtinė pakelta.",
-              focus="Dubens mobilumas su svoriu: jėga amplitudės gale."),
+              focus="Dubens mobilumas su svoriu: jėga amplitudės gale.", variants=[HIP_VARIANT["C"]]),
 }
+
+# Weak-side-only extra sets: every one-sided exercise with startSide gets one more set for the weaker side.
+BONUS_SETS = 1
 
 # The user's weaker sides: left leg, right chest, right side of the back, left arm.
 START_SIDE = {
@@ -67,11 +86,14 @@ def main():
         if stretches is not None:
             day["stretches"] = stretches
         ex = HIP_EXERCISE[day["id"]]
-        day["exercises"] = [e for e in day["exercises"] if e["id"] != ex["id"]] + [dict(ex)]
+        day["exercises"] = [e for e in day["exercises"] if e["id"] != ex["id"]] + [json.loads(json.dumps(ex))]
         for e in day["exercises"]:
             for v in [e] + e.get("variants", []):
                 if v["id"] in START_SIDE:
                     v["startSide"] = START_SIDE[v["id"]]
+                if v.get("startSide") and not v.get("bonusSets"):
+                    v["sets"] = v["sets"] + BONUS_SETS
+                    v["bonusSets"] = BONUS_SETS
     with open(PATH, "w", encoding="utf-8", newline="\n") as f:
         json.dump(prog, f, ensure_ascii=False, indent=2)
         f.write("\n")

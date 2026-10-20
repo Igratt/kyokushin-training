@@ -79,6 +79,9 @@ function normalizeExercise(e: unknown, label: string, fallbackId: string, ids: S
   if (sides !== undefined && sides !== 1 && sides !== 2) fail(`„${name}“: „sides“ turi būti 1 arba 2.`);
   const startSide = er.startSide === undefined ? undefined : er.startSide;
   if (startSide !== undefined && startSide !== 'left' && startSide !== 'right') fail(`„${name}“: „startSide“ turi būti "left" arba "right".`);
+  const bonusSets = er.bonusSets === undefined ? undefined : Math.round(toNumber(er.bonusSets));
+  if (bonusSets !== undefined && !(bonusSets >= 0 && bonusSets < sets)) fail(`„${name}“: „bonusSets“ turi būti mažiau už „sets“.`);
+  if (bonusSets && !startSide) fail(`„${name}“: „bonusSets“ reikia „startSide“.`);
   let id = text(er.id) ?? fallbackId;
   while (ids.has(id)) id += '_';
   ids.add(id);
@@ -96,6 +99,7 @@ function normalizeExercise(e: unknown, label: string, fallbackId: string, ids: S
     seconds,
     sides: sides as 1 | 2 | undefined,
     startSide: startSide as 'left' | 'right' | undefined,
+    bonusSets: bonusSets || undefined,
     image: image(er.image),
     description: text(er.description),
     focus: text(er.focus),
@@ -121,6 +125,18 @@ function normalizeStretch(e: unknown, label: string, fallbackId: string): Stretc
     description: text(er.description),
     focus: text(er.focus),
   };
+}
+
+/** Is set `setIndex` (0-based) one of the extra sets done with the weaker side only? */
+export function isBonusSet(ex: Exercise, setIndex: number): boolean {
+  return !!ex.bonusSets && setIndex >= ex.sets - ex.bonusSets;
+}
+
+/** "3 × 8 / koja" plus " + 1 silpnesnei pusei" when the exercise has weak-side-only sets. */
+export function setsText(ex: Exercise): string {
+  const bonus = ex.bonusSets ?? 0;
+  const main = `${ex.sets - bonus} × ${ex.reps}`;
+  return bonus ? `${main} + ${bonus} silpnesnei pusei` : main;
 }
 
 /** Every side of every item of the cool-down (or the warm-up), in order. side: 0 = whole body, 1 = left, 2 = right. */
@@ -152,6 +168,7 @@ function plain(ex: Exercise): Exercise {
     seconds: ex.seconds,
     sides: ex.sides,
     startSide: ex.startSide,
+    bonusSets: ex.bonusSets,
     image: ex.image,
     description: ex.description,
     focus: ex.focus,

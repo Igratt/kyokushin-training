@@ -2,7 +2,7 @@
   "id": "hard-gym",
   "programName": "Hard Gym: jėga + masė",
   "focus": "Sporto salė: jėga + masė",
-  "goal": "Karatė pertraukai: 4 dienos, viršus ir apačia po du kartus. Sunkūs pagrindiniai kėlimai po 4–6 kartus, pagalbiniai po 8–15 ir po vieną sprogstamą pratimą, kad neprarastum greičio. Prieš kiekvieną treniruotę dubens apšilimas, vienpusiai pratimai pradedami silpnesne puse.",
+  "goal": "Karatė pertraukai: 4 dienos, viršus ir apačia po du kartus. Sunkūs pagrindiniai kėlimai po 4–6 kartus, pagalbiniai po 8–15 ir po vieną sprogstamą pratimą, kad neprarastum greičio. Prieš kiekvieną treniruotę dubens apšilimas, vienpusiai pratimai pradedami silpnesne puse ir gauna papildomą setą tik jai.",
   "days": [
     {
       "id": "A",
@@ -124,24 +124,26 @@
         {
           "id": "GA4",
           "name": "Single-Arm Dumbbell Bench Press",
-          "sets": 3,
+          "sets": 4,
           "reps": "8–10 / ranka",
           "restSeconds": 90,
           "image": "assets/G_A4.webp",
           "description": "Gulk ant suolo, hantelis vienoje rankoje prie krūtinės, kita ranka ant klubo. Spausk tiesiai aukštyn ir lėtai nuleisk. Neleisk kūnui suktis į šoną.",
           "focus": "Krūtinė po vieną pusę: silpnesnė dešinė pasiveja kairę.",
-          "startSide": "right"
+          "startSide": "right",
+          "bonusSets": 1
         },
         {
           "id": "GA5",
           "name": "Single-Arm Dumbbell Row",
-          "sets": 3,
+          "sets": 4,
           "reps": "8–10 / ranka",
           "restSeconds": 90,
           "image": "assets/G_A5.webp",
           "description": "Kelis ir ranka ant suolo, nugara tiesi ir lygiagreti grindims. Trauk hantelį alkūne aukštyn link klubo, viršuje suspausk mentę, lėtai nuleisk.",
           "focus": "Nugaros pusės po vieną: dešinė silpnesnė, todėl pirma.",
-          "startSide": "right"
+          "startSide": "right",
+          "bonusSets": 1
         },
         {
           "id": "GA6",
@@ -156,13 +158,14 @@
         {
           "id": "GA7",
           "name": "Dumbbell Curl",
-          "sets": 3,
+          "sets": 4,
           "reps": "10–12 / ranka",
           "restSeconds": 60,
           "image": "assets/G_A7.webp",
           "description": "Stovėk tiesiai, alkūnės prie šonų. Lenk ranką iki peties, viršuje suspausk ir lėtai nuleisk. Po vieną ranką.",
           "focus": "Bicepsas: silpnesnė kairė ranka pasiveja dešinę.",
-          "startSide": "left"
+          "startSide": "left",
+          "bonusSets": 1
         },
         {
           "id": "GA8",
@@ -357,9 +360,10 @@
               "description": "Kettlebell laikyk priešingoje rankoje nei atraminė koja. Lenkis per klubą ir laisvą koją kelk atgal, kol liemuo beveik lygiagretus grindims, tada grįžk spausdamas sėdmenį.",
               "focus": "Tiesi nugara, klubai lygiai, pusiausvyra.",
               "startSide": "left",
-              "sets": 3,
+              "sets": 4,
               "reps": "8 / koja",
-              "restSeconds": 90
+              "restSeconds": 90,
+              "bonusSets": 1
             }
           ]
         },
@@ -370,7 +374,7 @@
           "description": "Viena koja priekyje, kita užkelta ant suoliuko. Leiskis per priekinę koją ir laikyk liemenį stabilų.",
           "focus": "Kontrolė ir vienos kojos stabilumas.",
           "startSide": "left",
-          "sets": 3,
+          "sets": 4,
           "reps": "8 / koja",
           "restSeconds": 90,
           "variants": [
@@ -382,11 +386,13 @@
               "description": "Kettlebell laikyk prie krūtinės. Ženk viena koja atgal ir leiskis, kol galinis kelis beveik paliečia grindis, tada stumkis priekine koja į pradinę padėtį.",
               "focus": "Liemuo vertikalus, priekinis kelis stabilus.",
               "startSide": "left",
-              "sets": 3,
+              "sets": 4,
               "reps": "8 / koja",
-              "restSeconds": 90
+              "restSeconds": 90,
+              "bonusSets": 1
             }
-          ]
+          ],
+          "bonusSets": 1
         },
         {
           "id": "GB5",
@@ -398,7 +404,22 @@
           "focus": "Pritraukiamieji raumenys: stabilesnis dubuo, mažiau kirkšnies traumų.",
           "sets": 3,
           "reps": "20 s / pusė",
-          "restSeconds": 45
+          "restSeconds": 45,
+          "variants": [
+            {
+              "id": "GB5v",
+              "name": "90/90 Hip Lift",
+              "tag": "kūno svoris",
+              "startSide": "left",
+              "image": "assets/G_B5v.webp",
+              "description": "Sėsk ant grindų, abu keliai sulenkti 90°: viena koja priekyje, kita šone. Įtempk sėdmenis ir kelk užpakalį nuo žemės, keliai lieka ant grindų. Pauzė viršuje, lėtai žemyn. Jei nepavyksta pakelti: atsiremk rankomis už nugaros ir kelk tiek, kiek gali, arba tik įtempk sėdmenį 5 s.",
+              "focus": "Klubo rotacija su jėga: sėdmenys ir pritraukiamieji amplitudės gale.",
+              "sets": 4,
+              "reps": "6 / pusė",
+              "restSeconds": 45,
+              "bonusSets": 1
+            }
+          ]
         },
         {
           "id": "GB6",
@@ -418,9 +439,10 @@
               "description": "Stovėk viena koja ant pakylos krašto, hantelį laikyk toje pačioje pusėje, kita ranka prisilaikyk. Lėtai nusileisk žemyn ir stipriai kilk ant pirštų.",
               "focus": "Pilna amplitudė, pauzė viršuje.",
               "startSide": "left",
-              "sets": 3,
+              "sets": 4,
               "reps": "10–12 / koja",
-              "restSeconds": 60
+              "restSeconds": 60,
+              "bonusSets": 1
             }
           ]
         },
@@ -630,7 +652,7 @@
           "description": "Laikyk štangos galą prie peties ir spausk į viršų–į priekį. Stovėsena stabili, liemuo nekliba.",
           "focus": "Spaudimas kampu ir core stabilumas.",
           "startSide": "right",
-          "sets": 3,
+          "sets": 4,
           "reps": "8 / ranka",
           "restSeconds": 90,
           "variants": [
@@ -642,11 +664,13 @@
               "description": "Klūpėk ant vieno kelio, kettlebell laikyk prie peties tos pusės, kur kelis ant žemės. Spausk tiesiai virš galvos, liemuo nekliba.",
               "focus": "Įtemptas presas ir sėdmuo.",
               "startSide": "right",
-              "sets": 3,
+              "sets": 4,
               "reps": "8 / ranka",
-              "restSeconds": 90
+              "restSeconds": 90,
+              "bonusSets": 1
             }
-          ]
+          ],
+          "bonusSets": 1
         },
         {
           "id": "GC5",
@@ -899,7 +923,7 @@
           "description": "Su hanteliais ženk didelį žingsnį į priekį, leiskis į įtūpstą ir keliauk tolyn išlaikydamas kontrolę.",
           "focus": "Stabilus kelis ir liemuo.",
           "startSide": "left",
-          "sets": 3,
+          "sets": 4,
           "reps": "10 / koja",
           "restSeconds": 90,
           "variants": [
@@ -911,11 +935,13 @@
               "description": "Kettlebell laikyk prie krūtinės. Ženk plačiai į šoną ir leiskis ant tos kojos, kita lieka tiesi, tada stumkis atgal.",
               "focus": "Visa pėda ant žemės, nugara tiesi.",
               "startSide": "left",
-              "sets": 3,
+              "sets": 4,
               "reps": "8 / koja",
-              "restSeconds": 90
+              "restSeconds": 90,
+              "bonusSets": 1
             }
-          ]
+          ],
+          "bonusSets": 1
         },
         {
           "id": "GD5",
@@ -924,9 +950,24 @@
           "image": "assets/G_D5.webp",
           "description": "Kettlebell prie krūtinės, plačiai išsižergk. Leiskis ant vienos kojos kuo žemiau, kita tiesi, pirštai į viršų. Kulnas prie žemės, krūtinė pakelta.",
           "focus": "Dubens mobilumas su svoriu: jėga amplitudės gale.",
-          "sets": 3,
+          "sets": 4,
           "reps": "6 / pusė",
-          "restSeconds": 60
+          "restSeconds": 60,
+          "variants": [
+            {
+              "id": "GD5v",
+              "name": "Kiba Dachi Hold",
+              "tag": "kūno svoris",
+              "seconds": 45,
+              "image": "assets/G_D5v.webp",
+              "description": "Plati stovėsena, pėdos lygiagrečios, šlaunys beveik lygiagrečios žemei. Keliai stumiami į išorę virš pėdų, kumščiai prie klubų, nugara tiesi. Laikyk ir ramiai kvėpuok.",
+              "focus": "Karatė stovėsena: klubų ir šlaunų jėga be svorio.",
+              "sets": 3,
+              "reps": "45 s",
+              "restSeconds": 45
+            }
+          ],
+          "bonusSets": 1
         },
         {
           "id": "GD6",
@@ -936,9 +977,25 @@
           "description": "Kettlebell laikyk priešingoje rankoje nei atraminė koja. Lenkis per klubą ir laisvą koją kelk atgal, kol liemuo beveik lygiagretus grindims, tada grįžk spausdamas sėdmenį.",
           "focus": "Tiesi nugara, klubai lygiai, pusiausvyra.",
           "startSide": "left",
-          "sets": 3,
+          "sets": 4,
           "reps": "8 / koja",
-          "restSeconds": 75
+          "restSeconds": 75,
+          "variants": [
+            {
+              "id": "GD6v",
+              "name": "Hip Airplane",
+              "tag": "kūno svoris",
+              "startSide": "left",
+              "image": "assets/G_D6v.webp",
+              "description": "Stovėk ant vienos kojos, pasilenk kaip vienos kojos RDL, kita koja tiesi atgal, rankos į šonus. Lėtai suk klubus į išorę (laisvos kojos pusė kyla), tada į vidų, kol dubuo lygus. Kelis nejuda.",
+              "focus": "Klubo rotacija ir pusiausvyra: sėdmuo valdo kelį.",
+              "sets": 4,
+              "reps": "5 / koja",
+              "restSeconds": 45,
+              "bonusSets": 1
+            }
+          ],
+          "bonusSets": 1
         },
         {
           "id": "GD7",
