@@ -1,5 +1,5 @@
 """Draws the hip pictures:
-- warm-up drills, one pose across the picture with an "APŠILIMAS" chip: public/assets/W_<key>.webp
+- warm-up drills (whole body + hips), one pose across the picture with an "APŠILIMAS" chip: public/assets/W_<key>.webp
 - hip strength exercises added as exercise 10 of each day, two panels: A_10, B_10, C_10
 
 Usage:  py tools/draw_hips.py [name ...]     (no names = all)
@@ -8,9 +8,9 @@ import math
 import sys
 
 import draw_stretches as ds
-from draw_exercises import ACCENT, FAR, GREEN, NEAR, RED, W, W_FOOT, W_SHIN, W_THIGH, Pic, bezier, go, side_figure
+from draw_exercises import ACCENT, FAR, GREEN, NEAR, RED, W, W_FOOT, W_SHIN, W_THIGH, Pic, bezier, centered, go, side_figure
 from draw_variants import CX as PCX
-from draw_variants import EQUIP, EQUIP_HI, along, front, kettlebell, limb, post, rect, side, standing_view
+from draw_variants import EQUIP, EQUIP_HI, along, front, kettlebell, limb, post, pushup, rect, side, standing_view
 
 FCX = W / 2  # centre of a one-pose picture
 TEAL = ds.TEAL
@@ -139,6 +139,89 @@ def deep_squat():
 def wgs():
     ds.finish = finish  # same pose as the cool-down picture, with the warm-up chip
     ds.wgs()
+
+
+# ------------------------------------------------------------------ whole-body warm-up drills
+def jacks():
+    """Jumping jacks, front view: legs apart, arms overhead, arcs showing the arm swing."""
+    pic = Pic()
+    ds.standing(pic, 1.15)
+    c = FCX
+    front(pic, (c - 12, 206), (c + 12, 206), (c - 28, 152), (c + 28, 152), (c, 132), (c - 52, 292), (c + 52, 292),
+          (c - 40, 100), (c + 40, 100), l_knee=(-6, 0), r_knee=(6, 0), l_elbow=(-10, -2), r_elbow=(10, -2))
+    arc_arrow(pic, (c + 28, 152), 66, 66, 10, 75, TEAL)
+    arc_arrow(pic, (c - 28, 152), 66, 66, 170, 105, TEAL)
+    finish(pic, "Kojos į šonus, rankos virš galvos, ritmingai", "jacks")
+
+
+def arm_circles():
+    """Arms straight out to the sides, a circle arrow around each hand."""
+    pic = Pic()
+    ds.standing(pic, 1.15)
+    c = FCX
+    front(pic, (c - 12, 206), (c + 12, 206), (c - 28, 152), (c + 28, 152), (c, 132), (c - 16, 292), (c + 16, 292),
+          (c - 84, 150), (c + 84, 150), l_elbow=(0, -3), r_elbow=(0, -3))
+    arc_arrow(pic, (c + 84, 150), 26, 26, 200, -130, TEAL)
+    arc_arrow(pic, (c - 84, 150), 26, 26, -20, 310, TEAL)
+    finish(pic, "Dideli ratai tiesiomis rankomis: pirmyn, tada atgal", "arm_circles")
+
+
+def cat_cow():
+    """On all fours with the back rounded up; the arched (cow) position is dashed below."""
+    pic = Pic()
+    ds.low(pic, 1.45, 272)
+    hip, sh, mid = (222, 247), (276, 247), (249, 233)
+    f_sh = (sh[0] - 3, sh[1] + 2)
+    j = ds.quadruped_legs(dict(hip=hip, mid=mid, sh=sh, head=go(sh, -64, 20), n_elbow=along(sh, (280, 292), 30),
+                               n_hand=(280, 292), f_sh=f_sh, f_elbow=along(f_sh, (284, 292), 30), f_hand=(284, 292)))
+    j = centered(j, FCX)
+    side_figure(pic, j)
+    h, m, s = j["hip"], j["mid"], j["sh"]
+    pic.path(bezier((h[0] + 6, h[1] + 10), (m[0], m[1] + 66), (s[0] - 6, s[1] + 10)), TEAL, 2.4, dashed=True)
+    pic.arrow((m[0], m[1] - 18), (m[0], m[1] - 30), (m[0], m[1] - 44), TEAL, 3)
+    finish(pic, "Nugarą apvalink aukštyn, tada išlenk žemyn", "cat_cow")
+
+
+def tspine():
+    """Quadruped thoracic rotation: hand behind the head, elbow turning up to the ceiling."""
+    pic = Pic()
+    ds.low(pic, 1.4, 270)
+    hip = (222, 247)
+    sh = go(hip, 6, 54)
+    f_sh = (sh[0] - 3, sh[1] + 2)
+    j = ds.quadruped_legs(dict(hip=hip, sh=sh, head=(sh[0] + 16, sh[1] - 10), n_elbow=(sh[0] + 8, sh[1] - 30),
+                               n_hand=(sh[0] + 4, sh[1] - 15), f_sh=f_sh, f_elbow=along(f_sh, (282, 292), 30), f_hand=(282, 292)))
+    j = centered(j, FCX)
+    side_figure(pic, j)
+    s = j["sh"]
+    arc_arrow(pic, (s[0], s[1] - 4), 44, 40, 236, 74, TEAL)
+    finish(pic, "Ranka už galvos, alkūnę suk į lubas", "tspine")
+
+
+def scap_pushup():
+    """Scapular push-up: straight-arm plank, only the shoulder blades move (double arrow at the upper back)."""
+    pic = Pic()
+    ds.standing(pic, 1.2)
+    j = centered(pushup((78, 236), 292), FCX)
+    side_figure(pic, j)
+    p = along(j["sh"], j["hip"], 16)
+    b = (p[0] + 4, p[1] - 26)
+    pic.arrow((b[0], b[1] - 4), (b[0], b[1] - 12), (b[0], b[1] - 22), TEAL, 3)
+    pic.arrow((b[0], b[1] + 4), (b[0], b[1] + 8), (b[0], b[1] + 12), TEAL, 3)
+    finish(pic, "Rankos tiesios, juda tik mentės: žemyn ir stumk", "scap_pushup")
+
+
+def inchworm():
+    """Inchworm: folded over, hands walking out towards a plank."""
+    pic = Pic()
+    ds.standing(pic, 1.2)
+    j = side((168, 206), (134, 292), (128, 292), (236, 292), (232, 292), torso_ang=-44, head_ang=-50,
+             knee=(-4, 0), elbow=(10, -6), n_toe=0, f_toe=0)
+    j = centered(j, FCX)
+    side_figure(pic, j)
+    h = j["n_hand"]
+    pic.arrow((h[0] + 12, h[1] - 8), (h[0] + 34, h[1] - 24), (h[0] + 56, h[1] - 6), TEAL, 3)
+    finish(pic, "Rankomis eik į planką, pėdomis grįžk prie rankų", "inchworm")
 
 
 # ------------------------------------------------------------------ hip strength (exercise 10)
@@ -307,7 +390,8 @@ def c10v():
 
 
 ALL = dict(hip_cars=hip_cars, leg_swings=leg_swings, ninety_ninety=ninety_ninety, cossack=cossack, deep_squat=deep_squat,
-           wgs=wgs, a10=a10, b10=b10, c10=c10, a10v=a10v, b10v=b10v, c10v=c10v)
+           wgs=wgs, jacks=jacks, arm_circles=arm_circles, cat_cow=cat_cow, tspine=tspine, scap_pushup=scap_pushup,
+           inchworm=inchworm, a10=a10, b10=b10, c10=c10, a10v=a10v, b10v=b10v, c10v=c10v)
 
 if __name__ == "__main__":
     for key in sys.argv[1:] or list(ALL):

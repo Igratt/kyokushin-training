@@ -1,7 +1,7 @@
 """Writes src/data/programs/hard-gym.json: the gym-only program for a break from karate.
 
 4 days, upper / lower twice a week: heavy main lifts (4–6), accessories (8–15), one explosive exercise per day
-to keep the speed, the hip warm-up before every workout (tools/add_hips.py) and the user's weaker side first
+to keep the speed, the whole-body warm-up before every workout (tools/add_hips.py) and the user's weaker side first
 on one-sided exercises (legs: left, chest and back: right, arms: left).
 
 Exercises taken over from the Kyokushin program keep their descriptions and pictures. A picture whose corner
@@ -15,7 +15,7 @@ import json
 import os
 import re
 
-from add_hips import WARMUP
+from add_hips import warmup_for
 from rebadge import rebadge
 
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
@@ -71,7 +71,7 @@ def with_variants(e, *variants):
 A = [
     with_variants(reuse("B6", "A", 1, 3, "5", 75), reuse("B6v", "A", 1, 3, "5", 75, True)),
     reuse("B2", "A", 2, 4, "4–6", 150),
-    with_variants(reuse("B3", "A", 3, 4, "5–8", 120), reuse("B3v", "A", 3, 4, "6–10", 120, True)),
+    with_variants(reuse("B3", "A", 3, 4, "5–8", 120), reuse("B3v", "A", 3, 4, "8–10", 120, True)),
     new("A", 4, "Single-Arm Dumbbell Bench Press", 3, "8–10 / ranka", 90,
         "Gulk ant suolo, hantelis vienoje rankoje prie krūtinės, kita ranka ant klubo. Spausk tiesiai aukštyn ir lėtai nuleisk. Neleisk kūnui suktis į šoną.",
         "Krūtinė po vieną pusę: silpnesnė dešinė pasiveja kairę.", startSide="right"),
@@ -104,7 +104,7 @@ C = [
         "Viršutinė krūtinė ir pečiai."),
     with_variants(reuse("B3v", "C", 3, 4, "8–12", 90), reuse("C5v", "C", 3, 4, "6–10", 90, True)),
     with_variants(reuse("B4", "C", 4, 3, "8 / ranka", 90), reuse("B4v", "C", 4, 3, "8 / ranka", 90, True)),
-    with_variants(reuse("B5v", "C", 5, 3, "10–12", 90), reuse("B5", "C", 5, 3, "10–12", 90, True)),
+    with_variants(reuse("B5", "C", 5, 3, "10–12", 90), reuse("B5v", "C", 5, 3, "10–12", 90, True)),
     with_variants(reuse("B7", "C", 6, 3, "12–15", 60), reuse("B7v", "C", 6, 3, "15–20", 45, True)),
     new("C", 7, "Cable Triceps Pushdown", 3, "10–15", 60,
         "Stovėk prie lyno, alkūnės prispaustos prie šonų. Spausk rankeną žemyn, kol rankos visiškai ištiestos, ir lėtai grąžink iki krūtinės. Alkūnės nejuda.",
@@ -132,12 +132,12 @@ program = {
     "focus": "Sporto salė: jėga + masė",
     "goal": "Karatė pertraukai: 4 dienos, viršus ir apačia po du kartus. Sunkūs pagrindiniai kėlimai po 4–6 kartus, "
             "pagalbiniai po 8–15 ir po vieną sprogstamą pratimą, kad neprarastum greičio. Prieš kiekvieną treniruotę "
-            "dubens apšilimas, vienpusiai pratimai pradedami silpnesne puse ir gauna papildomą setą tik jai.",
+            "viso kūno apšilimas, vienpusiai pratimai pradedami silpnesne puse ir gauna papildomą setą tik jai.",
     "days": [
-        {"id": "A", "name": "A DIENA", "subtitle": "Viršus · jėga", "warmup": WARMUP, "exercises": A, "stretches": UPPER},
-        {"id": "B", "name": "B DIENA", "subtitle": "Apačia · jėga", "warmup": WARMUP, "exercises": B, "stretches": LOWER},
-        {"id": "C", "name": "C DIENA", "subtitle": "Viršus · masė", "warmup": WARMUP, "exercises": C, "stretches": UPPER},
-        {"id": "D", "name": "D DIENA", "subtitle": "Apačia · masė + dubuo", "warmup": WARMUP, "exercises": D, "stretches": LOWER},
+        {"id": "A", "name": "A DIENA", "subtitle": "Viršus · jėga", "warmup": warmup_for("upper"), "exercises": A, "stretches": UPPER},
+        {"id": "B", "name": "B DIENA", "subtitle": "Apačia · jėga", "warmup": warmup_for("lower"), "exercises": B, "stretches": LOWER},
+        {"id": "C", "name": "C DIENA", "subtitle": "Viršus · masė", "warmup": warmup_for("upper"), "exercises": C, "stretches": UPPER},
+        {"id": "D", "name": "D DIENA", "subtitle": "Apačia · masė + dubuo", "warmup": warmup_for("lower"), "exercises": D, "stretches": LOWER},
     ],
 }
 

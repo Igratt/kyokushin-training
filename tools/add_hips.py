@@ -1,35 +1,75 @@
 """Hip work for src/data/programs/kyokushin-mix.json (idempotent: replaces what it added before).
 
-- `warmup` of every day: a 6 min guided hip mobility warm-up (pictures from tools/draw_hips.py).
+- `warmup` of every day: a ~8 min guided whole-body warm-up, top down (pictures from tools/draw_hips.py);
+  lower-body days get the extra hip drills, upper-body days the scapular push-ups.
 - Exercise 10 of every day: one hip strength exercise (Copenhagen plank, kick hold, Cossack squat).
 - `startSide` on one-sided exercises: the user's weaker side first (legs: left, chest: right).
 
-The warm-up list is also imported by tools/make_hard_gym.py.
+warmup_for() is also used by tools/make_hard_gym.py.
 """
 import json
 
 PATH = r"D:\Kyokushin\src\data\programs\kyokushin-mix.json"
 
-WARMUP = [
-    dict(id="W_hip_cars", name="Hip CARs (klubo sukimai)", hold=30, sides=2, image="assets/W_hip_cars.webp",
-         description="Stovėk ant vienos kojos ir prisilaikyk. Kitą kelį pakelk ir lėtai brėžk kuo didesnį ratą: pirmyn, į šoną, atgal ir žemyn. Liemuo nejuda, juda tik klubas.",
-         focus="valdomas judesys per visą klubo amplitudę"),
-    dict(id="W_leg_swings", name="Leg Swings (kojos mostai)", hold=30, sides=2, image="assets/W_leg_swings.webp",
-         description="Prisilaikyk ir mosuok tiesia koja pirmyn ir atgal, po to į šonus priešais save. Kas kartą šiek tiek aukščiau, liemuo tiesus.",
-         focus="dinamiškas klubų apšilimas prieš sunkius pratimus ir spyrius"),
-    dict(id="W_9090", name="90/90 Hip Switch", hold=45, sides=1, image="assets/W_9090.webp",
-         description="Sėsk ant grindų, abu keliai sulenkti 90°: viena koja priekyje, kita šone. Nekeldamas pėdų lėtai versk kelius į kitą pusę ir atgal. Nugara tiesi, rankomis gali atsiremti.",
-         focus="klubo vidinė ir išorinė rotacija"),
-    dict(id="W_cossack", name="Cossack Squat (savo svoris)", hold=45, sides=1, image="assets/W_cossack.webp",
-         description="Plačiai išsižergk. Leiskis ant vienos kojos, kita lieka tiesi, pirštai į viršų. Pakaitomis į abi puses, kulnas prie žemės, kiek leidžia klubai.",
-         focus="pritraukiamieji raumenys ir šoninis mobilumas"),
-    dict(id="W_wgs", name="World's Greatest Stretch", hold=30, sides=2, image="assets/W_wgs.webp",
-         description="Didelis įtūpstas, ranka į grindis prie priekinės pėdos, kita ranka sukasi į lubas. Judėk ritmingai: alkūnė link pėdos, sukimas į viršų.",
-         focus="klubų lenkiamieji ir krūtinės pasukimas"),
-    dict(id="W_deep_squat", name="Deep Squat Hold (gilus pritūpimas)", hold=45, sides=1, image="assets/W_deep_squat.webp",
-         description="Leiskis į gilų pritūpimą, kulnai prie žemės. Alkūnėmis švelniai stumk kelius į šonus ir lėtai linguok iš kairės į dešinę.",
-         focus="klubų ir čiurnų mobilumas pritūpimui"),
+def _w(key, name, hold, sides, description, focus):
+    return dict(id=f"W_{key}", name=name, hold=hold, sides=sides, image=f"assets/W_{key}.webp",
+                description=description, focus=focus)
+
+
+WARMUP_ITEMS = {
+    "jacks": _w("jacks", "Jumping Jacks (šuoliukai)", 40, 1,
+                "Šokinėk: kojos į šonus ir rankos virš galvos, tada atgal. Lengvai, ant pirštų, ritmingai. Tikslas – sušilti ir pakelti pulsą, ne pavargti.",
+                "visas kūnas sušyla, širdis įsibėgėja prieš krūvį"),
+    "arm_circles": _w("arm_circles", "Arm Circles (rankų sukimai)", 30, 1,
+                      "Rankos tiesios į šonus. Suk didelius ratus: 15 s pirmyn, 15 s atgal, kaskart kiek didesnius. Pečiai žemyn, liemuo nejuda.",
+                      "pečių sąnariai prieš spaudimą, traukimą ir smūgius"),
+    "cat_cow": _w("cat_cow", "Cat-Cow (katė–karvė)", 30, 1,
+                  "Keturpėsčias, rankos po pečiais, keliai po klubais. Iškvėpdamas apvalink nugarą ir nuleisk galvą, įkvėpdamas išlenk nugarą ir žiūrėk pirmyn. Lėtai, per visą stuburą.",
+                  "stuburo mobilumas prieš pritūpimus ir kėlimus"),
+    "tspine": _w("tspine", "T-Spine Rotation (krūtinės sukimas)", 25, 2,
+                 "Keturpėsčias, vieną ranką dėk už galvos. Alkūnę vesk po kūnu link kitos rankos, tada suk ją į lubas, akys seka alkūnę. Klubai nejuda.",
+                 "krūtinės stuburo sukimas: smūgiams, spyriams ir tiesiai nugarai po štanga"),
+    "scap_pushup": _w("scap_pushup", "Scapular Push-Ups (menčių atsispaudimai)", 30, 1,
+                      "Plankos padėtis ant tiesių rankų. Nelenkdamas alkūnių leisk krūtinę žemyn, kad mentės susiglaustų, tada stumk grindis nuo savęs, kol nugara tarp menčių apvali. Mažas judesys, lėtai.",
+                      "mentės ir serratus prieš spaudimą"),
+    "inchworm": _w("inchworm", "Inchworm (vikšras)", 40, 1,
+                   "Stovėdamas pasilenk, delnus dėk ant grindų ir eik rankomis pirmyn iki plankos. Vienas atsispaudimas, tada smulkiais žingsniais eik pėdomis prie rankų, kojas laikydamas kuo tiesesnes. Kartok.",
+                   "pakinkliai, pečiai ir presas vienu judesiu"),
+    "hip_cars": _w("hip_cars", "Hip CARs (klubo sukimai)", 20, 2,
+                   "Stovėk ant vienos kojos ir prisilaikyk. Kitą kelį pakelk ir lėtai brėžk kuo didesnį ratą: pirmyn, į šoną, atgal ir žemyn. Liemuo nejuda, juda tik klubas.",
+                   "valdomas judesys per visą klubo amplitudę"),
+    "leg_swings": _w("leg_swings", "Leg Swings (kojos mostai)", 20, 2,
+                     "Prisilaikyk ir mosuok tiesia koja pirmyn ir atgal, po to į šonus priešais save. Kas kartą šiek tiek aukščiau, liemuo tiesus.",
+                     "dinamiškas klubų apšilimas prieš sunkius pratimus ir spyrius"),
+    "9090": _w("9090", "90/90 Hip Switch", 30, 1,
+               "Sėsk ant grindų, abu keliai sulenkti 90°: viena koja priekyje, kita šone. Nekeldamas pėdų lėtai versk kelius į kitą pusę ir atgal. Nugara tiesi, rankomis gali atsiremti.",
+               "klubo vidinė ir išorinė rotacija"),
+    "cossack": _w("cossack", "Cossack Squat (savo svoris)", 30, 1,
+                  "Plačiai išsižergk. Leiskis ant vienos kojos, kita lieka tiesi, pirštai į viršų. Pakaitomis į abi puses, kulnas prie žemės, kiek leidžia klubai.",
+                  "pritraukiamieji raumenys ir šoninis mobilumas"),
+    "wgs": _w("wgs", "World's Greatest Stretch", 20, 2,
+              "Didelis įtūpstas, ranka į grindis prie priekinės pėdos, kita ranka sukasi į lubas. Judėk ritmingai: alkūnė link pėdos, sukimas į viršų.",
+              "klubų lenkiamieji ir krūtinės pasukimas"),
+    "deep_squat": _w("deep_squat", "Deep Squat Hold (gilus pritūpimas)", 30, 1,
+                     "Leiskis į gilų pritūpimą, kulnai prie žemės. Alkūnėmis švelniai stumk kelius į šonus ir lėtai linguok iš kairės į dešinę.",
+                     "klubų ir čiurnų mobilumas pritūpimui"),
+}
+
+# Order of the whole-body warm-up, top down. Some drills only on upper- or lower-body days; a full-body day gets both.
+WARMUP_ORDER = [
+    ("jacks", "upper lower full"), ("arm_circles", "upper lower full"), ("cat_cow", "upper lower full"),
+    ("tspine", "upper lower full"), ("scap_pushup", "upper full"), ("inchworm", "upper lower full"),
+    ("hip_cars", "upper lower full"), ("leg_swings", "upper lower full"), ("9090", "lower"),
+    ("cossack", "lower full"), ("wgs", "upper lower full"), ("deep_squat", "upper lower full"),
 ]
+
+# What each Kyokushin day mostly trains (A legs, B upper body, C both).
+DAY_KIND = {"A": "lower", "B": "upper", "C": "full"}
+
+
+def warmup_for(kind):
+    """The warm-up list of an 'upper', 'lower' or 'full' (both) day, as fresh dicts."""
+    return [dict(WARMUP_ITEMS[key]) for key, kinds in WARMUP_ORDER if kind in kinds.split()]
 
 # Every hip slot has a weighted/strength version and a bodyweight mobility-strength variant; the app alternates them.
 HIP_VARIANT = {
@@ -80,7 +120,7 @@ def main():
     with open(PATH, encoding="utf-8") as f:
         prog = json.load(f)
     for day in prog["days"]:
-        day["warmup"] = [dict(w) for w in WARMUP]
+        day["warmup"] = warmup_for(DAY_KIND[day["id"]])
         # keep key order: warmup before stretches
         stretches = day.pop("stretches", None)
         if stretches is not None:

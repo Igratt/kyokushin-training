@@ -371,24 +371,25 @@ def b1v():
 
 
 def b3v():
+    """Band-assisted pull-ups: a loop band hangs from the bar, one foot in it, the other leg straight."""
     pic, acc = Pic(), ACCENT["B"]
     for i in range(2):
         standing_view(pic, i)
-        pic.capsule((206, 26), (206, 300), 8, EQUIP)
-        pic.capsule((116, 26), (206, 26), 7, EQUIP)
-        pulley(pic, (116, 30))
-        rect(pic, 74, 246, 134, 255, EQUIP_HI)
-        rect(pic, 99, 255, 109, 300, EQUIP)
-        rect(pic, 140, 210, 170, 222, EQUIP_HI)
-        hands = (116, 126) if i == 0 else (122, 176)
-        j = side((104, 236), (156, 292), (150, 292), hands, (hands[0] - 4, hands[1] + 2), torso_ang=97, head_ang=93,
-                 knee=(10, -20), elbow=(-18, 14) if i else (-6, 0))
-        cable(pic, (116, 30), j["n_hand"])
-        side_figure(pic, j)
-        pic.dot(j["n_hand"], 4.5, GREY)
+        pullup_frame(pic)
+        dy = 0 if i == 0 else -40
+        bx = CX - 38
+        foot = (bx, 252 + dy)
+        front(pic, (CX - 12, 184 + dy), (CX + 12, 184 + dy), (CX - 28, 130 + dy), (CX + 28, 130 + dy), (CX, 112 + dy),
+              foot, (CX + 10, 270 + dy), (CX - 18, 72), (CX + 18, 72),
+              l_elbow=(-4, 0) if i == 0 else (-14, 10), r_elbow=(4, 0) if i == 0 else (14, 10),
+              l_knee_pt=(CX - 34, 230 + dy), feet=False)
+        pic.capsule((CX + 8, 274 + dy), (CX + 21, 274 + dy), W_FOOT + 1, FAR)
+        band(pic, [(bx, 54), (bx, foot[1] + 2)])
+        pic.capsule((foot[0] - 8, foot[1] + 4), (foot[0] + 8, foot[1] + 4), W_FOOT + 1, FAR)
+        band(pic, [(bx - 10, foot[1] + 8), (bx + 10, foot[1] + 8)])
         if i:
-            pic.arrow((146, 120), (152, 146), (142, 168), acc)
-        pic.caption("1 · Rankos aukštyn" if not i else "2 · Trauk iki krūtinės")
+            pic.arrow((CX + 58, 210), (CX + 66, 170), (CX + 58, 130), acc)
+        pic.caption("1 · Pėda gumoje, kabok" if not i else "2 · Smakras virš skersinio")
     pic.badge(3)
     pic.save("B_3v.webp")
 
@@ -410,25 +411,24 @@ def b4v():
 
 
 def b5v():
+    """Landmine row: straddling the bar, hinged over, pulling the loaded end up to the chest."""
     pic, acc = Pic(), ACCENT["B"]
     for i in range(2):
         standing_view(pic, i)
-        pic.capsule((238, 130), (238, 300), 8, EQUIP)
-        pulley(pic, (236, 252))
-        rect(pic, 44, 274, 132, 284, EQUIP_HI)
-        rect(pic, 196, 248, 204, 292, EQUIP_HI)
-        if i == 0:
-            j = side((86, 262), (194, 262), (190, 264), (150, 214), (146, 216), torso_ang=78, head_ang=74,
-                     knee=(0, -24), n_toe=82, f_toe=82, elbow=(0, 8))
-        else:
-            j = side((86, 262), (194, 262), (190, 264), (112, 236), (108, 238), torso_ang=94, head_ang=90,
-                     knee=(0, -24), n_toe=82, f_toe=82, elbow=(-24, 0))
-        cable(pic, (236, 252), j["n_hand"])
+        pivot = (238, 290)
+        rect(pic, 226, 283, 250, 296, EQUIP_HI)
+        hand = (134, 262) if i == 0 else (118, 232)
+        elbow = (0, 10) if i == 0 else (-24, 4)
+        j = side((84, 230), (90, 292), (98, 292), hand, (hand[0] - 4, hand[1] + 2), torso_ang=30, head_ang=24,
+                 knee=(16, -8), f_knee=(16, -8), elbow=elbow, f_elbow=elbow, n_toe=-6, f_toe=-6)
+        end = (hand[0] - 12, hand[1] + 5)
+        pic.capsule(pivot, end, 4.5, GREY)
+        pic.capsule((end[0] + 6, end[1] - 13), (end[0] + 6, end[1] + 13), 7, EQUIP_HI)
+        pic.capsule((end[0], end[1] - 15), (end[0], end[1] + 15), 8, acc)
         side_figure(pic, j)
-        pic.dot(j["n_hand"], 4.5, GREY)
         if i:
-            pic.arrow((168, 220), (146, 206), (124, 218), acc)
-        pic.caption("1 · Rankos ištiestos" if not i else "2 · Trauk prie pilvo")
+            pic.arrow((150, 262), (154, 244), (136, 232), acc)
+        pic.caption("1 · Apžergęs štangą, pasilenk" if not i else "2 · Trauk galą prie krūtinės")
     pic.badge(5)
     pic.save("B_5v.webp")
 
@@ -487,28 +487,23 @@ def b7v():
 
 
 def b8v():
+    """Low-to-high chop with a kettlebell: from outside the left knee up across to above the right shoulder."""
     pic, acc = Pic(), ACCENT["B"]
     for i in range(2):
         standing_view(pic, i)
-        post(pic, 12, 120)
-        anchor = (14, 286)
-        pulley(pic, anchor)
         if i == 0:
-            hands = ((CX - 40, 236), (CX - 34, 240))
-            sh = ((CX - 34, 168), (CX + 18, 164))
-            head, hip_y = (CX - 8, 148), 222
+            f = front(pic, (CX - 12, 232), (CX + 12, 232), (CX - 36, 186), (CX + 6, 180), (CX - 14, 160),
+                      (CX - 40, 292), (CX + 40, 292), (CX - 30, 226), (CX - 24, 228),
+                      l_knee=(-14, 0), r_knee=(14, 0), l_elbow=(-14, 0), r_elbow=(4, 12))
         else:
-            hands = ((CX + 52, 112), (CX + 60, 116))
-            sh = ((CX - 18, 156), (CX + 34, 160))
-            head, hip_y = (CX + 8, 136), 212
-        cable(pic, anchor, hands[0])
-        front(pic, (CX - 12, hip_y), (CX + 12, hip_y), sh[0], sh[1], head, (CX - 36, 292), (CX + 36, 292),
-              hands[0], hands[1], l_knee=(-12, 0), r_knee=(12, 0), l_elbow=(0, 10) if i == 0 else (-6, 6),
-              r_elbow=(0, 10) if i == 0 else (6, 8))
-        pic.dot(hands[0], 4.5, GREY)
+            f = front(pic, (CX - 12, 212), (CX + 12, 212), (CX - 4, 160), (CX + 40, 166), (CX + 12, 138),
+                      (CX - 36, 292), (CX + 36, 292), (CX + 40, 124), (CX + 46, 128),
+                      l_knee=(-12, 0), r_knee=(12, 0), l_elbow=(0, -6), r_elbow=(12, 6))
+        grip = ((f["lh"][0] + f["rh"][0]) / 2, (f["lh"][1] + f["rh"][1]) / 2)
+        kettlebell(pic, grip, acc)
         if i:
-            pic.arrow((CX - 30, 238), (CX + 10, 150), (CX + 64, 136), acc)
-        pic.caption("1 · Rankena prie klubo" if not i else "2 · Įstrižai į viršų")
+            pic.arrow((CX - 34, 240), (CX - 14, 128), (CX + 36, 102), acc)
+        pic.caption("1 · Kettlebell prie kairio kelio" if not i else "2 · Įstrižai virš dešinio peties")
     pic.badge(8)
     pic.save("B_8v.webp")
 
