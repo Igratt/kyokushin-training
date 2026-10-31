@@ -20,8 +20,20 @@ FLOOR, FLOOR_LINE = (29, 40, 72), (55, 70, 110)
 NEAR, TORSO, FAR = (233, 238, 248), (204, 212, 232), (120, 133, 166)
 TEXT, GREEN, RED = (205, 213, 236), (34, 197, 94), (239, 68, 68)
 ACCENT = {"A": (59, 130, 246), "B": (249, 115, 22), "C": (34, 197, 94)}
-FONT_B = r"C:\Windows\Fonts\arialbd.ttf"
 OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "public", "assets")
+
+
+def font_path():
+    """Bold sans font for captions and badges: Arial on Windows, Liberation Sans (same metrics) or DejaVu elsewhere."""
+    for p in (r"C:\Windows\Fonts\arialbd.ttf", "/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf",
+              "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", "/Library/Fonts/Arial Bold.ttf"):
+        if os.path.exists(p):
+            return p
+    return "arialbd.ttf"
+
+
+FONT_B = font_path()
+
 
 W_TORSO, W_THIGH, W_SHIN, W_UPPER, W_FORE, W_FOOT, R_HAND, R_HEAD, W_NECK = 24, 15, 12, 11, 9.5, 7, 5.5, 11.5, 10
 

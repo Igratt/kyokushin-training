@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type CSSProperties } from 'react';
-import type { Session, Settings } from '../types';
+import type { Exercise, Session, Settings } from '../types';
 import { exerciseKey, isBonusSet, plural, stretchMinutes, stretchSteps } from '../data/programs';
 import {
   effectiveSets,
@@ -10,6 +10,7 @@ import {
   progress,
   restFor,
   sideName,
+  weakSide,
   type Action,
   type LastPerformance,
 } from '../workout/engine';
@@ -44,6 +45,26 @@ function lastText(p: LastPerformance, timed: boolean, knownKg: number | undefine
   return p.weights.map((w) => (w === null ? '—' : formatKg(w))).join(' · ') + ' kg';
 }
 
+/**
+ * Loud banner for a set done with the weaker side only. It used to be one line of small text under the set
+ * number, which is easy to miss mid-workout (and then both sides get done), so now it is a big yellow block
+ * at the top of the screen, repeated on the rest screen before that set.
+ */
+function SideBanner({ ex, title, sub }: { ex: Exercise; title: string; sub: string }) {
+  const left = ex.startSide !== 'right';
+  return (
+    <div className="side-banner" role="alert" id="side-banner">
+      <span className="side-arrow" aria-hidden="true">
+        {left ? '←' : '→'}
+      </span>
+      <span className="side-text">
+        <span className="side-title h-display">{title}</span>
+        <span className="side-sub">{sub}</span>
+      </span>
+    </div>
+  );
+}
+
 export default function Active({ session: s, dispatch, settings, suggested, last, onWarmup, onExit }: Props) {
   const day = s.day;
   const resting = s.phase === 'RESTING';
@@ -72,6 +93,12 @@ export default function Active({ session: s, dispatch, settings, suggested, last
   const lastPerf = last[exerciseKey(ex.name)];
   const exWeightText = s.weights[ex.id] ?? '';
   const doneSets = effectiveSets(s, s.exerciseIndex);
+  // The current set is one of the extra sets for the weaker side only.
+  const bonusNow = !!ex.startSide && !allDone && isBonusSet(ex, done);
+  const weak = weakSide(ex);
+  const otherSide = ex.startSide === 'right' ? 'kairės' : 'dešinės';
+  const sideSuffix = ex.sides === 2 ? ' / pusė' : '';
+  const dayBtn = 'btn btn-xl btn-day' + (bonusNow ? ' bonus' : '');
 
   useEffect(() => {
     setShowNote(false);
@@ -162,11 +189,13 @@ export default function Active({ session: s, dispatch, settings, suggested, last
     const target = s.restTarget;
     const nextEx = day.exercises[target.exerciseIndex];
     const afterExercise = s.restLabel === 'exercise';
+    const nextBonus = !!nextEx.startSide && isBonusSet(nextEx, target.setIndex);
     return (
       <div className="screen active" style={{ '--day': color } as CSSProperties}>
         {topBar}
         <div className="rest-view">
           <div className="rest-label">{afterExercise ? 'Poilsis prieš kitą pratimą' : `Poilsis prieš setą ${target.setIndex + 1}/${ex.sets}`}</div>
+          {nextBonus && <SideBanner ex={nextEx} title={`Kitas: tik ${weakSide(nextEx)} pusė`} sub={`Papildomas setas silpnesnei pusei · ${nextEx.startSide === 'right' ? 'kairės' : 'dešinės'} nedaryk`} />}
           <div className="ring-wrap">
             <svg viewBox="0 0 120 120" className="ring" aria-hidden="true">
               <circle cx="60" cy="60" r="54" className="ring-bg" />
@@ -207,9 +236,11 @@ export default function Active({ session: s, dispatch, settings, suggested, last
         {topBar}
         <div className="rest-view" id="work-timer">
           <div className="rest-label">
-            {prep ? (work.side === 2 ? 'Keisk pusę' : 'Pasiruošk') : 'Laikyk'}
+            {prep ? (work.side === 2 ? 'Keisk pusę' : 'Pasiruošk') : ex.fast ? 'Kuo greičiau!' : 'Laikyk'}
             {work.side > 0 && (
-              <span className="variant-chip on side-chip">{sideName(work.side, ex.startSide).replace(/^./, (c) => c.toUpperCase())} pusė</span>
+              <span className={'variant-chip on side-chip' + (bonusNow ? ' bonus' : '')}>
+                {bonusNow ? 'Tik ' + sideName(work.side, ex.startSide) : sideName(work.side, ex.startSide).replace(/^./, (c) => c.toUpperCase())} pusė
+              </span>
             )}
           </div>
           <div className={'ring-wrap' + (prep ? ' prep' : '')}>
@@ -222,10 +253,11 @@ export default function Active({ session: s, dispatch, settings, suggested, last
           <div className="next-card">
             <ExerciseImage src={ex.image} name={ex.name} className="next-img" />
             <div>
-              <div className="muted small">Pratimas su laiku</div>
+              <div className="muted small">{ex.fast ? 'Greičio setas: kuo daugiau kartojimų' : 'Pratimas su laiku'}</div>
               <div className="next-name">{ex.name}</div>
               <div className="muted small">
-                setas {done + 1}/{ex.sets} · {ex.seconds} s{ex.sides === 2 ? ' / pusė' : ''}
+                setas {done + 1}/{ex.sets} · {ex.seconds} s{sideSuffix}
+                {bonusNow ? ` · tik ${weak}` : ''}
               </div>
             </div>
           </div>
@@ -237,8 +269,8 @@ export default function Active({ session: s, dispatch, settings, suggested, last
               Stabdyti
             </button>
           </div>
-          <button className="btn btn-xl btn-day" id="set-done" onClick={completeSet}>
-            ✓ Setas atliktas
+          <button className={dayBtn} id="set-done" onClick={completeSet}>
+            ✓ Setas atliktas{bonusNow ? ` · tik ${weak}` : ''}
           </button>
         </div>
       </div>
@@ -267,6 +299,7 @@ export default function Active({ session: s, dispatch, settings, suggested, last
           </button>
         </section>
       )}
+      {bonusNow && <SideBanner ex={ex} title={`Tik ${weak} pusė`} sub={`Papildomas setas silpnesnei pusei · ${otherSide} nedaryk`} />}
       <div className="ex-head">
         {ex.focus && <div className="muted small">{ex.focus}</div>}
         <h1 className="h-display ex-title">{ex.name}</h1>
@@ -297,14 +330,14 @@ export default function Active({ session: s, dispatch, settings, suggested, last
           <span className="h-display big reps">{ex.reps}</span>
         </div>
         {ex.startSide && (
-          <div className="side-line" id="side-line">
-            {!allDone && isBonusSet(ex, done)
-              ? `Papildomas setas: tik ${ex.startSide === 'left' ? 'kairė' : 'dešinė'} pusė (silpnesnė)`
+          <div className={'side-line' + (bonusNow ? ' bonus' : '')} id="side-line">
+            {bonusNow
+              ? `Papildomas setas: TIK ${weak.toUpperCase()} pusė (silpnesnė), ${otherSide} nedaryk`
               : `Pradėk ${ex.startSide === 'left' ? 'kaire' : 'dešine'} puse (silpnesnė), ${ex.startSide === 'left' ? 'dešine' : 'kaire'} – tiek pat kartojimų`}
           </div>
         )}
         <div className="muted small">
-          {timed ? `Laikmatis: ${ex.seconds} s${ex.sides === 2 ? ' / pusė' : ''} · ` : ''}Poilsis po seto: {restFor(s, s.exerciseIndex)} s
+          {timed ? `${ex.fast ? 'Greičio setas' : 'Laikmatis'}: ${ex.seconds} s${sideSuffix} · ` : ''}Poilsis po seto: {restFor(s, s.exerciseIndex)} s
         </div>
         <div className="last-line" id="last-line">
           {lastPerf ? (
@@ -344,7 +377,8 @@ export default function Active({ session: s, dispatch, settings, suggested, last
         <div className="done-list muted small">
           {doneSets.map((st) => (
             <span key={st.set}>
-              ✓ {st.set}: {formatWeight(st.weightKg)}
+              ✓ {st.set}
+              {isBonusSet(ex, st.set - 1) ? ` (tik ${weak})` : ''}: {formatWeight(st.weightKg)}
               {st.perSet ? '*' : ''}
             </span>
           ))}
@@ -375,12 +409,12 @@ export default function Active({ session: s, dispatch, settings, suggested, last
             </button>
           )
         ) : timed && !work ? (
-          <button className="btn btn-xl btn-day" id="work-start" onClick={startWork}>
-            ▶ Pradėti laikmatį · {ex.seconds} s{ex.sides === 2 ? ' / pusė' : ''}
+          <button className={dayBtn} id="work-start" onClick={startWork}>
+            ▶ Pradėti laikmatį · {ex.seconds} s{bonusNow ? ` · tik ${weak}` : sideSuffix}
           </button>
         ) : (
-          <button className="btn btn-xl btn-day" id="set-done" onClick={completeSet}>
-            ✓ Setas atliktas
+          <button className={dayBtn} id="set-done" onClick={completeSet}>
+            ✓ Setas atliktas{bonusNow ? ` · tik ${weak}` : ''}
           </button>
         )}
         <div className="row nav-row">

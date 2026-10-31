@@ -77,6 +77,9 @@ function normalizeExercise(e: unknown, label: string, fallbackId: string, ids: S
   if (seconds !== undefined && !(seconds >= 5 && seconds <= 900)) fail(`„${name}“: „seconds“ turi būti nuo 5 iki 900.`);
   const sides = er.sides === undefined ? undefined : Math.round(toNumber(er.sides));
   if (sides !== undefined && sides !== 1 && sides !== 2) fail(`„${name}“: „sides“ turi būti 1 arba 2.`);
+  // Speed set (punches, kicks): the same timer, but the screen says "as fast as you can" instead of "hold".
+  const fast = er.fast === true;
+  if (fast && seconds === undefined) fail(`„${name}“: „fast“ reikia „seconds“.`);
   const startSide = er.startSide === undefined ? undefined : er.startSide;
   if (startSide !== undefined && startSide !== 'left' && startSide !== 'right') fail(`„${name}“: „startSide“ turi būti "left" arba "right".`);
   const bonusSets = er.bonusSets === undefined ? undefined : Math.round(toNumber(er.bonusSets));
@@ -98,6 +101,7 @@ function normalizeExercise(e: unknown, label: string, fallbackId: string, ids: S
     restSeconds: rest,
     seconds,
     sides: sides as 1 | 2 | undefined,
+    fast: fast || undefined,
     startSide: startSide as 'left' | 'right' | undefined,
     bonusSets: bonusSets || undefined,
     image: image(er.image),
@@ -167,6 +171,7 @@ function plain(ex: Exercise): Exercise {
     restSeconds: ex.restSeconds,
     seconds: ex.seconds,
     sides: ex.sides,
+    fast: ex.fast,
     startSide: ex.startSide,
     bonusSets: ex.bonusSets,
     image: ex.image,

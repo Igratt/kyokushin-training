@@ -10,6 +10,8 @@ export interface Exercise {
   seconds?: number;
   /** 2 = the hold is done on the left and then on the right side (side plank). */
   sides?: 1 | 2;
+  /** Timed set done as fast reps (speed punches, kicks) instead of a hold: the screen says "Kuo greičiau" instead of "Laikyk". */
+  fast?: boolean;
   /** One-sided exercise: start with this (weaker) side, then do the same reps with the other one. */
   startSide?: 'left' | 'right';
   /** The last N of `sets` are done with the weaker side only (to even out an imbalance). */

@@ -25,7 +25,10 @@ APK: https://github.com/Igratt/kyokushin-training/releases/latest/download/Kyoku
 Kiekvienas JSON failas aplanke `src/data/programs/` yra programa, rodoma Nustatymai → Programa.
 
 - `kyokushin-mix.json`: pagrindinė, 3 dienos (karatė + salė).
-- `hard-gym.json`: 4 dienos tik sporto salei, pvz. karatė pertraukai (viršus / apačia po du kartus, jėga + masė). Ją sugeneruoja `py tools/make_hard_gym.py`: perima Kyokushin programos pratimų aprašymus ir nuotraukas, naujus piešinius ima iš `py tools/draw_gym.py`, o nuotraukas, kurių kampo numeris nesutampa su nauja vieta, nukopijuoja su teisingu numeriu (`tools/rebadge.py`). Naują programą pridėti:
+- `hard-gym.json`: 4 dienos tik sporto salei, pvz. karatė pertraukai (viršus / apačia po du kartus, jėga + masė). Ją sugeneruoja `py tools/make_hard_gym.py`: perima Kyokushin programos pratimų aprašymus ir nuotraukas, naujus piešinius ima iš `py tools/draw_gym.py`, o nuotraukas, kurių kampo numeris nesutampa su nauja vieta, nukopijuoja su teisingu numeriu (`tools/rebadge.py`).
+- `karate-power.json`: „Karatė: sprogstamumas ir greitis“, 3 dienos tik sprogstamumui ir aštrumui, be masės auginimo: A kojos (depth jump, šuoliai per kliūtis, trap-bar jump, kelio kėlimas su guma, šoniniai šuoliai, greiti mae geri, pogo), B viršus (kamuolio metimai, landmine „smūgis“, greiti smūgiai su guma, sprogstami prisitraukimai, landmine sukimai), C visas kūnas (kettlebell swing, greitėjimai 10 m, tuck jump, kojų keitimas šuoliu, greiti mawashi geri, šešėlio kombinacijos). Mažai kartojimų, lengvi svoriai, pilnas poilsis, viskas maksimaliu greičiu. Sugeneruoja `py tools/make_power.py` (dalį pratimų perima iš Kyokushin programos, naujus piešinius piešia `py tools/draw_power.py`, nesutampančius numerius perkopijuoja `tools/rebadge.py`). Piešimo įrankiai veikia ir ne Windows'e: pusjuodį šriftą randa patys (Arial, Liberation Sans arba DejaVu).
+
+Naują programą pridėti:
 
 1. Įdėk naują `.json` failą į `src/data/programs/` (formatas toks pat kaip `kyokushin-mix.json`).
 2. `npm run deploy` — programa atsiras telefone kitą kartą atidarius.
@@ -62,9 +65,9 @@ Formatas:
 
 `warmup` (nebūtina, prie dienos, iki 15): vedamas apšilimas prieš treniruotę, tokio pat formato kaip `stretches`. Pirmo pratimo ekrane, kol neatliktas nė vienas setas, rodoma kortelė „Apšilimas · ~8 min“ su mygtuku „Pradėti apšilimą“; eiga tokia pati kaip tempimo, o pabaigoje grįžtama į treniruotę. Dabartinis apšilimas – viso kūno, nuo viršaus žemyn: šuoliukai, rankų sukimai, katė–karvė, krūtinės sukimas, menčių atsispaudimai (viršaus ir mišrią dieną), vikšras, Hip CARs, kojos mostai, 90/90 (apačios dieną), Cossack (apačios ir mišrią dieną), World's Greatest Stretch, gilus pritūpimas. Piešinius piešia `py tools/draw_hips.py`, į programą įrašo `py tools/add_hips.py` (`warmup_for('upper' | 'lower' | 'full')`, kartu su dubens jėgos pratimu kiekvienos dienos pabaigoje).
 
-`startSide` (nebūtina, `"left"` arba `"right"`): vienpusis pratimas, kurį reikia pradėti silpnesne puse. Ekrane rodoma „Pradėk kaire puse (silpnesnė), dešine – tiek pat kartojimų“, o pratimų su laiku (`sides: 2`) laikmatis pradeda nuo tos pusės. `bonusSets` (nebūtina, reikia `startSide`): paskutiniai N iš `sets` setų daromi tik silpnesnei pusei (ekrane „Papildomas setas: tik kairė pusė“, laikmatis laiko tik tą pusę; peržiūroje „3 × 8 + 1 silpnesnei pusei“). `tools/add_hips.py` ir `tools/make_hard_gym.py` tokį setą prideda kiekvienam vienpusiam pratimui.
+`startSide` (nebūtina, `"left"` arba `"right"`): vienpusis pratimas, kurį reikia pradėti silpnesne puse. Ekrane rodoma „Pradėk kaire puse (silpnesnė), dešine – tiek pat kartojimų“, o pratimų su laiku (`sides: 2`) laikmatis pradeda nuo tos pusės. `bonusSets` (nebūtina, reikia `startSide`): paskutiniai N iš `sets` setų daromi tik silpnesnei pusei. Tokio seto nepražiopsosi: ekrano viršuje pulsuoja geltonas užrašas „← Tik kairė pusė · dešinės nedaryk“, mygtukas pagelsta ir sako „Setas atliktas · tik kairė“, poilsio ekrane prieš jį – „Kitas: tik kairė pusė“, Android pranešime „TIK KAIRĖ PUSĖ“, laikmatis laiko tik tą pusę, o atliktų setų sąraše jis pažymėtas „(tik kairė)“; peržiūroje „3 × 8 + 1 silpnesnei pusei“. `tools/add_hips.py`, `tools/make_hard_gym.py` ir `tools/make_power.py` tokį setą prideda kiekvienam vienpusiam pratimui.
 
-`seconds` (nebūtina): pratimas su laiku, pvz. Plank, kiek sekundžių laikyti vieną setą (5–900). Tokiam pratimui laikmatį paleidžia pati programa: pasibaigus poilsiui 5 s pasiruošimas, laikymas, trumpas signalas, ir setas užskaitomas be jokio paspaudimo. Pirmam setui (ar atėjus prie pratimo ranka) yra mygtukas „Pradėti laikmatį“. `sides: 2` reiškia, kad laikoma kairė, o po 5 s pertraukos dešinė pusė (Side Plank). Telefone laikymas rodomas ir pranešimų juostoje, signalas skamba ir užrakinus ekraną.
+`seconds` (nebūtina): pratimas su laiku, pvz. Plank, kiek sekundžių laikyti vieną setą (5–900). Tokiam pratimui laikmatį paleidžia pati programa: pasibaigus poilsiui 5 s pasiruošimas, laikymas, trumpas signalas, ir setas užskaitomas be jokio paspaudimo. Pirmam setui (ar atėjus prie pratimo ranka) yra mygtukas „Pradėti laikmatį“. `sides: 2` reiškia, kad laikoma kairė, o po 5 s pertraukos dešinė pusė (Side Plank). Telefone laikymas rodomas ir pranešimų juostoje, signalas skamba ir užrakinus ekraną. `fast: true` (nebūtina, reikia `seconds`): greičio setas – per tą laiką daroma kuo daugiau greitų kartojimų (smūgiai, spyriai, greitos pėdos); tas pats laikmatis, tik ekrane „Kuo greičiau!“ vietoj „Laikyk“, o pranešime „Greitai · …“.
 
 `variants` (nebūtina, iki 5): kiti to paties pratimo atlikimo būdai. Programa juos keičia pakaitomis: kiekvieną kartą darant tą pačią dieną imamas kitas variantas (pagal tai, kiek kartų diena jau buvo daryta), o prieš treniruotę ar iki pirmo seto variantą galima pakeisti ranka. Pagrindiniai kėlimai (Back Squat, Bench Press, Trap-Bar Deadlift, Push Press) variantų neturi, kad svoriai būtų palyginami. Variantų piešinius piešia `py tools/draw_variants.py`.
 
@@ -94,13 +97,13 @@ npm run preview
 
 ```
 src/
-  data/programs/*.json     programos (source of truth); kyokushin-mix.json = pagrindinė
+  data/programs/*.json     programos (source of truth); kyokushin-mix.json = pagrindinė, hard-gym.json, karate-power.json
   data/programs.ts         programų tikrinimas, dienų spalvos, pagalbinės funkcijos
   workout/engine.ts        būsenų mašina: ACTIVE_SET → RESTING → … → FINISHED, svorio klausimas, istorijos įrašas
   storage.ts               localStorage + programos saugykla (aktyvi treniruotė, istorija, programos, nustatymai)
   native.ts                Android: saugykla, poilsio timerio įskiepis, failų dalinimas
   hooks.ts                 timeris pagal laiko žymą, Wake Lock, garsas naršyklėje, install prompt, fullscreen
   screens/                 Home, Preview, Active (setas + poilsis), WeightDialog, Complete, History, Settings
-public/assets/             pratimų nuotraukos (WebP); A_9, B_7, B_9, C_9 piešia tools/draw_exercises.py
+public/assets/             pratimų nuotraukos (WebP); A_9, B_7, B_9, C_9 piešia tools/draw_exercises.py, G_* draw_gym.py, P_* draw_power.py
 android/                   Capacitor Android projektas (RestTimer įskiepis, garso failas, ikonos)
 ```

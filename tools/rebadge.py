@@ -12,7 +12,18 @@ import sys
 from PIL import Image, ImageDraw, ImageFont
 
 ASSETS = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "public", "assets")
-FONT_B = r"C:\Windows\Fonts\arialbd.ttf"
+
+
+def font_path():
+    """Bold sans font for captions and badges: Arial on Windows, Liberation Sans (same metrics) or DejaVu elsewhere."""
+    for p in (r"C:\Windows\Fonts\arialbd.ttf", "/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf",
+              "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", "/Library/Fonts/Arial Bold.ttf"):
+        if os.path.exists(p):
+            return p
+    return "arialbd.ttf"
+
+
+FONT_B = font_path()
 
 
 # Photos whose black badge touches black gym equipment, so the search can't separate it: boxes measured by eye.

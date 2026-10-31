@@ -15,3 +15,4 @@ android/app/release
 android/capacitor-cordova-android-plugins/build
 *.keystore
 *.p12
+__pycache__/

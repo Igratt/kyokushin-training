@@ -233,6 +233,11 @@ function stretchStep(s: Session, list: GuidedList, index: number, now: number): 
   };
 }
 
+/** "kairė" / "dešinė": the weaker side of a one-sided exercise (the side it starts with). */
+export function weakSide(ex: Exercise): string {
+  return ex.startSide === 'right' ? 'dešinė' : 'kairė';
+}
+
 /** Name of side 1 / side 2 of a two-sided item: the side to start with comes first. */
 export function sideName(side: number, startSide?: Exercise['startSide']): string {
   if (side !== 1 && side !== 2) return '';
@@ -452,12 +457,15 @@ export function stretchTimerText(s: Session): { title: string; text: string; don
 /** Texts for the Android notification while a timed set (plank) is held. */
 export function workTimerText(s: Session): { title: string; text: string; doneTitle: string; doneText: string } {
   const ex = s.day.exercises[s.exerciseIndex];
-  const setText = `setas ${s.logs[s.exerciseIndex].sets.length + 1}/${ex.sets}`;
+  const done = s.logs[s.exerciseIndex].sets.length;
+  const setText = `setas ${done + 1}/${ex.sets}`;
   const side = s.work?.side ?? 0;
-  const sideText = side ? ` (${sideName(side, ex.startSide)})` : '';
-  const more = side === 1;
+  // A weak-side-only set has no second side, so it ends after the first one.
+  const bonus = isBonusSet(ex, done);
+  const sideText = side ? ` (${bonus ? 'tik ' : ''}${sideName(side, ex.startSide)})` : '';
+  const more = side === 1 && !bonus;
   return {
-    title: `Laikyk · ${ex.name}${sideText}`,
+    title: `${ex.fast ? 'Greitai' : 'Laikyk'} · ${ex.name}${sideText}`,
     text: setText,
     doneTitle: more ? 'Keisk pusę' : 'Setas atliktas',
     doneText: more ? `${ex.name} · ${sideName(2, ex.startSide)} pusė` : `${ex.name} · ${setText} · poilsis`,
@@ -523,15 +531,17 @@ export function restTimerText(s: Session): { title: string; text: string; doneTi
   const cur = s.day.exercises[s.exerciseIndex];
   if (!t) return { title: 'Poilsis', text: '', doneTitle: 'Poilsis baigėsi', doneText: '' };
   if (s.restLabel === 'set') {
-    const setText = `setas ${t.setIndex + 1}/${cur.sets}`;
+    const only = cur.startSide && isBonusSet(cur, t.setIndex) ? ` · TIK ${weakSide(cur).toUpperCase()} PUSĖ` : '';
+    const setText = `setas ${t.setIndex + 1}/${cur.sets}${only}`;
     return { title: `Poilsis · ${cur.name}`, text: `Toliau ${setText}`, doneTitle: 'Poilsis baigėsi', doneText: `${cur.name} · ${setText}` };
   }
   const next = s.day.exercises[t.exerciseIndex];
+  const only = next.startSide && isBonusSet(next, t.setIndex) ? ` · TIK ${weakSide(next).toUpperCase()} PUSĖ` : '';
   return {
     title: 'Poilsis prieš kitą pratimą',
-    text: `Toliau: ${next.name} · ${next.sets} × ${next.reps}`,
+    text: `Toliau: ${next.name} · ${next.sets} × ${next.reps}${only}`,
     doneTitle: 'Poilsis baigėsi',
-    doneText: `Toliau: ${next.name}`,
+    doneText: `Toliau: ${next.name}${only}`,
   };
 }
 

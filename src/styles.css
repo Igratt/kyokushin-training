@@ -8,6 +8,8 @@
   --muted: #93a0c2;
   --day: #3b82f6;
   --danger: #ef4444;
+  /* attention colour: sets done with the weaker side only */
+  --warn: #fbbf24;
   --font-display: 'Barlow Condensed', 'Arial Narrow', Impact, sans-serif;
   --font-body: 'Barlow', 'Segoe UI', Roboto, system-ui, sans-serif;
   --radius: 16px;
@@ -233,11 +235,26 @@ ul, ol { padding: 0; list-style: none; }
 }
 @media (prefers-reduced-motion: reduce) {
   .bar-fill, .ring-fg { transition: none; }
+  .side-banner { animation: none; }
 }
 .rest-label .side-chip { margin-left: 10px; vertical-align: middle; }
 .last-line { font-size: 15px; padding-top: 6px; border-top: 1px solid var(--line); }
 .last-line b { color: var(--day); font-weight: 700; }
 .warm-card { gap: 10px; border-color: var(--day); }
 .side-line { font-size: 14px; font-weight: 600; color: var(--day); }
-.dot.bonus { border-style: dashed; }
-.dot.bonus.on { border-style: solid; }
+.side-line.bonus { color: var(--warn); font-size: 16px; }
+.dot.bonus { border-style: dashed; border-color: var(--warn); }
+.dot.bonus.on { border-style: solid; background: var(--warn); }
+
+/* weak-side-only set: a loud yellow banner (top of the screen and on the rest screen before it), yellow main button */
+.side-banner { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 12px; width: 100%; padding: 12px 14px; border-radius: 14px; background: var(--warn); color: #0b1020; text-align: left; animation: side-pulse 1.4s ease-out infinite; }
+.side-arrow { font-size: 42px; line-height: 1; font-weight: 800; }
+.side-text { display: grid; gap: 2px; min-width: 0; }
+.side-title { font-size: 28px; }
+.side-sub { font-size: 14px; font-weight: 700; }
+@keyframes side-pulse {
+  0% { box-shadow: 0 0 0 0 rgba(251, 191, 36, 0.65); }
+  100% { box-shadow: 0 0 0 12px rgba(251, 191, 36, 0); }
+}
+.btn-day.bonus { background: var(--warn); border-color: var(--warn); }
+.variant-chip.on.bonus { background: var(--warn); }
