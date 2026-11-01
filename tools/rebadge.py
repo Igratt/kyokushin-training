@@ -13,6 +13,8 @@ from PIL import Image, ImageDraw, ImageFont
 
 ASSETS = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "public", "assets")
 FONT_B = r"C:\Windows\Fonts\arialbd.ttf"
+if not os.path.exists(FONT_B):  # Linux (cloud sessions): Arial-metric clone
+    FONT_B = "/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf"
 
 
 # Photos whose black badge touches black gym equipment, so the search can't separate it: boxes measured by eye.

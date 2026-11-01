@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type CSSProperties } from 'react';
-import type { Session, Settings } from '../types';
-import { exerciseKey, isBonusSet, plural, stretchMinutes, stretchSteps } from '../data/programs';
+import type { Exercise, Session, Settings } from '../types';
+import { exerciseKey, isBonusSet, plural, soloLabel, soloRestLabel, stretchMinutes, stretchSteps } from '../data/programs';
 import {
   effectiveSets,
   formatClock,
@@ -16,6 +16,17 @@ import {
 import { useAlarm, useFullscreen, useNow, useWakeLock } from '../hooks';
 import { isNative, nativeTimer } from '../native';
 import { Confirm, DayTag, ExerciseImage, ProgressBar, TopBar } from '../ui';
+
+/** Big amber banner for a set done with the weaker side only, so it cannot be missed mid-workout. */
+function SoloBanner({ ex, prefix }: { ex: Exercise; prefix?: string }) {
+  return (
+    <div className="solo-banner" role="alert">
+      {prefix && <div className="solo-pre">{prefix}</div>}
+      <div className="solo-main h-display">⚠ {soloLabel(ex)}</div>
+      <div className="solo-sub">{soloRestLabel(ex)}</div>
+    </div>
+  );
+}
 
 interface Props {
   session: Session;
@@ -174,6 +185,7 @@ export default function Active({ session: s, dispatch, settings, suggested, last
             </svg>
             <div className="ring-time h-display">{formatClock(Math.ceil(remainingMs / 1000))}</div>
           </div>
+          {!afterExercise && isBonusSet(nextEx, target.setIndex) && <SoloBanner ex={nextEx} prefix="Kitas setas" />}
           <div className="next-card">
             <ExerciseImage src={nextEx.image} name={nextEx.name} className="next-img" />
             <div>
@@ -212,6 +224,7 @@ export default function Active({ session: s, dispatch, settings, suggested, last
               <span className="variant-chip on side-chip">{sideName(work.side, ex.startSide).replace(/^./, (c) => c.toUpperCase())} pusė</span>
             )}
           </div>
+          {isBonusSet(ex, done) && <SoloBanner ex={ex} />}
           <div className={'ring-wrap' + (prep ? ' prep' : '')}>
             <svg viewBox="0 0 120 120" className="ring" aria-hidden="true">
               <circle cx="60" cy="60" r="54" className="ring-bg" />
@@ -247,6 +260,7 @@ export default function Active({ session: s, dispatch, settings, suggested, last
 
   // The day's warm-up is offered until the first set is done.
   const warmSteps = stretchSteps(day, 'warmup');
+  const soloNow = !allDone && isBonusSet(ex, done);
   const showWarm = warmSteps.length > 0 && prog.done === 0 && !s.warmedUp;
   const warmNames = (day.warmup ?? []).map((w) => w.name.replace(/\s*\(.*\)$/, ''));
 
@@ -283,6 +297,7 @@ export default function Active({ session: s, dispatch, settings, suggested, last
           </div>
         )}
       </div>
+      {soloNow && <SoloBanner ex={ex} />}
       <ExerciseImage src={ex.image} name={ex.name} className="ex-image" />
       {ex.description && <p className="ex-desc">{ex.description}</p>}
 
@@ -297,7 +312,7 @@ export default function Active({ session: s, dispatch, settings, suggested, last
           <span className="h-display big reps">{ex.reps}</span>
         </div>
         {ex.startSide && (
-          <div className="side-line" id="side-line">
+          <div className={'side-line' + (soloNow ? ' solo' : '')} id="side-line">
             {!allDone && isBonusSet(ex, done)
               ? `Papildomas setas: tik ${ex.startSide === 'left' ? 'kairė' : 'dešinė'} pusė (silpnesnė)`
               : `Pradėk ${ex.startSide === 'left' ? 'kaire' : 'dešine'} puse (silpnesnė), ${ex.startSide === 'left' ? 'dešine' : 'kaire'} – tiek pat kartojimų`}
@@ -379,8 +394,8 @@ export default function Active({ session: s, dispatch, settings, suggested, last
             ▶ Pradėti laikmatį · {ex.seconds} s{ex.sides === 2 ? ' / pusė' : ''}
           </button>
         ) : (
-          <button className="btn btn-xl btn-day" id="set-done" onClick={completeSet}>
-            ✓ Setas atliktas
+          <button className={'btn btn-xl btn-day' + (soloNow ? ' btn-solo' : '')} id="set-done" onClick={completeSet}>
+            {soloNow ? `✓ Atlikau – ${soloLabel(ex).toLowerCase()}` : '✓ Setas atliktas'}
           </button>
         )}
         <div className="row nav-row">
