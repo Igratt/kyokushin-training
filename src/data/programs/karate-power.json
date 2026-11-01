@@ -1,0 +1,806 @@
+{
+  "id": "karate-power",
+  "programName": "Karatė: sprogstamumas",
+  "focus": "Greitis, sprogstamumas, reakcija",
+  "goal": "Tik karatė naudai, ne raumenų masei: 3 dienos po ~50 min. Mažai kartojimų maksimaliu greičiu ir ilgas poilsis, kad kiekvienas kartojimas būtų greitas. Smūgių ir spyrių greitis su guma, reakcijos startai, šuoliai, metimai ir greiti kėlimai. Kai greitis krenta, setą baik. Silpnesnė pusė pirma ir gauna papildomą setą.",
+  "days": [
+    {
+      "id": "A",
+      "name": "A DIENA",
+      "subtitle": "Apačia · spyriai",
+      "warmup": [
+        {
+          "id": "W_jacks",
+          "name": "Jumping Jacks (šuoliukai)",
+          "hold": 40,
+          "sides": 1,
+          "image": "assets/W_jacks.webp",
+          "description": "Šokinėk: kojos į šonus ir rankos virš galvos, tada atgal. Lengvai, ant pirštų, ritmingai. Tikslas – sušilti ir pakelti pulsą, ne pavargti.",
+          "focus": "visas kūnas sušyla, širdis įsibėgėja prieš krūvį"
+        },
+        {
+          "id": "W_arm_circles",
+          "name": "Arm Circles (rankų sukimai)",
+          "hold": 30,
+          "sides": 1,
+          "image": "assets/W_arm_circles.webp",
+          "description": "Rankos tiesios į šonus. Suk didelius ratus: 15 s pirmyn, 15 s atgal, kaskart kiek didesnius. Pečiai žemyn, liemuo nejuda.",
+          "focus": "pečių sąnariai prieš spaudimą, traukimą ir smūgius"
+        },
+        {
+          "id": "W_cat_cow",
+          "name": "Cat-Cow (katė–karvė)",
+          "hold": 30,
+          "sides": 1,
+          "image": "assets/W_cat_cow.webp",
+          "description": "Keturpėsčias, rankos po pečiais, keliai po klubais. Iškvėpdamas apvalink nugarą ir nuleisk galvą, įkvėpdamas išlenk nugarą ir žiūrėk pirmyn. Lėtai, per visą stuburą.",
+          "focus": "stuburo mobilumas prieš pritūpimus ir kėlimus"
+        },
+        {
+          "id": "W_tspine",
+          "name": "T-Spine Rotation (krūtinės sukimas)",
+          "hold": 25,
+          "sides": 2,
+          "image": "assets/W_tspine.webp",
+          "description": "Keturpėsčias, vieną ranką dėk už galvos. Alkūnę vesk po kūnu link kitos rankos, tada suk ją į lubas, akys seka alkūnę. Klubai nejuda.",
+          "focus": "krūtinės stuburo sukimas: smūgiams, spyriams ir tiesiai nugarai po štanga"
+        },
+        {
+          "id": "W_inchworm",
+          "name": "Inchworm (vikšras)",
+          "hold": 40,
+          "sides": 1,
+          "image": "assets/W_inchworm.webp",
+          "description": "Stovėdamas pasilenk, delnus dėk ant grindų ir eik rankomis pirmyn iki plankos. Vienas atsispaudimas, tada smulkiais žingsniais eik pėdomis prie rankų, kojas laikydamas kuo tiesesnes. Kartok.",
+          "focus": "pakinkliai, pečiai ir presas vienu judesiu"
+        },
+        {
+          "id": "W_hip_cars",
+          "name": "Hip CARs (klubo sukimai)",
+          "hold": 20,
+          "sides": 2,
+          "image": "assets/W_hip_cars.webp",
+          "description": "Stovėk ant vienos kojos ir prisilaikyk. Kitą kelį pakelk ir lėtai brėžk kuo didesnį ratą: pirmyn, į šoną, atgal ir žemyn. Liemuo nejuda, juda tik klubas.",
+          "focus": "valdomas judesys per visą klubo amplitudę"
+        },
+        {
+          "id": "W_leg_swings",
+          "name": "Leg Swings (kojos mostai)",
+          "hold": 20,
+          "sides": 2,
+          "image": "assets/W_leg_swings.webp",
+          "description": "Prisilaikyk ir mosuok tiesia koja pirmyn ir atgal, po to į šonus priešais save. Kas kartą šiek tiek aukščiau, liemuo tiesus.",
+          "focus": "dinamiškas klubų apšilimas prieš sunkius pratimus ir spyrius"
+        },
+        {
+          "id": "W_9090",
+          "name": "90/90 Hip Switch",
+          "hold": 30,
+          "sides": 1,
+          "image": "assets/W_9090.webp",
+          "description": "Sėsk ant grindų, abu keliai sulenkti 90°: viena koja priekyje, kita šone. Nekeldamas pėdų lėtai versk kelius į kitą pusę ir atgal. Nugara tiesi, rankomis gali atsiremti.",
+          "focus": "klubo vidinė ir išorinė rotacija"
+        },
+        {
+          "id": "W_cossack",
+          "name": "Cossack Squat (savo svoris)",
+          "hold": 30,
+          "sides": 1,
+          "image": "assets/W_cossack.webp",
+          "description": "Plačiai išsižergk. Leiskis ant vienos kojos, kita lieka tiesi, pirštai į viršų. Pakaitomis į abi puses, kulnas prie žemės, kiek leidžia klubai.",
+          "focus": "pritraukiamieji raumenys ir šoninis mobilumas"
+        },
+        {
+          "id": "W_wgs",
+          "name": "World's Greatest Stretch",
+          "hold": 20,
+          "sides": 2,
+          "image": "assets/W_wgs.webp",
+          "description": "Didelis įtūpstas, ranka į grindis prie priekinės pėdos, kita ranka sukasi į lubas. Judėk ritmingai: alkūnė link pėdos, sukimas į viršų.",
+          "focus": "klubų lenkiamieji ir krūtinės pasukimas"
+        },
+        {
+          "id": "W_deep_squat",
+          "name": "Deep Squat Hold (gilus pritūpimas)",
+          "hold": 30,
+          "sides": 1,
+          "image": "assets/W_deep_squat.webp",
+          "description": "Leiskis į gilų pritūpimą, kulnai prie žemės. Alkūnėmis švelniai stumk kelius į šonus ir lėtai linguok iš kairės į dešinę.",
+          "focus": "klubų ir čiurnų mobilumas pritūpimui"
+        }
+      ],
+      "exercises": [
+        {
+          "id": "PA1",
+          "name": "Pogo Hops",
+          "sets": 3,
+          "reps": "15 s",
+          "restSeconds": 60,
+          "image": "assets/P_A1.webp",
+          "description": "Stovėk ant pirštų, keliai beveik tiesūs. Šokinėk vietoje greitai ir žemai, kulnai neliečia žemės, pėdos ant žemės kuo trumpiau. Rankos padeda ritmui.",
+          "focus": "Kulkšnių spyruoklė: greitesnis atsispyrimas judant kovoje.",
+          "seconds": 15
+        },
+        {
+          "id": "PA2",
+          "name": "Box Jump",
+          "image": "assets/P_A2.webp",
+          "description": "Lengvai pritūpk, mostelk rankomis ir sprogstamai pašok ant dėžės. Nusileisk minkštai abiem kojomis ir nulipk žemyn.",
+          "focus": "Maksimalus aukštis, pilnas poilsis tarp šuolių.",
+          "sets": 4,
+          "reps": "3",
+          "restSeconds": 90,
+          "variants": [
+            {
+              "id": "PA2v",
+              "name": "Broad Jump",
+              "tag": "į tolį",
+              "image": "assets/P_A2v.webp",
+              "description": "Stovėk pėdų plotyje, mostelk rankomis atgal ir sprogstamai šok kuo toliau į priekį. Nusileisk minkštai ant abiejų kojų sulenktais keliais ir sustok 1–2 s.",
+              "focus": "Maksimalus atstumas, minkštas nusileidimas.",
+              "sets": 4,
+              "reps": "3",
+              "restSeconds": 90
+            }
+          ]
+        },
+        {
+          "id": "PA3",
+          "name": "Lateral Bound",
+          "sets": 4,
+          "reps": "4 / koja",
+          "restSeconds": 75,
+          "image": "assets/P_A3.webp",
+          "description": "Stovėk ant vienos kojos, pritūpk ir sprogstamai atsispirk į šoną. Nusileisk ant kitos kojos minkštai, kelis virš pėdos, ir sustok 1 s. Pradėk kaire koja (atsispiria kairė). Kiekvienas kartojimas maksimaliu greičiu; kai greitis krenta, setą baik.",
+          "focus": "Šoninis sprogstamumas: greitas išėjimas iš linijos ir kampo keitimas.",
+          "startSide": "left",
+          "bonusSets": 1
+        },
+        {
+          "id": "PA4",
+          "name": "Trap-Bar Jump",
+          "sets": 4,
+          "reps": "3",
+          "restSeconds": 120,
+          "image": "assets/P_A4.webp",
+          "description": "Lengva trap-bar štanga (apie 20–30 % tavo trap-bar mirties trauka). Pusiau pritūpk ir šok kuo aukščiau, nusileisk minkštai sulenktais keliais, sustok, tada kitas šuolis.",
+          "focus": "Kojų galia su svoriu, bet be lėto kėlimo: greitis, ne masė."
+        },
+        {
+          "id": "PA5",
+          "name": "Banded Roundhouse Kick",
+          "sets": 4,
+          "reps": "6 / koja",
+          "restSeconds": 60,
+          "image": "assets/P_A5.webp",
+          "description": "Guma prie žemo stulpo ir ant kulkšnies. Kovinė stovėsena: greitas mawashi geri į pilvo aukštį ir iškart atgal į stovėseną. Svarbu greitis pirmyn ir atgal, ne aukštis. Kiekvienas kartojimas maksimaliu greičiu; kai greitis krenta, setą baik.",
+          "focus": "Spyrio greitis: klubas ir kelias greičiau išmetami ir grąžinami.",
+          "startSide": "left",
+          "bonusSets": 1
+        },
+        {
+          "id": "PA6",
+          "name": "Hanging Leg Raise",
+          "image": "assets/P_A6.webp",
+          "description": "Kabėk ant skersinio. Kelk kojas sprogstamai aukštyn, nuleisk lėtai, be siūbavimo.",
+          "focus": "Greitas pilvas ir klubų lenkiamieji: aukštesni, greitesni spyriai.",
+          "sets": 3,
+          "reps": "6",
+          "restSeconds": 60,
+          "variants": [
+            {
+              "id": "PA6v",
+              "name": "Reverse Crunch (ant suolo)",
+              "tag": "ant suolo",
+              "image": "assets/P_A6v.webp",
+              "description": "Gulėk ant suolo ir rankomis laikykis už jo galo virš galvos. Sulenktus kelius trauk link krūtinės, kol dubuo atsikelia nuo suolo, ir lėtai nuleisk.",
+              "focus": "Judesį daro presas, ne inercija.",
+              "sets": 3,
+              "reps": "8",
+              "restSeconds": 60
+            }
+          ]
+        }
+      ],
+      "stretches": [
+        {
+          "id": "S_hip_flexor",
+          "name": "Kneeling Hip Flexor Stretch",
+          "hold": 45,
+          "sides": 2,
+          "image": "assets/S_hip_flexor.webp",
+          "description": "Atsiklaupk ant vieno kelio, kita koja priekyje. Įtempk sėdmenį ir stumk klubus pirmyn, kol pajusi tempimą galinės kojos šlaunies priekyje. Tos pusės ranką kelk aukštyn.",
+          "focus": "aukštiems spyriams ir gilesnei stovėsenai, po pritūpimų"
+        },
+        {
+          "id": "S_pigeon",
+          "name": "Pigeon Stretch",
+          "hold": 45,
+          "sides": 2,
+          "image": "assets/S_pigeon.webp",
+          "description": "Priekinė koja sulenkta priešais tave, galinė ištiesta atgal. Klubai lygiai, lėtai leiskis žemyn ir kvėpuok į sėdmenį.",
+          "focus": "klubų sukimui: mawashi geri ir ura mawashi"
+        },
+        {
+          "id": "S_hamstring",
+          "name": "Seated Hamstring Stretch",
+          "hold": 45,
+          "sides": 1,
+          "image": "assets/S_hamstring.webp",
+          "description": "Sėdėk tiesiomis kojomis, pirštai į viršų. Lenkis pirmyn per klubus tiesia nugara ir siek pėdų, kol pajusi tempimą šlaunies gale.",
+          "focus": "mae geri ir kakato geri, po RDL"
+        },
+        {
+          "id": "S_butterfly",
+          "name": "Butterfly Stretch",
+          "hold": 45,
+          "sides": 1,
+          "image": "assets/S_butterfly.webp",
+          "description": "Sėdėk tiesia nugara, padus suglausk ir pritrauk pėdas arčiau savęs. Alkūnėmis švelniai spausk kelius žemyn.",
+          "focus": "yoko geri ir kiba dachi"
+        },
+        {
+          "id": "S_straddle",
+          "name": "Straddle Stretch",
+          "hold": 45,
+          "sides": 1,
+          "image": "assets/S_straddle.webp",
+          "description": "Sėdėk kojas išskėtęs kuo plačiau, keliai į viršų. Lenkis pirmyn tiesia nugara, rankas slinkdamas grindimis.",
+          "focus": "šoniniam špagatui ir aukštiems spyriams"
+        },
+        {
+          "id": "S_calf",
+          "name": "Wall Calf Stretch",
+          "hold": 30,
+          "sides": 2,
+          "image": "assets/S_calf.webp",
+          "description": "Rankomis atsiremk į sieną, galinė koja tiesi, kulnas prie grindų. Lėtai stumk klubus link sienos.",
+          "focus": "blauzdoms ir Achilui po šuolių, judėjimui ant pirštų"
+        }
+      ]
+    },
+    {
+      "id": "B",
+      "name": "B DIENA",
+      "subtitle": "Viršus · smūgiai",
+      "warmup": [
+        {
+          "id": "W_jacks",
+          "name": "Jumping Jacks (šuoliukai)",
+          "hold": 40,
+          "sides": 1,
+          "image": "assets/W_jacks.webp",
+          "description": "Šokinėk: kojos į šonus ir rankos virš galvos, tada atgal. Lengvai, ant pirštų, ritmingai. Tikslas – sušilti ir pakelti pulsą, ne pavargti.",
+          "focus": "visas kūnas sušyla, širdis įsibėgėja prieš krūvį"
+        },
+        {
+          "id": "W_arm_circles",
+          "name": "Arm Circles (rankų sukimai)",
+          "hold": 30,
+          "sides": 1,
+          "image": "assets/W_arm_circles.webp",
+          "description": "Rankos tiesios į šonus. Suk didelius ratus: 15 s pirmyn, 15 s atgal, kaskart kiek didesnius. Pečiai žemyn, liemuo nejuda.",
+          "focus": "pečių sąnariai prieš spaudimą, traukimą ir smūgius"
+        },
+        {
+          "id": "W_cat_cow",
+          "name": "Cat-Cow (katė–karvė)",
+          "hold": 30,
+          "sides": 1,
+          "image": "assets/W_cat_cow.webp",
+          "description": "Keturpėsčias, rankos po pečiais, keliai po klubais. Iškvėpdamas apvalink nugarą ir nuleisk galvą, įkvėpdamas išlenk nugarą ir žiūrėk pirmyn. Lėtai, per visą stuburą.",
+          "focus": "stuburo mobilumas prieš pritūpimus ir kėlimus"
+        },
+        {
+          "id": "W_tspine",
+          "name": "T-Spine Rotation (krūtinės sukimas)",
+          "hold": 25,
+          "sides": 2,
+          "image": "assets/W_tspine.webp",
+          "description": "Keturpėsčias, vieną ranką dėk už galvos. Alkūnę vesk po kūnu link kitos rankos, tada suk ją į lubas, akys seka alkūnę. Klubai nejuda.",
+          "focus": "krūtinės stuburo sukimas: smūgiams, spyriams ir tiesiai nugarai po štanga"
+        },
+        {
+          "id": "W_scap_pushup",
+          "name": "Scapular Push-Ups (menčių atsispaudimai)",
+          "hold": 30,
+          "sides": 1,
+          "image": "assets/W_scap_pushup.webp",
+          "description": "Plankos padėtis ant tiesių rankų. Nelenkdamas alkūnių leisk krūtinę žemyn, kad mentės susiglaustų, tada stumk grindis nuo savęs, kol nugara tarp menčių apvali. Mažas judesys, lėtai.",
+          "focus": "mentės ir serratus prieš spaudimą"
+        },
+        {
+          "id": "W_inchworm",
+          "name": "Inchworm (vikšras)",
+          "hold": 40,
+          "sides": 1,
+          "image": "assets/W_inchworm.webp",
+          "description": "Stovėdamas pasilenk, delnus dėk ant grindų ir eik rankomis pirmyn iki plankos. Vienas atsispaudimas, tada smulkiais žingsniais eik pėdomis prie rankų, kojas laikydamas kuo tiesesnes. Kartok.",
+          "focus": "pakinkliai, pečiai ir presas vienu judesiu"
+        },
+        {
+          "id": "W_hip_cars",
+          "name": "Hip CARs (klubo sukimai)",
+          "hold": 20,
+          "sides": 2,
+          "image": "assets/W_hip_cars.webp",
+          "description": "Stovėk ant vienos kojos ir prisilaikyk. Kitą kelį pakelk ir lėtai brėžk kuo didesnį ratą: pirmyn, į šoną, atgal ir žemyn. Liemuo nejuda, juda tik klubas.",
+          "focus": "valdomas judesys per visą klubo amplitudę"
+        },
+        {
+          "id": "W_leg_swings",
+          "name": "Leg Swings (kojos mostai)",
+          "hold": 20,
+          "sides": 2,
+          "image": "assets/W_leg_swings.webp",
+          "description": "Prisilaikyk ir mosuok tiesia koja pirmyn ir atgal, po to į šonus priešais save. Kas kartą šiek tiek aukščiau, liemuo tiesus.",
+          "focus": "dinamiškas klubų apšilimas prieš sunkius pratimus ir spyrius"
+        },
+        {
+          "id": "W_wgs",
+          "name": "World's Greatest Stretch",
+          "hold": 20,
+          "sides": 2,
+          "image": "assets/W_wgs.webp",
+          "description": "Didelis įtūpstas, ranka į grindis prie priekinės pėdos, kita ranka sukasi į lubas. Judėk ritmingai: alkūnė link pėdos, sukimas į viršų.",
+          "focus": "klubų lenkiamieji ir krūtinės pasukimas"
+        },
+        {
+          "id": "W_deep_squat",
+          "name": "Deep Squat Hold (gilus pritūpimas)",
+          "hold": 30,
+          "sides": 1,
+          "image": "assets/W_deep_squat.webp",
+          "description": "Leiskis į gilų pritūpimą, kulnai prie žemės. Alkūnėmis švelniai stumk kelius į šonus ir lėtai linguok iš kairės į dešinę.",
+          "focus": "klubų ir čiurnų mobilumas pritūpimui"
+        }
+      ],
+      "exercises": [
+        {
+          "id": "PB1",
+          "name": "Shadow Speed Punches",
+          "sets": 4,
+          "reps": "10 s",
+          "restSeconds": 50,
+          "image": "assets/P_B1.webp",
+          "description": "Kovinė stovėsena, rankos gynyboje. 10 s tiesių smūgių (kairė, dešinė) kuo greičiau, kiekvienas smūgis grįžta į gynybą. Pečiai atsipalaidavę, kvėpuok trumpai.",
+          "focus": "Smūgių greitis ir rankų grąžinimas.",
+          "seconds": 10
+        },
+        {
+          "id": "PB2",
+          "name": "Medicine Ball Rotational Throw",
+          "image": "assets/P_B2.webp",
+          "description": "Stovėk šonu prie sienos, įsuk klubus ir sprogstamai mesk kamuolį. Jėga turi eiti iš pėdos, klubų ir liemens.",
+          "focus": "Maksimalus sprogstamumas.",
+          "sets": 4,
+          "reps": "4 / pusė",
+          "restSeconds": 90
+        },
+        {
+          "id": "PB3",
+          "name": "Medicine Ball Shot Put",
+          "sets": 4,
+          "reps": "4 / ranka",
+          "restSeconds": 75,
+          "image": "assets/P_B3.webp",
+          "description": "Kovinė stovėsena, kamuolys (3–5 kg) vienoje rankoje prie peties. Sukdamas galinę pėdą ir klubus stumk kamuolį į sieną ar partneriui kaip smūgį. Pradėk dešine (silpnesnė krūtinė). Kiekvienas kartojimas maksimaliu greičiu; kai greitis krenta, setą baik.",
+          "focus": "Smūgio galia nuo pėdos per klubus į ranką.",
+          "startSide": "right",
+          "bonusSets": 1
+        },
+        {
+          "id": "PB4",
+          "name": "Explosive Push-Ups",
+          "image": "assets/P_B4.webp",
+          "description": "Leiskis į atsispaudimą ir tada stipriai stumkis nuo grindų taip, kad rankos atsiplėštų.",
+          "focus": "Kuo greičiau atsispirk, delnai atsiplėšia nuo žemės.",
+          "sets": 4,
+          "reps": "5",
+          "restSeconds": 90,
+          "variants": [
+            {
+              "id": "PB4v",
+              "name": "Banded Explosive Push-Ups",
+              "tag": "su guma",
+              "image": "assets/P_B4v.webp",
+              "description": "Gumą permesk per nugarą ir prispausk delnais prie grindų. Leiskis kontroliuotai ir sprogstamai stumkis aukštyn prieš gumos pasipriešinimą.",
+              "focus": "Greitas stūmimas, ne iki failure.",
+              "sets": 4,
+              "reps": "5",
+              "restSeconds": 90
+            }
+          ]
+        },
+        {
+          "id": "PB5",
+          "name": "Landmine Punch Press",
+          "image": "assets/P_B5.webp",
+          "description": "Štangos galas prie peties, kovinė stovėsena. Sprogstamai išstumk į priekį–aukštyn sukdamas galinę pėdą, kaip tiesų smūgį, ir kontroliuotai grąžink. Vidutinis svoris, greitis svarbiau. Kiekvienas kartojimas maksimaliu greičiu; kai greitis krenta, setą baik.",
+          "focus": "Smūgio galia su svoriu: pėda, klubai, ranka viena grandine.",
+          "startSide": "right",
+          "sets": 4,
+          "reps": "4 / ranka",
+          "restSeconds": 90,
+          "bonusSets": 1
+        },
+        {
+          "id": "PB6",
+          "name": "Banded Rotational Punch",
+          "tag": "su guma",
+          "image": "assets/P_B6.webp",
+          "description": "Gumą pritvirtink už nugaros peties aukštyje. Kovinė stovėsena: sprogstamai smūgiuok į priekį sukdamas galinę pėdą ir klubus, tada kontroliuotai grįžk.",
+          "focus": "Smūgio greitis prieš gumą: kairė silpnesnė, todėl pirma.",
+          "sets": 4,
+          "reps": "8 / ranka",
+          "restSeconds": 60,
+          "startSide": "left",
+          "bonusSets": 1
+        },
+        {
+          "id": "PB7",
+          "name": "Explosive Pull-Ups",
+          "image": "assets/P_B7.webp",
+          "description": "Iš kabėjimo trauk sprogstamai, kuo greičiau smakras virš skersinio, nuleisk lėtai. Be svorio, greitis svarbiau.",
+          "focus": "Greita nugara: subalansuoja smūgius ir greičiau grąžina ranką.",
+          "sets": 3,
+          "reps": "4",
+          "restSeconds": 120,
+          "variants": [
+            {
+              "id": "PB7v",
+              "name": "Band-Assisted Pull-Ups",
+              "tag": "su guma",
+              "image": "assets/P_B7v.webp",
+              "description": "Gumos kilpą permesk per skersinį ir perkišk per save, į apačią įstatyk kelį ar pėdą. Prisitrauk iki smakro virš skersinio ir lėtai, pilnai nusileisk. Guma leidžia daugiau kartojimų nei paprasti prisitraukimai: kai lengvai padarai 10, imk plonesnę gumą.",
+              "focus": "Daugiau kartojimų nugarai: mentės žemyn, be siūbavimo.",
+              "sets": 3,
+              "reps": "5",
+              "restSeconds": 120
+            }
+          ]
+        }
+      ],
+      "stretches": [
+        {
+          "id": "S_doorway",
+          "name": "Doorway Chest Stretch",
+          "hold": 45,
+          "sides": 1,
+          "image": "assets/S_doorway.webp",
+          "description": "Dilbius padėk ant durų staktos, alkūnės pečių aukštyje. Ženk žingsnį pirmyn, kol pajusi tempimą krūtinėje.",
+          "focus": "krūtinei po spaudimų, laisvesniam smūgiui"
+        },
+        {
+          "id": "S_cross_body",
+          "name": "Cross-Body Shoulder Stretch",
+          "hold": 30,
+          "sides": 2,
+          "image": "assets/S_cross_body.webp",
+          "description": "Ištiestą ranką trauk per krūtinę, kita ranka prispausk ją ties alkūne. Petys žemai, ne prie ausies.",
+          "focus": "pečiams ir galinei deltai po traukimų"
+        },
+        {
+          "id": "S_triceps",
+          "name": "Overhead Triceps Stretch",
+          "hold": 30,
+          "sides": 2,
+          "image": "assets/S_triceps.webp",
+          "description": "Pakelk ranką, sulenk alkūnę ir delną nuleisk už galvos. Kita ranka švelniai trauk alkūnę žemyn.",
+          "focus": "tricepsui po spaudimų ir smūgių"
+        },
+        {
+          "id": "S_thread",
+          "name": "Thread the Needle",
+          "hold": 30,
+          "sides": 2,
+          "image": "assets/S_thread.webp",
+          "description": "Atsiremk keturiomis. Vieną ranką pakišk po kūnu į kitą pusę ir nuleisk petį bei skruostą ant grindų, kita ranka siek lubų.",
+          "focus": "krūtinės ląstos sukimui: smūgiams ir blokams"
+        },
+        {
+          "id": "S_child",
+          "name": "Child's Pose",
+          "hold": 45,
+          "sides": 1,
+          "image": "assets/S_child.webp",
+          "description": "Atsisėsk ant kulnų, kelius praskėsk ir ištiesk rankas toli pirmyn. Pasistumk rankomis į vieną, paskui į kitą šoną.",
+          "focus": "nugaros plačiausiesiems ir juosmeniui"
+        },
+        {
+          "id": "S_wrist",
+          "name": "Kneeling Wrist Stretch",
+          "hold": 30,
+          "sides": 1,
+          "image": "assets/S_wrist.webp",
+          "description": "Atsiremk keturiomis, delnai ant grindų, pirštai atgal į kelius. Lėtai sėskis atgal, kol pajusi tempimą dilbiuose.",
+          "focus": "riešams ir dilbiams: smūgiams ir atsispaudimams ant kumščių"
+        }
+      ]
+    },
+    {
+      "id": "C",
+      "name": "C DIENA",
+      "subtitle": "Visas kūnas · reakcija",
+      "warmup": [
+        {
+          "id": "W_jacks",
+          "name": "Jumping Jacks (šuoliukai)",
+          "hold": 40,
+          "sides": 1,
+          "image": "assets/W_jacks.webp",
+          "description": "Šokinėk: kojos į šonus ir rankos virš galvos, tada atgal. Lengvai, ant pirštų, ritmingai. Tikslas – sušilti ir pakelti pulsą, ne pavargti.",
+          "focus": "visas kūnas sušyla, širdis įsibėgėja prieš krūvį"
+        },
+        {
+          "id": "W_arm_circles",
+          "name": "Arm Circles (rankų sukimai)",
+          "hold": 30,
+          "sides": 1,
+          "image": "assets/W_arm_circles.webp",
+          "description": "Rankos tiesios į šonus. Suk didelius ratus: 15 s pirmyn, 15 s atgal, kaskart kiek didesnius. Pečiai žemyn, liemuo nejuda.",
+          "focus": "pečių sąnariai prieš spaudimą, traukimą ir smūgius"
+        },
+        {
+          "id": "W_cat_cow",
+          "name": "Cat-Cow (katė–karvė)",
+          "hold": 30,
+          "sides": 1,
+          "image": "assets/W_cat_cow.webp",
+          "description": "Keturpėsčias, rankos po pečiais, keliai po klubais. Iškvėpdamas apvalink nugarą ir nuleisk galvą, įkvėpdamas išlenk nugarą ir žiūrėk pirmyn. Lėtai, per visą stuburą.",
+          "focus": "stuburo mobilumas prieš pritūpimus ir kėlimus"
+        },
+        {
+          "id": "W_tspine",
+          "name": "T-Spine Rotation (krūtinės sukimas)",
+          "hold": 25,
+          "sides": 2,
+          "image": "assets/W_tspine.webp",
+          "description": "Keturpėsčias, vieną ranką dėk už galvos. Alkūnę vesk po kūnu link kitos rankos, tada suk ją į lubas, akys seka alkūnę. Klubai nejuda.",
+          "focus": "krūtinės stuburo sukimas: smūgiams, spyriams ir tiesiai nugarai po štanga"
+        },
+        {
+          "id": "W_scap_pushup",
+          "name": "Scapular Push-Ups (menčių atsispaudimai)",
+          "hold": 30,
+          "sides": 1,
+          "image": "assets/W_scap_pushup.webp",
+          "description": "Plankos padėtis ant tiesių rankų. Nelenkdamas alkūnių leisk krūtinę žemyn, kad mentės susiglaustų, tada stumk grindis nuo savęs, kol nugara tarp menčių apvali. Mažas judesys, lėtai.",
+          "focus": "mentės ir serratus prieš spaudimą"
+        },
+        {
+          "id": "W_inchworm",
+          "name": "Inchworm (vikšras)",
+          "hold": 40,
+          "sides": 1,
+          "image": "assets/W_inchworm.webp",
+          "description": "Stovėdamas pasilenk, delnus dėk ant grindų ir eik rankomis pirmyn iki plankos. Vienas atsispaudimas, tada smulkiais žingsniais eik pėdomis prie rankų, kojas laikydamas kuo tiesesnes. Kartok.",
+          "focus": "pakinkliai, pečiai ir presas vienu judesiu"
+        },
+        {
+          "id": "W_hip_cars",
+          "name": "Hip CARs (klubo sukimai)",
+          "hold": 20,
+          "sides": 2,
+          "image": "assets/W_hip_cars.webp",
+          "description": "Stovėk ant vienos kojos ir prisilaikyk. Kitą kelį pakelk ir lėtai brėžk kuo didesnį ratą: pirmyn, į šoną, atgal ir žemyn. Liemuo nejuda, juda tik klubas.",
+          "focus": "valdomas judesys per visą klubo amplitudę"
+        },
+        {
+          "id": "W_leg_swings",
+          "name": "Leg Swings (kojos mostai)",
+          "hold": 20,
+          "sides": 2,
+          "image": "assets/W_leg_swings.webp",
+          "description": "Prisilaikyk ir mosuok tiesia koja pirmyn ir atgal, po to į šonus priešais save. Kas kartą šiek tiek aukščiau, liemuo tiesus.",
+          "focus": "dinamiškas klubų apšilimas prieš sunkius pratimus ir spyrius"
+        },
+        {
+          "id": "W_cossack",
+          "name": "Cossack Squat (savo svoris)",
+          "hold": 30,
+          "sides": 1,
+          "image": "assets/W_cossack.webp",
+          "description": "Plačiai išsižergk. Leiskis ant vienos kojos, kita lieka tiesi, pirštai į viršų. Pakaitomis į abi puses, kulnas prie žemės, kiek leidžia klubai.",
+          "focus": "pritraukiamieji raumenys ir šoninis mobilumas"
+        },
+        {
+          "id": "W_wgs",
+          "name": "World's Greatest Stretch",
+          "hold": 20,
+          "sides": 2,
+          "image": "assets/W_wgs.webp",
+          "description": "Didelis įtūpstas, ranka į grindis prie priekinės pėdos, kita ranka sukasi į lubas. Judėk ritmingai: alkūnė link pėdos, sukimas į viršų.",
+          "focus": "klubų lenkiamieji ir krūtinės pasukimas"
+        },
+        {
+          "id": "W_deep_squat",
+          "name": "Deep Squat Hold (gilus pritūpimas)",
+          "hold": 30,
+          "sides": 1,
+          "image": "assets/W_deep_squat.webp",
+          "description": "Leiskis į gilų pritūpimą, kulnai prie žemės. Alkūnėmis švelniai stumk kelius į šonus ir lėtai linguok iš kairės į dešinę.",
+          "focus": "klubų ir čiurnų mobilumas pritūpimui"
+        }
+      ],
+      "exercises": [
+        {
+          "id": "PC1",
+          "name": "Reaction Start Sprint",
+          "sets": 6,
+          "reps": "5 m",
+          "restSeconds": 45,
+          "image": "assets/P_C1.webp",
+          "description": "Kovinė stovėsena. Partneris ploja arba numeta daiktą, tu startuoji 5 m sprintu kuo greičiau. Vienas: pradėk, kai išgirsti bet kokį garsą salėje, arba keisk kryptį (pirmyn, į šonus).",
+          "focus": "Reakcija ir pirmas žingsnis: greičiau įeini į atstumą ir išeini iš jo."
+        },
+        {
+          "id": "PC2",
+          "name": "Jump Squat",
+          "image": "assets/P_C2.webp",
+          "description": "Pritūpk negiliai ir iš apačios sprogstamai pašok aukštyn. Nusileisk minkštai ir išlaikyk ritmą.",
+          "focus": "Maksimalus aukštis, minkštas nusileidimas.",
+          "sets": 4,
+          "reps": "3",
+          "restSeconds": 90,
+          "variants": [
+            {
+              "id": "PC2v",
+              "name": "Dumbbell Jump Squat",
+              "tag": "su hanteliais",
+              "image": "assets/P_C2v.webp",
+              "description": "Laikyk lengvus hantelius šonuose. Pritūpk negiliai, sprogstamai šok aukštyn ir nusileisk minkštai.",
+              "focus": "Lengvas svoris, maksimalus greitis.",
+              "sets": 4,
+              "reps": "3",
+              "restSeconds": 90
+            }
+          ]
+        },
+        {
+          "id": "PC3",
+          "name": "Kettlebell Swing",
+          "sets": 4,
+          "reps": "8",
+          "restSeconds": 90,
+          "image": "assets/P_C3.webp",
+          "description": "Gira tarp kojų, nugara tiesi, klubai atgal. Sprogstamai stumk klubus pirmyn, gira kyla iki krūtinės aukščio iš klubų jėgos, ne rankomis. Viršuje įtempk sėdmenis ir pilvą.",
+          "focus": "Klubų sprogstamumas: tas pats judesys kaip spyrio ir smūgio jėga."
+        },
+        {
+          "id": "PC4",
+          "name": "Push Press",
+          "image": "assets/P_C4.webp",
+          "description": "Štanga prie pečių, trumpas dip žemyn ir tada stiprus stūmimas kojomis bei rankomis virš galvos.",
+          "focus": "Greitas kojų ir rankų perdavimas, ne sunkus spaudimas.",
+          "sets": 4,
+          "reps": "3",
+          "restSeconds": 120
+        },
+        {
+          "id": "PC5",
+          "name": "Medicine Ball Slam",
+          "image": "assets/P_C5.webp",
+          "description": "Pakelk kamuolį virš galvos ir visa jėga trenk jį į grindis. Naudok visą kūną – pilvą, klubus ir rankas.",
+          "focus": "Sprogstamai, bet techniškai.",
+          "sets": 3,
+          "reps": "5",
+          "restSeconds": 60,
+          "variants": [
+            {
+              "id": "PC5v",
+              "name": "Rotational Med Ball Slam",
+              "tag": "į šoną",
+              "image": "assets/P_C5v.webp",
+              "description": "Pakelk kamuolį virš galvos ir sukdamas liemenį trenk jį įstrižai į grindis šalia pėdos. Keisk puses.",
+              "focus": "Sprogstamai, jėga iš liemens.",
+              "sets": 3,
+              "reps": "4 / pusė",
+              "restSeconds": 60
+            }
+          ]
+        },
+        {
+          "id": "PC6",
+          "name": "Banded Knee Strike",
+          "sets": 4,
+          "reps": "8 / koja",
+          "restSeconds": 60,
+          "image": "assets/P_C6.webp",
+          "description": "Guma prie žemo stulpo už nugaros ir ant kelio. Kovinė stovėsena: galinės kojos kelį sprogstamai kelk aukštyn ir pirmyn (hiza geri), rankos traukia žemyn, tada greitai atgal. Kiekvienas kartojimas maksimaliu greičiu; kai greitis krenta, setą baik.",
+          "focus": "Kelio smūgio greitis ir klubų lenkiamųjų galia.",
+          "startSide": "left",
+          "bonusSets": 1
+        },
+        {
+          "id": "PC7",
+          "name": "Pallof Press",
+          "image": "assets/P_C7.webp",
+          "description": "Stovėk šonu prie troso ar gumos ir stumk rankas pirmyn. Užduotis – neleisti liemeniui suktis.",
+          "focus": "Anti-rotation ir stabilumas.",
+          "sets": 3,
+          "reps": "8 / pusė",
+          "restSeconds": 45,
+          "variants": [
+            {
+              "id": "PC7v",
+              "name": "Half-Kneeling Pallof Press (guma)",
+              "tag": "su guma, klūpint",
+              "image": "assets/P_C7v.webp",
+              "description": "Klūpėk ant vieno kelio šonu į gumos tvirtinimą. Spausk rankas tiesiai priešais save, sulaikyk 2 s ir neleisk liemeniui pasisukti.",
+              "focus": "Anti-rotation, dubuo stabilus.",
+              "sets": 3,
+              "reps": "8 / pusė",
+              "restSeconds": 45
+            }
+          ]
+        }
+      ],
+      "stretches": [
+        {
+          "id": "S_wgs",
+          "name": "World's Greatest Stretch",
+          "hold": 30,
+          "sides": 2,
+          "image": "assets/S_wgs.webp",
+          "description": "Gilus įtūpstas, galinė koja tiesi. Ranką padėk prie priekinės pėdos, kitą kelk į lubas ir sukis krūtine į tą pusę.",
+          "focus": "klubams ir krūtinės ląstai, visam kūnui"
+        },
+        {
+          "id": "S_hip_flexor",
+          "name": "Kneeling Hip Flexor Stretch",
+          "hold": 30,
+          "sides": 2,
+          "image": "assets/S_hip_flexor.webp",
+          "description": "Atsiklaupk ant vieno kelio, kita koja priekyje. Įtempk sėdmenį ir stumk klubus pirmyn, kol pajusi tempimą galinės kojos šlaunies priekyje. Tos pusės ranką kelk aukštyn.",
+          "focus": "aukštiems spyriams ir gilesnei stovėsenai, po pritūpimų"
+        },
+        {
+          "id": "S_pigeon",
+          "name": "Pigeon Stretch",
+          "hold": 30,
+          "sides": 2,
+          "image": "assets/S_pigeon.webp",
+          "description": "Priekinė koja sulenkta priešais tave, galinė ištiesta atgal. Klubai lygiai, lėtai leiskis žemyn ir kvėpuok į sėdmenį.",
+          "focus": "klubų sukimui: mawashi geri ir ura mawashi"
+        },
+        {
+          "id": "S_hamstring",
+          "name": "Seated Hamstring Stretch",
+          "hold": 45,
+          "sides": 1,
+          "image": "assets/S_hamstring.webp",
+          "description": "Sėdėk tiesiomis kojomis, pirštai į viršų. Lenkis pirmyn per klubus tiesia nugara ir siek pėdų, kol pajusi tempimą šlaunies gale.",
+          "focus": "mae geri ir kakato geri, po RDL"
+        },
+        {
+          "id": "S_cobra",
+          "name": "Cobra Stretch",
+          "hold": 30,
+          "sides": 1,
+          "image": "assets/S_cobra.webp",
+          "description": "Gulėk ant pilvo, delnai po pečiais. Stumk krūtinę aukštyn, klubai lieka ant grindų, pečiai žemyn nuo ausų.",
+          "focus": "presui ir klubų lenkiamiesiems po pilvo pratimų"
+        },
+        {
+          "id": "S_child",
+          "name": "Child's Pose",
+          "hold": 45,
+          "sides": 1,
+          "image": "assets/S_child.webp",
+          "description": "Atsisėsk ant kulnų, kelius praskėsk ir ištiesk rankas toli pirmyn. Pasistumk rankomis į vieną, paskui į kitą šoną.",
+          "focus": "nugaros plačiausiesiems ir juosmeniui"
+        },
+        {
+          "id": "S_straddle",
+          "name": "Straddle Stretch",
+          "hold": 45,
+          "sides": 1,
+          "image": "assets/S_straddle.webp",
+          "description": "Sėdėk kojas išskėtęs kuo plačiau, keliai į viršų. Lenkis pirmyn tiesia nugara, rankas slinkdamas grindimis.",
+          "focus": "šoniniam špagatui ir aukštiems spyriams"
+        }
+      ]
+    }
+  ]
+}

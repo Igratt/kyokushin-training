@@ -132,6 +132,20 @@ export function isBonusSet(ex: Exercise, setIndex: number): boolean {
   return !!ex.bonusSets && setIndex >= ex.sets - ex.bonusSets;
 }
 
+/** "TIK KAIRĖ RANKA" / "TIK DEŠINĖ KOJA" / "TIK KAIRĖ PUSĖ" for a weak-side-only set (limb read from reps "… / ranka"). */
+export function soloLabel(ex: Exercise): string {
+  const side = ex.startSide === 'right' ? 'dešinė' : 'kairė';
+  const limb = /\/\s*ranka/i.test(ex.reps) ? 'ranka' : /\/\s*koja/i.test(ex.reps) ? 'koja' : 'pusė';
+  return `tik ${side} ${limb}`.toUpperCase();
+}
+
+/** The other (stronger) side, which rests during a weak-side-only set: "Dešinė ranka ilsisi". */
+export function soloRestLabel(ex: Exercise): string {
+  const other = ex.startSide === 'right' ? 'Kairė' : 'Dešinė';
+  const limb = /\/\s*ranka/i.test(ex.reps) ? 'ranka' : /\/\s*koja/i.test(ex.reps) ? 'koja' : 'pusė';
+  return `${other} ${limb} šį setą ilsisi`;
+}
+
 /** "3 × 8 / koja" plus " + 1 silpnesnei pusei" when the exercise has weak-side-only sets. */
 export function setsText(ex: Exercise): string {
   const bonus = ex.bonusSets ?? 0;

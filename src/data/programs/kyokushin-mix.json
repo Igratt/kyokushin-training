@@ -905,13 +905,13 @@
         },
         {
           "id": "C7",
-          "name": "Farmer Carry",
+          "name": "Kettlebell Front Rack Carry",
           "sets": 3,
           "reps": "30–40 m",
           "restSeconds": 75,
-          "image": "assets/C_7.png",
-          "description": "Paėmęs sunkius hantelius eik stabiliai pirmyn: krūtinė aukštai, pilvas įtemptas, pečiai nesusmukę.",
-          "focus": "Grip, core ir laikysena.",
+          "image": "assets/C_7r.webp",
+          "description": "Dvi giras pakelk prie krūtinės (front rack): rankenos delne, gira guli ant dilbio išorės, alkūnės žemyn ir prie šonų. Eik stabiliai pirmyn trumpais žingsniais. Pečiai nuleisti, ne prie ausų, šonkauliai žemyn, pilvas įtemptas. Jei viena gira: laikyk ją silpnesnės pusės rankoje ir sukeisk po ėjimo.",
+          "focus": "Pilvas ir kojos be trapecijų: kūnas laikosi tiesiai po krūviu priekyje.",
           "variants": [
             {
               "id": "C7v",

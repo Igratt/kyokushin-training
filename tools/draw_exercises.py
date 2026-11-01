@@ -21,6 +21,8 @@ NEAR, TORSO, FAR = (233, 238, 248), (204, 212, 232), (120, 133, 166)
 TEXT, GREEN, RED = (205, 213, 236), (34, 197, 94), (239, 68, 68)
 ACCENT = {"A": (59, 130, 246), "B": (249, 115, 22), "C": (34, 197, 94)}
 FONT_B = r"C:\Windows\Fonts\arialbd.ttf"
+if not os.path.exists(FONT_B):  # Linux (cloud sessions): Arial-metric clone
+    FONT_B = "/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf"
 OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "public", "assets")
 
 W_TORSO, W_THIGH, W_SHIN, W_UPPER, W_FORE, W_FOOT, R_HAND, R_HEAD, W_NECK = 24, 15, 12, 11, 9.5, 7, 5.5, 11.5, 10
