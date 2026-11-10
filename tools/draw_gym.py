@@ -3,6 +3,7 @@
 Usage:  py tools/draw_gym.py [name ...]     (no names = all)
 Pictures reused from the Kyokushin program are copied with the right number by tools/make_hard_gym.py.
 """
+import math
 import sys
 
 from draw_exercises import Pic, dumbbell_side, go, side_figure
@@ -169,32 +170,25 @@ def gc7():
 
 
 def gd3():
-    """Barbell hip thrust: upper back on a bench, feet on the floor."""
+    """Single-leg glute bridge on the floor: one foot flat, the other leg straight, hips lifted."""
     pic, acc = Pic(), ACC["D"]
     for i in range(2):
         standing_view(pic, i, 1.15)
-        top = 240
-        rect(pic, 18, top, 96, top + 9, EQUIP_HI)
-        rect(pic, 28, top + 9, 36, 300, EQUIP)
-        rect(pic, 78, top + 9, 86, 300, EQUIP)
-        sh = (90, 232)
-        hip = (122, 276) if i == 0 else (142, 240)
-        ankle = (184, 292)
-        n_knee, n_ankle = limb(hip, ankle, 44, 44, (hip[0] + 44, hip[1] - 44))
-        f_knee, f_ankle = (n_knee[0] - 5, n_knee[1] + 2), (n_ankle[0] - 7, n_ankle[1])
-        bar = (hip[0] + 2, hip[1] - 12)
-        n_elbow, n_hand = limb(sh, bar, 30, 27, (sh[0] + 22, sh[1] + 22))
-        f_sh = (sh[0] - 3, sh[1] + 2)
-        f_elbow, f_hand = limb(f_sh, (bar[0] - 2, bar[1] + 1), 30, 27, (sh[0] + 18, sh[1] + 24))
-        j = dict(hip=hip, sh=sh, head=go(sh, 150 if i == 0 else 160, 20), n_knee=n_knee, n_ankle=n_ankle,
-                 n_toe=go(n_ankle, 0, 20), f_knee=f_knee, f_ankle=f_ankle, f_toe=go(f_ankle, 0, 20), f_sh=f_sh,
-                 n_elbow=n_elbow, n_hand=n_hand, f_elbow=f_elbow, f_hand=f_hand)
+        sh = (62, 284)
+        hip = (128, 284) if i == 0 else (134, 250)
+        f_knee, f_ankle = limb(hip, (190, 290), 44, 44, (hip[0] + 30, hip[1] - 60))
+        d = (f_knee[0] - hip[0], f_knee[1] - hip[1]) if i == 0 else (hip[0] - sh[0], hip[1] - sh[1])
+        u = (d[0] / math.hypot(*d), d[1] / math.hypot(*d))
+        n_knee = (hip[0] + u[0] * 44, hip[1] + u[1] * 44)
+        n_ankle = (hip[0] + u[0] * 88, hip[1] + u[1] * 88)
+        ang = math.degrees(math.atan2(-u[1], u[0]))
+        j = dict(hip=hip, sh=sh, head=go(sh, 178, 20), n_knee=n_knee, n_ankle=n_ankle, n_toe=go(n_ankle, ang + 90, 14),
+                 f_knee=f_knee, f_ankle=f_ankle, f_toe=go(f_ankle, 0, 18), f_sh=(sh[0] + 2, sh[1] + 2),
+                 n_elbow=(sh[0] + 28, 290), n_hand=(sh[0] + 54, 291), f_elbow=(sh[0] + 26, 291), f_hand=(sh[0] + 52, 292))
         side_figure(pic, j)
-        pic.path(arc_pts(bar, 25, 0, 360, 40), acc, 4.5)
-        pic.dot(bar, 5, GREY)
         if i:
-            pic.arrow((hip[0] - 6, 292), (hip[0] - 12, 276), (hip[0] - 4, 262), acc)
-        pic.caption("1 · Nugara ant suolo, klubai žemai" if not i else "2 · Kelk klubus, spausk sėdmenis")
+            pic.arrow((hip[0] - 6, 290), (hip[0] - 12, 274), (hip[0] - 4, 262), acc)
+        pic.caption("1 · Viena koja tiesi, klubai žemai" if not i else "2 · Kelk klubus, spausk sėdmenį")
     pic.badge(3)
     pic.save("G_D3.webp")
 

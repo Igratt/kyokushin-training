@@ -115,13 +115,13 @@ C = [
 D = [
     with_variants(reuse("C1", "D", 1, 3, "3", 75), reuse("C1v", "D", 1, 3, "3", 75, True)),
     reuse("C2", "D", 2, 4, "5", 150),
-    new("D", 3, "Barbell Hip Thrust", 4, "8–10", 90,
-        "Viršutinė nugara ant suolo krašto, pėdos ant žemės, štanga per klubus (su minkšta apsauga). Kelk klubus, kol kūnas tiesus nuo pečių iki kelių, viršuje 1 s suspausk sėdmenis.",
-        "Sėdmenys ir dubens jėga."),
+    new("D", 3, "Single-Leg Glute Bridge", 4, "10–12 / koja", 60,
+        "Gulėk ant nugaros, vienos kojos pėda ant grindų arti sėdmenų, kita koja ištiesta. Remdamasis kulnu kelk klubus, kol kūnas tiesus nuo pečių iki kelio, viršuje 1–2 s suspausk sėdmenį ir lėtai nuleisk. Per lengva: hantelis ant klubo arba 3 s pauzė viršuje.",
+        "Sėdmenys ir klubo tiesimas spyriams, kiekviena koja atskirai.", startSide="left", bonusSets=1),
     with_variants(reuse("C4", "D", 4, 3, "10 / koja", 90), reuse("C4v", "D", 4, 3, "8 / koja", 90, True)),
     with_variants(reuse("C10", "D", 5, 3, "6 / pusė", 60), reuse("C10v", "D", 5, 3, "45 s", 45, True)),
     with_variants(reuse("A3v", "D", 6, 3, "8 / koja", 75), reuse("B10v", "D", 6, 3, "5 / koja", 45, True)),
-    with_variants(reuse("C7", "D", 7, 3, "30–40 m", 75), reuse("C7v", "D", 7, 3, "30 m / ranka", 75, True)),
+    with_variants(reuse("C7", "D", 7, 3, "10–12 / pusė", 60), reuse("C7v", "D", 7, 3, "10 / pusė", 60, True)),
     with_variants(reuse("A8", "D", 8, 3, "10 / pusė", 50), reuse("A8v", "D", 8, 3, "10 / pusė", 50, True)),
 ]
 

@@ -626,21 +626,20 @@ def c6v():
 
 
 def c7v():
+    """Plank shoulder taps: straight-arm plank, one hand taps the opposite shoulder, hips stay still."""
     pic, acc = Pic(), ACCENT["C"]
-    for i, lean in enumerate((False, True)):
-        standing_view(pic, i)
-        if not lean:
-            l_sh, r_sh, head, r_hand = (CX - 28, 152), (CX + 28, 152), (CX, 132), (CX + 32, 210)
-        else:
-            l_sh, r_sh, head, r_hand = (CX - 22, 148), (CX + 30, 166), (CX + 8, 130), (CX + 38, 222)
-        front(pic, (CX - 12, 206), (CX + 12, 206), l_sh, r_sh, head, (CX - 14, 292), (CX + 14, 292),
-              (CX - 32, 206), r_hand, l_elbow=(-6, 0), r_elbow=(6, 0))
-        db_end(pic, (r_hand[0] + 1, r_hand[1] + 4), acc)
-        a = (l_sh[0] - 26, l_sh[1] - 18)
-        b = (r_sh[0] + 26, r_sh[1] - 18 + (r_sh[1] - l_sh[1]) * 0.9)
-        pic.path([a, b], GREEN if not lean else RED, 2.6, dashed=True)
-        pic.mark(not lean)
-        pic.caption("Teisingai: pečiai lygūs" if not lean else "Neteisingai: pasvirai į šoną", GREEN if not lean else RED)
+    for i in range(2):
+        standing_view(pic, i, 1.2)
+        j = pushup((78, 236), 292)
+        if i:
+            sh = j["sh"]
+            j["n_elbow"] = (sh[0] - 10, sh[1] + 30)
+            j["n_hand"] = (sh[0] + 4, sh[1] + 9)
+        side_figure(pic, j)
+        if i:
+            hand = j["n_hand"]
+            pic.arrow((hand[0] - 8, 288), (hand[0] - 20, 266), (hand[0] - 6, hand[1] + 14), acc)
+        pic.caption("1 · Aukšta planka" if not i else "2 · Ranka prie kito peties")
     pic.badge(7)
     pic.save("C_7v.webp")
 

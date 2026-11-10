@@ -905,24 +905,24 @@
         },
         {
           "id": "C7",
-          "name": "Kettlebell Front Rack Carry",
+          "name": "Side Plank Hip Lift",
           "sets": 3,
-          "reps": "30–40 m",
-          "restSeconds": 75,
-          "image": "assets/C_7r.webp",
-          "description": "Dvi giras pakelk prie krūtinės (front rack): rankenos delne, gira guli ant dilbio išorės, alkūnės žemyn ir prie šonų. Eik stabiliai pirmyn trumpais žingsniais. Pečiai nuleisti, ne prie ausų, šonkauliai žemyn, pilvas įtemptas. Jei viena gira: laikyk ją silpnesnės pusės rankoje ir sukeisk po ėjimo.",
-          "focus": "Pilvas ir kojos be trapecijų: kūnas laikosi tiesiai po krūviu priekyje.",
+          "reps": "10–12 / pusė",
+          "restSeconds": 60,
+          "image": "assets/C_7s.webp",
+          "description": "Šoninė planka ant dilbio, alkūnė po petimi, pėdos viena ant kitos. Lėtai nuleisk klubus beveik iki grindų, tada kelk aukštai, kol kūnas tiesus. Pirma visi kartojimai viena puse, tada kita. Per sunku: atsiremk keliu, ne pėda.",
+          "focus": "Šoninis presas be jokio svorio rankose: trapecijos nedirba.",
           "variants": [
             {
               "id": "C7v",
-              "name": "Suitcase Carry",
-              "tag": "viena ranka",
+              "name": "Plank Shoulder Taps",
+              "tag": "be svorio",
               "sets": 3,
-              "reps": "30–40 m / ranka",
-              "restSeconds": 75,
+              "reps": "10 / pusė",
+              "restSeconds": 60,
               "image": "assets/C_7v.webp",
-              "description": "Sunkų hantelį ar kettlebell neškis vienoje rankoje. Eik tiesiai, nesilenk į šoną, pečiai lygūs.",
-              "focus": "Šoninis presas, laikysena."
+              "description": "Aukšta planka ant ištiestų rankų, pėdos šiek tiek plačiau nei klubai. Lėtai pakelk vieną ranką ir paliesk priešingą petį, tada kitą. Klubai nesisuka ir nesisupa. Per sunku: pėdas statyk plačiau.",
+              "focus": "Pilvas laiko kūną nejudantį, jokio svorio rankose."
             }
           ]
         },
