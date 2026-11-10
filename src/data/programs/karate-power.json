@@ -119,7 +119,21 @@
           "image": "assets/P_A1.webp",
           "description": "Stovėk ant pirštų, keliai beveik tiesūs. Šokinėk vietoje greitai ir žemai, kulnai neliečia žemės, pėdos ant žemės kuo trumpiau. Rankos padeda ritmui.",
           "focus": "Kulkšnių spyruoklė: greitesnis atsispyrimas judant kovoje.",
-          "seconds": 15
+          "seconds": 15,
+          "variants": [
+            {
+              "id": "PA1v",
+              "name": "Lateral Pogo Hops",
+              "tag": "į šonus",
+              "sets": 3,
+              "reps": "15 s",
+              "restSeconds": 60,
+              "image": "assets/P_A1v.webp",
+              "description": "Kojos kartu, ant pirštų. Šokinėk greitai ir žemai į šonus per liniją (kairė–dešinė), pėdos ant žemės kuo trumpiau, kulnai neliečia žemės.",
+              "focus": "Kulkšnių spyruoklė ir šoninis kojų greitis.",
+              "seconds": 15
+            }
+          ]
         },
         {
           "id": "PA2",
@@ -154,6 +168,19 @@
           "description": "Stovėk ant vienos kojos, pritūpk ir sprogstamai atsispirk į šoną. Nusileisk ant kitos kojos minkštai, kelis virš pėdos, ir sustok 1 s. Pradėk kaire koja (atsispiria kairė). Kiekvienas kartojimas maksimaliu greičiu; kai greitis krenta, setą baik.",
           "focus": "Šoninis sprogstamumas: greitas išėjimas iš linijos ir kampo keitimas.",
           "startSide": "left",
+          "variants": [
+            {
+              "id": "PA3v",
+              "name": "Lateral Hurdle Hops",
+              "tag": "per kliūtį",
+              "sets": 3,
+              "reps": "6",
+              "restSeconds": 75,
+              "image": "assets/P_A3v.webp",
+              "description": "Žema kliūtis (kūgis, žemas suolelis ar susuktas rankšluostis) šone. Abiem kojom peršok į šoną ir iškart atgal, nusileisk minkštai ant pirštų ir kuo greičiau atšok. Kiekvienas kartojimas maksimaliu greičiu; kai greitis krenta, setą baik.",
+              "focus": "Šoninis sprogstamumas abiem kojom: greitas kampo keitimas."
+            }
+          ],
           "bonusSets": 1
         },
         {
@@ -176,6 +203,21 @@
           "description": "Guma prie žemo stulpo ir ant kulkšnies. Kovinė stovėsena: greitas mawashi geri į pilvo aukštį ir iškart atgal į stovėseną. Svarbu greitis pirmyn ir atgal, ne aukštis. Kiekvienas kartojimas maksimaliu greičiu; kai greitis krenta, setą baik.",
           "focus": "Spyrio greitis: klubas ir kelias greičiau išmetami ir grąžinami.",
           "startSide": "left",
+          "variants": [
+            {
+              "id": "PA5v",
+              "name": "Banded Front Kick",
+              "tag": "mae geri su guma",
+              "sets": 4,
+              "reps": "6 / koja",
+              "restSeconds": 60,
+              "image": "assets/P_A5v.webp",
+              "description": "Guma prie žemo stulpo už nugaros ir ant kulkšnies. Kovinė stovėsena: kelį greitai aukštyn, spirk mae geri pirmyn pilvo aukštyje pėdos pagalvėle ir iškart atitrauk atgal. Kiekvienas kartojimas maksimaliu greičiu; kai greitis krenta, setą baik.",
+              "focus": "Tiesaus spyrio greitis: kelias ir pėda greičiau pirmyn ir atgal.",
+              "startSide": "left",
+              "bonusSets": 1
+            }
+          ],
           "bonusSets": 1
         },
         {
@@ -365,7 +407,21 @@
           "image": "assets/P_B1.webp",
           "description": "Kovinė stovėsena, rankos gynyboje. 10 s tiesių smūgių (kairė, dešinė) kuo greičiau, kiekvienas smūgis grįžta į gynybą. Pečiai atsipalaidavę, kvėpuok trumpai.",
           "focus": "Smūgių greitis ir rankų grąžinimas.",
-          "seconds": 10
+          "seconds": 10,
+          "variants": [
+            {
+              "id": "PB1v",
+              "name": "Banded Speed Punches",
+              "tag": "su guma",
+              "sets": 4,
+              "reps": "10 s",
+              "restSeconds": 50,
+              "image": "assets/P_B1v.webp",
+              "description": "Guma pritvirtinta už nugaros krūtinės aukštyje, kilpos rankose. Kovinė stovėsena: 10 s tiesių smūgių kuo greičiau prieš gumą, kiekvienas grįžta į gynybą.",
+              "focus": "Smūgių greitis prieš pasipriešinimą ir greitesnis rankos grąžinimas.",
+              "seconds": 10
+            }
+          ]
         },
         {
           "id": "PB2",
@@ -375,7 +431,20 @@
           "focus": "Maksimalus sprogstamumas.",
           "sets": 4,
           "reps": "4 / pusė",
-          "restSeconds": 90
+          "restSeconds": 90,
+          "variants": [
+            {
+              "id": "PB2v",
+              "name": "Rotational Med Ball Slam",
+              "tag": "į šoną",
+              "image": "assets/P_B2v.webp",
+              "description": "Pakelk kamuolį virš galvos ir sukdamas liemenį trenk jį įstrižai į grindis šalia pėdos. Keisk puses.",
+              "focus": "Sprogstamai, jėga iš liemens.",
+              "sets": 4,
+              "reps": "4 / pusė",
+              "restSeconds": 90
+            }
+          ]
         },
         {
           "id": "PB3",
@@ -387,6 +456,19 @@
           "description": "Kovinė stovėsena, kamuolys (3–5 kg) vienoje rankoje prie peties. Sukdamas galinę pėdą ir klubus stumk kamuolį į sieną ar partneriui kaip smūgį. Pradėk dešine (silpnesnė krūtinė). Kiekvienas kartojimas maksimaliu greičiu; kai greitis krenta, setą baik.",
           "focus": "Smūgio galia nuo pėdos per klubus į ranką.",
           "startSide": "right",
+          "variants": [
+            {
+              "id": "PB3v",
+              "name": "Medicine Ball Chest Pass",
+              "tag": "abiem rankom",
+              "sets": 4,
+              "reps": "5",
+              "restSeconds": 75,
+              "image": "assets/P_B3v.webp",
+              "description": "Stovėk prieš sieną, kamuolys (3–5 kg) abiem rankom prie krūtinės. Sprogstamai stumk jį į sieną, pagauk atšokusį ir iškart vėl. Kiekvienas kartojimas maksimaliu greičiu; kai greitis krenta, setą baik.",
+              "focus": "Krūtinės ir rankų sprogstamumas abiem pusėm vienodai."
+            }
+          ],
           "bonusSets": 1
         },
         {
@@ -422,6 +504,20 @@
           "sets": 4,
           "reps": "4 / ranka",
           "restSeconds": 90,
+          "variants": [
+            {
+              "id": "PB5v",
+              "name": "Landmine Press",
+              "image": "assets/P_B5v.webp",
+              "description": "Laikyk štangos galą prie peties ir spausk į viršų–į priekį. Stovėsena stabili, liemuo nekliba.",
+              "focus": "Spaudimas kampu ir core stabilumas.",
+              "startSide": "right",
+              "sets": 4,
+              "reps": "6 / ranka",
+              "restSeconds": 90,
+              "bonusSets": 1
+            }
+          ],
           "bonusSets": 1
         },
         {
@@ -435,6 +531,19 @@
           "reps": "8 / ranka",
           "restSeconds": 60,
           "startSide": "left",
+          "variants": [
+            {
+              "id": "PB6v",
+              "name": "Low-to-High Chop (kettlebell)",
+              "tag": "iš apačios į viršų",
+              "image": "assets/P_B6v.webp",
+              "description": "Kettlebell abiem rankomis prie išorinės kairio kelio pusės, lengvas pritūpimas. Sukdamas klubus ir liemenį kelk jį įstrižai per kūną virš dešinio peties, galinė pėda pasisuka kartu. Lėtai grąžink tuo pačiu keliu.",
+              "focus": "Rotacija iš klubų, rankos tik laiko svorį.",
+              "sets": 3,
+              "reps": "8 / pusė",
+              "restSeconds": 60
+            }
+          ],
           "bonusSets": 1
         },
         {
@@ -632,7 +741,20 @@
           "restSeconds": 45,
           "image": "assets/P_C1.webp",
           "description": "Kovinė stovėsena. Partneris ploja arba numeta daiktą, tu startuoji 5 m sprintu kuo greičiau. Vienas: pradėk, kai išgirsti bet kokį garsą salėje, arba keisk kryptį (pirmyn, į šonus).",
-          "focus": "Reakcija ir pirmas žingsnis: greičiau įeini į atstumą ir išeini iš jo."
+          "focus": "Reakcija ir pirmas žingsnis: greičiau įeini į atstumą ir išeini iš jo.",
+          "variants": [
+            {
+              "id": "PC1v",
+              "name": "Falling Start Sprint",
+              "tag": "kritimo startas",
+              "sets": 6,
+              "reps": "5 m",
+              "restSeconds": 45,
+              "image": "assets/P_C1v.webp",
+              "description": "Stovėk tiesiai, pėdos kartu. Lenkis visu kūnu į priekį, kol pradedi kristi, ir tą akimirką pagauk kritimą sprogstamu 5 m sprintu.",
+              "focus": "Pirmas žingsnis ir pagreitis iš vietos."
+            }
+          ]
         },
         {
           "id": "PC2",
@@ -665,7 +787,22 @@
           "restSeconds": 90,
           "image": "assets/P_C3.webp",
           "description": "Gira tarp kojų, nugara tiesi, klubai atgal. Sprogstamai stumk klubus pirmyn, gira kyla iki krūtinės aukščio iš klubų jėgos, ne rankomis. Viršuje įtempk sėdmenis ir pilvą.",
-          "focus": "Klubų sprogstamumas: tas pats judesys kaip spyrio ir smūgio jėga."
+          "focus": "Klubų sprogstamumas: tas pats judesys kaip spyrio ir smūgio jėga.",
+          "variants": [
+            {
+              "id": "PC3v",
+              "name": "Single-Arm Kettlebell Swing",
+              "tag": "viena ranka",
+              "sets": 4,
+              "reps": "6 / ranka",
+              "restSeconds": 90,
+              "image": "assets/P_C3v.webp",
+              "description": "Kaip įprastas swing, bet gira vienoje rankoje, kita ranka laisvai juda šone. Klubai atgal, tada sprogstamai pirmyn, gira iki krūtinės. Neleisk liemeniui suktis į giros pusę. Kiekvienas kartojimas maksimaliu greičiu; kai greitis krenta, setą baik.",
+              "focus": "Klubų sprogstamumas ir pilvas prieš sukimąsi.",
+              "startSide": "left",
+              "bonusSets": 1
+            }
+          ]
         },
         {
           "id": "PC4",
@@ -710,6 +847,20 @@
           "description": "Guma prie žemo stulpo už nugaros ir ant kelio. Kovinė stovėsena: galinės kojos kelį sprogstamai kelk aukštyn ir pirmyn (hiza geri), rankos traukia žemyn, tada greitai atgal. Kiekvienas kartojimas maksimaliu greičiu; kai greitis krenta, setą baik.",
           "focus": "Kelio smūgio greitis ir klubų lenkiamųjų galia.",
           "startSide": "left",
+          "variants": [
+            {
+              "id": "PC6v",
+              "name": "Explosive Step-Up",
+              "image": "assets/P_C6v.webp",
+              "description": "Viena koja ant suoliuko ar dėžės, per ją stumkis aukštyn kuo greičiau. Viršuje gali pridėti kelio pakėlimą.",
+              "focus": "Kelio pakėlimas su pasipriešinimu: galingesnis hiza geri.",
+              "startSide": "left",
+              "sets": 4,
+              "reps": "4 / koja",
+              "restSeconds": 60,
+              "bonusSets": 1
+            }
+          ],
           "bonusSets": 1
         },
         {

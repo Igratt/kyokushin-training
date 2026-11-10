@@ -167,6 +167,19 @@
           "description": "Gulk ant suolo, hantelis vienoje rankoje prie krūtinės, kita ranka ant klubo. Spausk tiesiai aukštyn ir lėtai nuleisk. Neleisk kūnui suktis į šoną.",
           "focus": "Krūtinė po vieną pusę: silpnesnė dešinė pasiveja kairę.",
           "startSide": "right",
+          "variants": [
+            {
+              "id": "GA4v",
+              "name": "Dumbbell Floor Press",
+              "tag": "ant grindų",
+              "sets": 3,
+              "reps": "8–10",
+              "restSeconds": 90,
+              "image": "assets/G_A4v.webp",
+              "description": "Gulėk ant grindų, keliai sulenkti, hanteliai virš krūtinės. Leisk, kol alkūnės (apie 45° nuo kūno) paliečia grindis, trumpai sustok ir spausk abu aukštyn.",
+              "focus": "Krūtinė ir tricepsas, saugu pečiams: alkūnės nenusileidžia per žemai."
+            }
+          ],
           "bonusSets": 1
         },
         {
@@ -179,6 +192,19 @@
           "description": "Kelis ir ranka ant suolo, nugara tiesi ir lygiagreti grindims. Trauk hantelį alkūne aukštyn link klubo, viršuje suspausk mentę, lėtai nuleisk.",
           "focus": "Nugaros pusės po vieną: dešinė silpnesnė, todėl pirma.",
           "startSide": "right",
+          "variants": [
+            {
+              "id": "GA5v",
+              "name": "Inverted Row",
+              "tag": "po skersiniu",
+              "sets": 3,
+              "reps": "8–12",
+              "restSeconds": 90,
+              "image": "assets/G_A5v.webp",
+              "description": "Skersinis (Smith ar rėmo) maždaug klubų aukštyje. Kabėk po juo tiesiomis rankomis, kulnai ant grindų, kūnas tiesus. Trauk krūtinę prie skersinio, suspausk mentes ir lėtai nusileisk. Per lengva: kojas ant suolo.",
+              "focus": "Visa nugara savo svoriu, kaip darei vietoj lyno traukos."
+            }
+          ],
           "bonusSets": 1
         },
         {
@@ -189,7 +215,22 @@
           "restSeconds": 60,
           "image": "assets/G_A6.webp",
           "description": "Stovėk tiesiai, hanteliai prie šonų, alkūnės šiek tiek sulenktos. Kelk rankas į šonus iki pečių aukščio ir lėtai nuleisk. Nesiūbuok kūnu.",
-          "focus": "Platesni pečiai ir sveiki pečių sąnariai."
+          "focus": "Platesni pečiai ir sveiki pečių sąnariai.",
+          "variants": [
+            {
+              "id": "GA6v",
+              "name": "Cable Lateral Raise",
+              "tag": "lynas, viena ranka",
+              "sets": 4,
+              "reps": "12–15 / ranka",
+              "restSeconds": 60,
+              "image": "assets/G_A6v.webp",
+              "description": "Stovėk šonu prie žemo lyno, rankena tolimesnėje rankoje prie kito klubo. Kelk ranką į šoną iki peties aukščio, alkūnė šiek tiek sulenkta, ir lėtai nuleisk. Pečius laikyk žemai, nekelk jų prie ausų.",
+              "focus": "Pečių vidurinė dalis su pastoviu krūviu, be trapecijų.",
+              "startSide": "left",
+              "bonusSets": 1
+            }
+          ]
         },
         {
           "id": "GA7",
@@ -201,6 +242,21 @@
           "description": "Stovėk tiesiai, alkūnės prie šonų. Lenk ranką iki peties, viršuje suspausk ir lėtai nuleisk. Po vieną ranką.",
           "focus": "Bicepsas: silpnesnė kairė ranka pasiveja dešinę.",
           "startSide": "left",
+          "variants": [
+            {
+              "id": "GA7v",
+              "name": "Hammer Curl",
+              "tag": "neutralus suėmimas",
+              "sets": 4,
+              "reps": "10–12 / ranka",
+              "restSeconds": 60,
+              "image": "assets/G_A7v.webp",
+              "description": "Stovėk tiesiai, hanteliai prie šonų, delnai atsukti į kūną. Lenk ranką iki peties nekeisdamas suėmimo (nykštys į viršų) ir lėtai nuleisk. Po vieną ranką.",
+              "focus": "Bicepsas ir dilbis: stipresnis suėmimas.",
+              "startSide": "left",
+              "bonusSets": 1
+            }
+          ],
           "bonusSets": 1
         },
         {
@@ -736,7 +792,20 @@
           "restSeconds": 120,
           "image": "assets/G_C2.webp",
           "description": "Suolas pakeltas 30–45°. Hanteliai prie krūtinės viršaus, alkūnės apie 45° nuo kūno. Spausk aukštyn, kol rankos tiesios, ir lėtai nuleisk.",
-          "focus": "Viršutinė krūtinė ir pečiai."
+          "focus": "Viršutinė krūtinė ir pečiai.",
+          "variants": [
+            {
+              "id": "GC2v",
+              "name": "Weighted Push-Ups",
+              "tag": "su svoriu",
+              "sets": 4,
+              "reps": "8–12",
+              "restSeconds": 90,
+              "image": "assets/G_C2v.webp",
+              "description": "Atsispaudimai su svorio disku ant viršutinės nugaros (uždėk pats ar padeda partneris). Kūnas tiesus, leiskis, kol krūtinė beveik liečia grindis, ir stumk aukštyn. Per sunku: be disko.",
+              "focus": "Krūtinė, pečiai ir tricepsas, pečių sąnariams patogiau nei štanga."
+            }
+          ]
         },
         {
           "id": "GC3",
@@ -843,7 +912,20 @@
           "restSeconds": 60,
           "image": "assets/G_C7.webp",
           "description": "Stovėk prie lyno, alkūnės prispaustos prie šonų. Spausk rankeną žemyn, kol rankos visiškai ištiestos, ir lėtai grąžink iki krūtinės. Alkūnės nejuda.",
-          "focus": "Tricepsas: stipresnis spaudimas ir smūgio užbaigimas."
+          "focus": "Tricepsas: stipresnis spaudimas ir smūgio užbaigimas.",
+          "variants": [
+            {
+              "id": "GC7v",
+              "name": "Overhead Dumbbell Triceps Extension",
+              "tag": "virš galvos",
+              "sets": 3,
+              "reps": "10–12",
+              "restSeconds": 60,
+              "image": "assets/G_C7v.webp",
+              "description": "Abiem rankom laikyk vieną hantelį virš galvos. Alkūnės į viršų ir arti galvos: lenk rankas, kol hantelis už galvos, tada tiesk aukštyn. Alkūnės nejuda, pilvas įtemptas.",
+              "focus": "Ilgoji tricepso galva: stipresnis smūgio užbaigimas."
+            }
+          ]
         },
         {
           "id": "GC8",
@@ -1076,7 +1158,20 @@
           "description": "Gulėk ant nugaros, vienos kojos pėda ant grindų arti sėdmenų, kita koja ištiesta. Remdamasis kulnu kelk klubus, kol kūnas tiesus nuo pečių iki kelio, viršuje 1–2 s suspausk sėdmenį ir lėtai nuleisk. Per lengva: hantelis ant klubo arba 3 s pauzė viršuje.",
           "focus": "Sėdmenys ir klubo tiesimas spyriams, kiekviena koja atskirai.",
           "startSide": "left",
-          "bonusSets": 1
+          "bonusSets": 1,
+          "variants": [
+            {
+              "id": "GD3v",
+              "name": "Kettlebell Swing",
+              "tag": "gira",
+              "sets": 4,
+              "reps": "10–12",
+              "restSeconds": 75,
+              "image": "assets/P_C3.webp",
+              "description": "Gira tarp kojų, nugara tiesi, klubai atgal. Sprogstamai stumk klubus pirmyn, gira kyla iki krūtinės aukščio iš klubų jėgos, ne rankomis. Viršuje įtempk sėdmenis ir pilvą.",
+              "focus": "Sėdmenys ir klubų tiesimas be suolo ir štangos."
+            }
+          ]
         },
         {
           "id": "GD4",

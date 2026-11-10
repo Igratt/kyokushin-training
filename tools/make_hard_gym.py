@@ -63,6 +63,11 @@ def new(day, n, name, sets, reps, rest, description, focus, **extra):
             "image": f"assets/G_{day}{n}.webp", "description": description, "focus": focus, **extra}
 
 
+def newv(day, n, name, tag, sets, reps, rest, description, focus, image=None, **extra):
+    return {"id": f"G{day}{n}v", "name": name, "tag": tag, "sets": sets, "reps": reps,
+            "restSeconds": rest, "image": image or f"assets/G_{day}{n}v.webp", "description": description, "focus": focus, **extra}
+
+
 def with_variants(e, *variants):
     e["variants"] = list(variants)
     return e
@@ -72,18 +77,30 @@ A = [
     with_variants(reuse("B6", "A", 1, 3, "5", 75), reuse("B6v", "A", 1, 3, "5", 75, True)),
     reuse("B2", "A", 2, 4, "4–6", 150),
     with_variants(reuse("B3", "A", 3, 4, "5–8", 120), reuse("B3v", "A", 3, 4, "8–10", 120, True)),
-    new("A", 4, "Single-Arm Dumbbell Bench Press", 3, "8–10 / ranka", 90,
+    with_variants(new("A", 4, "Single-Arm Dumbbell Bench Press", 3, "8–10 / ranka", 90,
         "Gulk ant suolo, hantelis vienoje rankoje prie krūtinės, kita ranka ant klubo. Spausk tiesiai aukštyn ir lėtai nuleisk. Neleisk kūnui suktis į šoną.",
         "Krūtinė po vieną pusę: silpnesnė dešinė pasiveja kairę.", startSide="right"),
-    new("A", 5, "Single-Arm Dumbbell Row", 3, "8–10 / ranka", 90,
+                  newv("A", 4, "Dumbbell Floor Press", "ant grindų", 3, "8–10", 90,
+                       "Gulėk ant grindų, keliai sulenkti, hanteliai virš krūtinės. Leisk, kol alkūnės (apie 45° nuo kūno) paliečia grindis, trumpai sustok ir spausk abu aukštyn.",
+                       "Krūtinė ir tricepsas, saugu pečiams: alkūnės nenusileidžia per žemai.")),
+    with_variants(new("A", 5, "Single-Arm Dumbbell Row", 3, "8–10 / ranka", 90,
         "Kelis ir ranka ant suolo, nugara tiesi ir lygiagreti grindims. Trauk hantelį alkūne aukštyn link klubo, viršuje suspausk mentę, lėtai nuleisk.",
         "Nugaros pusės po vieną: dešinė silpnesnė, todėl pirma.", startSide="right"),
-    new("A", 6, "Lateral Raise", 3, "12–15", 60,
+                  newv("A", 5, "Inverted Row", "po skersiniu", 3, "8–12", 90,
+                       "Skersinis (Smith ar rėmo) maždaug klubų aukštyje. Kabėk po juo tiesiomis rankomis, kulnai ant grindų, kūnas tiesus. Trauk krūtinę prie skersinio, suspausk mentes ir lėtai nusileisk. Per lengva: kojas ant suolo.",
+                       "Visa nugara savo svoriu, kaip darei vietoj lyno traukos.")),
+    with_variants(new("A", 6, "Lateral Raise", 3, "12–15", 60,
         "Stovėk tiesiai, hanteliai prie šonų, alkūnės šiek tiek sulenktos. Kelk rankas į šonus iki pečių aukščio ir lėtai nuleisk. Nesiūbuok kūnu.",
         "Platesni pečiai ir sveiki pečių sąnariai."),
-    new("A", 7, "Dumbbell Curl", 3, "10–12 / ranka", 60,
+                  newv("A", 6, "Cable Lateral Raise", "lynas, viena ranka", 3, "12–15 / ranka", 60,
+                       "Stovėk šonu prie žemo lyno, rankena tolimesnėje rankoje prie kito klubo. Kelk ranką į šoną iki peties aukščio, alkūnė šiek tiek sulenkta, ir lėtai nuleisk. Pečius laikyk žemai, nekelk jų prie ausų.",
+                       "Pečių vidurinė dalis su pastoviu krūviu, be trapecijų.", startSide="left")),
+    with_variants(new("A", 7, "Dumbbell Curl", 3, "10–12 / ranka", 60,
         "Stovėk tiesiai, alkūnės prie šonų. Lenk ranką iki peties, viršuje suspausk ir lėtai nuleisk. Po vieną ranką.",
         "Bicepsas: silpnesnė kairė ranka pasiveja dešinę.", startSide="left"),
+                  newv("A", 7, "Hammer Curl", "neutralus suėmimas", 3, "10–12 / ranka", 60,
+                       "Stovėk tiesiai, hanteliai prie šonų, delnai atsukti į kūną. Lenk ranką iki peties nekeisdamas suėmimo (nykštys į viršų) ir lėtai nuleisk. Po vieną ranką.",
+                       "Bicepsas ir dilbis: stipresnis suėmimas.", startSide="left")),
     with_variants(reuse("A7", "A", 8, 3, "10–15", 60), reuse("A7v", "A", 8, 3, "12–15", 60, True)),
 ]
 
@@ -99,25 +116,34 @@ B = [
 
 C = [
     with_variants(reuse("B1", "C", 1, 3, "4 / pusė", 60), reuse("B1v", "C", 1, 3, "6 / pusė", 60, True)),
-    new("C", 2, "Incline Dumbbell Press", 4, "8–10", 120,
+    with_variants(new("C", 2, "Incline Dumbbell Press", 4, "8–10", 120,
         "Suolas pakeltas 30–45°. Hanteliai prie krūtinės viršaus, alkūnės apie 45° nuo kūno. Spausk aukštyn, kol rankos tiesios, ir lėtai nuleisk.",
         "Viršutinė krūtinė ir pečiai."),
+                  newv("C", 2, "Weighted Push-Ups", "su svoriu", 4, "8–12", 90,
+                       "Atsispaudimai su svorio disku ant viršutinės nugaros (uždėk pats ar padeda partneris). Kūnas tiesus, leiskis, kol krūtinė beveik liečia grindis, ir stumk aukštyn. Per sunku: be disko.",
+                       "Krūtinė, pečiai ir tricepsas, pečių sąnariams patogiau nei štanga.")),
     with_variants(reuse("B3v", "C", 3, 4, "8–12", 90), reuse("C5v", "C", 3, 4, "6–10", 90, True)),
     with_variants(reuse("B4", "C", 4, 3, "8 / ranka", 90), reuse("B4v", "C", 4, 3, "8 / ranka", 90, True)),
     with_variants(reuse("B5", "C", 5, 3, "10–12", 90), reuse("B5v", "C", 5, 3, "10–12", 90, True)),
     with_variants(reuse("B7", "C", 6, 3, "12–15", 60), reuse("B7v", "C", 6, 3, "15–20", 45, True)),
-    new("C", 7, "Cable Triceps Pushdown", 3, "10–15", 60,
+    with_variants(new("C", 7, "Cable Triceps Pushdown", 3, "10–15", 60,
         "Stovėk prie lyno, alkūnės prispaustos prie šonų. Spausk rankeną žemyn, kol rankos visiškai ištiestos, ir lėtai grąžink iki krūtinės. Alkūnės nejuda.",
         "Tricepsas: stipresnis spaudimas ir smūgio užbaigimas."),
+                  newv("C", 7, "Overhead Dumbbell Triceps Extension", "virš galvos", 3, "10–12", 60,
+                       "Abiem rankom laikyk vieną hantelį virš galvos. Alkūnės į viršų ir arti galvos: lenk rankas, kol hantelis už galvos, tada tiesk aukštyn. Alkūnės nejuda, pilvas įtemptas.",
+                       "Ilgoji tricepso galva: stipresnis smūgio užbaigimas.")),
     with_variants(reuse("B9", "C", 8, 3, "45–60 s", 45), reuse("B9v", "C", 8, 3, "30–45 s / pusė", 45, True)),
 ]
 
 D = [
     with_variants(reuse("C1", "D", 1, 3, "3", 75), reuse("C1v", "D", 1, 3, "3", 75, True)),
     reuse("C2", "D", 2, 4, "5", 150),
-    new("D", 3, "Single-Leg Glute Bridge", 4, "10–12 / koja", 60,
+    with_variants(new("D", 3, "Single-Leg Glute Bridge", 4, "10–12 / koja", 60,
         "Gulėk ant nugaros, vienos kojos pėda ant grindų arti sėdmenų, kita koja ištiesta. Remdamasis kulnu kelk klubus, kol kūnas tiesus nuo pečių iki kelio, viršuje 1–2 s suspausk sėdmenį ir lėtai nuleisk. Per lengva: hantelis ant klubo arba 3 s pauzė viršuje.",
         "Sėdmenys ir klubo tiesimas spyriams, kiekviena koja atskirai.", startSide="left", bonusSets=1),
+                  newv("D", 3, "Kettlebell Swing", "gira", 4, "10–12", 75,
+                       "Gira tarp kojų, nugara tiesi, klubai atgal. Sprogstamai stumk klubus pirmyn, gira kyla iki krūtinės aukščio iš klubų jėgos, ne rankomis. Viršuje įtempk sėdmenis ir pilvą.",
+                       "Sėdmenys ir klubų tiesimas be suolo ir štangos.", image="assets/P_C3.webp")),
     with_variants(reuse("C4", "D", 4, 3, "10 / koja", 90), reuse("C4v", "D", 4, 3, "8 / koja", 90, True)),
     with_variants(reuse("C10", "D", 5, 3, "6 / pusė", 60), reuse("C10v", "D", 5, 3, "45 s", 45, True)),
     with_variants(reuse("A3v", "D", 6, 3, "8 / koja", 75), reuse("B10v", "D", 6, 3, "5 / koja", 45, True)),
