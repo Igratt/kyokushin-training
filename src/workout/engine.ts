@@ -205,7 +205,7 @@ function completeSet(s: Session, now: number, perSetWeight?: string): Session {
   const newLog = { ...log, sets: [...log.sets, setLog] };
   const logs = s.logs.map((l, i) => (i === s.exerciseIndex ? newLog : l));
   const exerciseDone = newLog.sets.length >= ex.sets;
-  const base: Session = { ...s, logs, lastActionAt: now, pendingWeightFor: exerciseDone ? ex.id : null, work: null };
+  const base: Session = { ...s, logs, lastActionAt: now, pendingWeightFor: exerciseDone && !ex.noWeight ? ex.id : null, work: null };
   let target: Position | null = null;
   let label: 'set' | 'exercise' | null = null;
   if (!exerciseDone) {

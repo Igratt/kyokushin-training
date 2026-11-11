@@ -14,6 +14,8 @@ export interface Exercise {
   startSide?: 'left' | 'right';
   /** The last N of `sets` are done with the weaker side only (to even out an imbalance). */
   bonusSets?: number;
+  /** No "what weight did you use?" question after the last set (holds and releases done without weights). */
+  noWeight?: boolean;
   image?: string;
   description?: string;
   focus?: string;

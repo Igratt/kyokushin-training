@@ -6,7 +6,8 @@ Usage:  py tools/draw_more.py [name ...]     (no names = all)
 import math
 import sys
 
-from draw_exercises import ACCENT, Pic, go, side_figure
+import draw_stretches as ds
+from draw_exercises import ACCENT, W, Pic, centered, go, side_figure
 from draw_variants import (CX, EQUIP, EQUIP_HI, GREY, along, ball, band, cable, db_end, front, kettlebell, limb,
                            lying_view, post, pulley, pushup, rect, shadow, side, stand_front, standing_view)
 
@@ -316,8 +317,26 @@ def pc3v():
     pic.save("P_C3v.webp")
 
 
+
+def hip_release():
+    """Left hip (psoas) release: lying face down, a soft block under the left hip bone and the lower belly.
+    One pose, no number badge: the app adds it as the last exercise of every day (R_hip_release.webp)."""
+    pic = Pic()
+    ds.low(pic, 1.75)
+    j = dict(hip=(140, 268), sh=(78, 280), head=(56, 272), n_knee=(186, 284), n_ankle=(230, 289),
+             n_toe=go((230, 289), -20, 14), f_knee=(184, 286), f_ankle=(228, 290), f_toe=go((228, 290), -20, 14),
+             f_sh=(80, 282), n_elbow=(86, 290), n_hand=(58, 286), f_elbow=(84, 291), f_hand=(60, 287))
+    j = centered(j, W / 2)
+    hip = j["hip"]
+    rect(pic, hip[0] - 18, 276, hip[0] + 14, 292, (125, 211, 252))
+    side_figure(pic, j)
+    pic.arrow((hip[0] + 34, hip[1] - 54), (hip[0] + 30, hip[1] - 32), (hip[0] + 8, hip[1] - 14), ACC["A"])
+    pic.caption("Blokelis po kairiu klubo kaulu · atsipalaiduok 1:30")
+    pic.save("R_hip_release.webp")
+
+
 ALL = dict(ga4v=ga4v, ga5v=ga5v, ga6v=ga6v, ga7v=ga7v, gc2v=gc2v, gc7v=gc7v, pa1v=pa1v, pa3v=pa3v, pa5v=pa5v,
-           pb1v=pb1v, pb3v=pb3v, pc1v=pc1v, pc3v=pc3v)
+           pb1v=pb1v, pb3v=pb3v, pc1v=pc1v, pc3v=pc3v, hip_release=hip_release)
 
 if __name__ == "__main__":
     for name in (sys.argv[1:] or ALL):

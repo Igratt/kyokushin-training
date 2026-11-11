@@ -183,6 +183,7 @@ function plain(ex: Exercise): Exercise {
     sides: ex.sides,
     startSide: ex.startSide,
     bonusSets: ex.bonusSets,
+    noWeight: ex.noWeight,
     image: ex.image,
     description: ex.description,
     focus: ex.focus,
@@ -215,6 +216,31 @@ export function withChoice(ex: Exercise, choice: number): Exercise {
   return { ...versions[c], choices: versions, choice: c };
 }
 
+/**
+ * The last exercise of every day in every program (built-in and imported): a release for the user's left hip, which
+ * sits forward from always fighting with the left leg in front. Lying face down on a soft block for 1 min 30 s.
+ */
+export const HIP_RELEASE: Exercise = {
+  id: 'hip-release-left',
+  name: 'Kairio klubo atpalaidavimas ant blokelio',
+  sets: 1,
+  reps: '1 min 30 s',
+  restSeconds: 0,
+  seconds: 90,
+  sides: 1,
+  noWeight: true,
+  image: 'assets/R_hip_release.webp',
+  description:
+    'Atsigulk kniūbsčias. Minkštą blokelį (jogos plytą) pasidėk po KAIRIUOJU klubo kaulu (priekinis dubens kaulas) ir pilvo apačia. ' +
+    'Kairė koja tiesi, kakta ant sukryžiuotų rankų, visas kūnas atsipalaidavęs. Lėtai kvėpuok į pilvą ir leisk klubui grimzti ant blokelio. ' +
+    'Jei atsiranda aštrus skausmas, dilgčiojimas ar pulsavimas, pasislink blokelį arba nutrauk.',
+  focus: 'Kairio klubo lenkiamųjų (psoas) atpalaidavimas: kairė dubens pusė pasislinkusi į priekį nuo kovinės stovėsenos su kaire koja priekyje.',
+};
+
+function withHipRelease(exercises: Exercise[]): Exercise[] {
+  return exercises.some((e) => e.id === HIP_RELEASE.id) ? exercises : [...exercises, { ...HIP_RELEASE }];
+}
+
 /** Validates a program (a built-in file or one the user imports) and fills in defaults. Throws with a Lithuanian message. */
 export function normalizeProgram(raw: unknown, source: Program['source']): Program {
   if (!raw || typeof raw !== 'object' || Array.isArray(raw)) fail('Failas nėra programa: tikėtasi JSON objekto su „days“.');
@@ -232,8 +258,10 @@ export function normalizeProgram(raw: unknown, source: Program['source']): Progr
     if (!Array.isArray(dr.exercises) || dr.exercises.length === 0) fail(`Dienoje ${id} nėra pratimų („exercises“).`);
     if (dr.exercises.length > 20) fail(`Dienoje ${id} per daug pratimų (daugiausia 20).`);
     const exIds = new Set<string>();
-    const exercises: Exercise[] = (dr.exercises as unknown[]).map((e, ei) =>
-      normalizeExercise(e, `Dienos ${id} ${ei + 1}-asis pratimas`, `${id}${ei + 1}`, exIds, true),
+    const exercises: Exercise[] = withHipRelease(
+      (dr.exercises as unknown[]).map((e, ei) =>
+        normalizeExercise(e, `Dienos ${id} ${ei + 1}-asis pratimas`, `${id}${ei + 1}`, exIds, true),
+      ),
     );
     let stretches: Stretch[] | undefined;
     if (Array.isArray(dr.stretches) && dr.stretches.length > 0) {
