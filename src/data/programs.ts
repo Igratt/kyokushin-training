@@ -100,6 +100,7 @@ function normalizeExercise(e: unknown, label: string, fallbackId: string, ids: S
     sides: sides as 1 | 2 | undefined,
     startSide: startSide as 'left' | 'right' | undefined,
     bonusSets: bonusSets || undefined,
+    noWeight: er.noWeight === true || undefined,
     image: image(er.image),
     description: text(er.description),
     focus: text(er.focus),

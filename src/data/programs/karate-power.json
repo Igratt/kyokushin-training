@@ -2,7 +2,7 @@
   "id": "karate-power",
   "programName": "Karatė: sprogstamumas",
   "focus": "Greitis, sprogstamumas, reakcija",
-  "goal": "Tik karatė naudai, ne raumenų masei: 3 dienos po ~50 min. Mažai kartojimų maksimaliu greičiu ir ilgas poilsis, kad kiekvienas kartojimas būtų greitas. Smūgių ir spyrių greitis su guma, reakcijos startai, šuoliai, metimai ir greiti kėlimai. Kai greitis krenta, setą baik. Silpnesnė pusė pirma ir gauna papildomą setą.",
+  "goal": "Tik karatė naudai, ne raumenų masei: 3 dienos po ~60 min. Mažai kartojimų maksimaliu greičiu ir ilgas poilsis, kad kiekvienas kartojimas būtų greitas. Smūgių ir spyrių greitis su guma, reakcijos startai, šuoliai, metimai ir greiti kėlimai. Kai greitis krenta, setą baik. Silpnesnė pusė pirma ir gauna papildomą setą. Ištvermė pabaigoje: A – šuolių intervalai, B – smūgiai su hanteliais ir sunki gynyba, C – kovos simuliacija 3 + 2 + 2 + 2 min. Visada po greičio darbo, kad kovoje rankos ir kojos neužsirūgštų.",
   "days": [
     {
       "id": "A",
@@ -240,6 +240,33 @@
               "sets": 3,
               "reps": "8",
               "restSeconds": 60
+            }
+          ]
+        },
+        {
+          "id": "PA7",
+          "name": "Jump Squat Intervals",
+          "sets": 8,
+          "reps": "20 s",
+          "restSeconds": 5,
+          "image": "assets/P_A7.webp",
+          "description": "Intervalai: 20 s kuo daugiau pritūpimų su šuoliu, tada 10 s poilsio (5 s poilsis ir 5 s pasiruošimas), ir taip visus setus. Šuolis nebūtinai aukščiausias: svarbu išlaikyti tempą iki galo. Nusileisk minkštai ant pirštų, keliai neina į vidų. Skaičiuok pakartojimus ir kas savaitę per 20 s padaryk bent vienu daugiau.",
+          "focus": "Ištvermė: kojos neapsunksta per kovą ir pratęsimus.",
+          "seconds": 20,
+          "noWeight": true,
+          "variants": [
+            {
+              "id": "PA7v",
+              "name": "Kick Intervals",
+              "tag": "spyriai",
+              "sets": 8,
+              "reps": "20 s",
+              "restSeconds": 5,
+              "image": "assets/P_A7v.webp",
+              "description": "Intervalai su spyriais: 20 s kuo greičiau pakaitomis žemi ir vidutiniai mawashi geri kaire ir dešine, 10 s poilsio, ir taip visus setus. Rankos gynyboje, atraminė koja ant pirštų, po kiekvieno spyrio koja grįžta į stovėseną. Guma nebūtina, su ja sunkiau.",
+              "focus": "Ištvermė: spyriai išlieka greiti ir pratęsimuose.",
+              "seconds": 20,
+              "noWeight": true
             }
           ]
         }
@@ -568,6 +595,57 @@
               "restSeconds": 120
             }
           ]
+        },
+        {
+          "id": "PB8",
+          "name": "Punch-Outs (hanteliai)",
+          "sets": 3,
+          "reps": "90 s",
+          "restSeconds": 30,
+          "image": "assets/P_B8.webp",
+          "description": "Kovinė stovėsena, lengvi hanteliai (1–1,5 kg). Kol laikmatis rodo daugiau nei 30 s – greiti tiesūs smūgiai pakaitomis be sustojimo, didžiausiu tempu, kurį išlaikai. Paskutinės 30 s – gynyba su tais pačiais hanteliais, kumščiai prie skruostų. Alkūnės iki galo netiesink, pečiai žemyn, iškvėpk su kiekvienu smūgiu. Kai lengva – sunkesni hanteliai (iki 2 kg) arba +15 s.",
+          "focus": "Ištvermė: rankos ištveria kovos tempą ir po to dar laiko gynybą.",
+          "seconds": 90,
+          "variants": [
+            {
+              "id": "PB8v",
+              "name": "Banded Punch-Outs",
+              "tag": "su guma",
+              "sets": 3,
+              "reps": "90 s",
+              "restSeconds": 30,
+              "image": "assets/P_B8v.webp",
+              "description": "Guma pritvirtinta už nugaros krūtinės aukštyje, kilpos rankose. Kol laikmatis rodo daugiau nei 30 s – greiti tiesūs smūgiai prieš gumą be sustojimo, paskutinės 30 s – gynyba, guma įtempta. Pečiai žemyn, iškvėpk su kiekvienu smūgiu.",
+              "focus": "Ištvermė: smūgiai nesilpnėja kovos gale, gynyba nekrenta.",
+              "seconds": 90,
+              "noWeight": true
+            }
+          ]
+        },
+        {
+          "id": "PB9",
+          "name": "Guard Hold (sunkus)",
+          "sets": 2,
+          "reps": "60 s",
+          "restSeconds": 30,
+          "image": "assets/P_B9.webp",
+          "description": "Kovinė stovėsena, kiekvienoje rankoje 2,5–5 kg hantelis. Kumščiai prie skruostų, alkūnės žemyn ir arti šonų, pečiai nuleisti. Išlaikyk 60 s; jei gali ilgiau, spausk +15 s ir laikyk, kol dar išlaikai teisingą gynybą. Kai dega, atpalaiduok pečius ir lėtai iškvėpk, bet rankų nenuleisk. Kai 90 s lengva – sunkesni hanteliai.",
+          "focus": "Ištvermė: rankos išsilaiko gynyboje prie galvos visą kovą.",
+          "seconds": 60,
+          "variants": [
+            {
+              "id": "PB9v",
+              "name": "Dumbbell Guard Punches",
+              "tag": "su smūgiais",
+              "sets": 2,
+              "reps": "60 s",
+              "restSeconds": 30,
+              "image": "assets/P_B9v.webp",
+              "description": "Kovinė stovėsena, hanteliai 2–3 kg. 60 s pakaitomis lėti, kontroliuojami tiesūs smūgiai pečių aukštyje: ranka kaskart grįžta į gynybą, kita lieka prie veido. Alkūnės iki galo netiesink, iškvėpk su kiekvienu smūgiu.",
+              "focus": "Ištvermė: rankos nekrenta net po ilgų smūgių serijų.",
+              "seconds": 60
+            }
+          ]
         }
       ],
       "stretches": [
@@ -883,6 +961,60 @@
               "sets": 3,
               "reps": "8 / pusė",
               "restSeconds": 45
+            }
+          ]
+        },
+        {
+          "id": "PC8",
+          "name": "Kova: pagrindinis laikas",
+          "sets": 1,
+          "reps": "3 min",
+          "restSeconds": 25,
+          "image": "assets/P_C8.webp",
+          "description": "Kovos simuliacija (jei yra maišas – ant maišo): 3 min kovos tempu – smūgių serijos į kūną, keliai, žemi ir aukšti spyriai, judėjimas. Kas 30 s – 10 s visu greičiu (smūgių kruša į kūną), tada vėl kovos tempas. Rankos visą laiką gynyboje, iškvėpk su kiekvienu smūgiu, tarp serijų atpalaiduok pečius. Po jo – pratęsimai, kaip tavo kovose.",
+          "focus": "Ištvermė: kovos tempas visą pagrindinį laiką.",
+          "seconds": 180,
+          "noWeight": true,
+          "variants": [
+            {
+              "id": "PC8v",
+              "name": "Kova su burpiais",
+              "tag": "burpiai",
+              "sets": 1,
+              "reps": "3 min",
+              "restSeconds": 25,
+              "image": "assets/P_C8v.webp",
+              "description": "Kaip pagrindinis laikas – 3 min kovos tempu, bet kiekvienos minutės paskutinės 10 s – burpiai vietoj smūgių krušos. Treniruoja tęsti kovą, kai kojos jau sunkios, o kvėpavimas dažnas. Po jo – pratęsimai.",
+              "focus": "Ištvermė: viso kūno kondicija kovos tempui išlaikyti.",
+              "seconds": 180,
+              "noWeight": true
+            }
+          ]
+        },
+        {
+          "id": "PC9",
+          "name": "Kova: pratęsimai",
+          "sets": 3,
+          "reps": "2 min",
+          "restSeconds": 25,
+          "image": "assets/P_C9.webp",
+          "description": "Iškart po pagrindinio laiko: pratęsimai po 2 min, prieš kiekvieną 30 s pauzė, kaip laukiant teisėjų sprendimo. Tas pats kovos tempas. Kas 30 s – 10 s visu greičiu (smūgių kruša į kūną), tada vėl kovos tempas. Rankos visą laiką gynyboje, iškvėpk su kiekvienu smūgiu, tarp serijų atpalaiduok pečius. Ilgiausia kova: 3 + 2 + 2 + 2 = 9 min. Kai lengva – trumpink pauzę iki 15 s arba krušas daryk kas 20 s.",
+          "focus": "Ištvermė: jėgų užtenka ir pratęsimams, iki 9 min.",
+          "seconds": 120,
+          "noWeight": true,
+          "variants": [
+            {
+              "id": "PC9v",
+              "name": "Pratęsimai su burpiais",
+              "tag": "burpiai",
+              "sets": 3,
+              "reps": "2 min",
+              "restSeconds": 25,
+              "image": "assets/P_C9v.webp",
+              "description": "Pratęsimai po 2 min su 30 s pauze, kaip pagrindinėje versijoje, bet kiekvienos minutės paskutinės 10 s – burpiai vietoj smūgių krušos.",
+              "focus": "Ištvermė: jėgų užtenka ir pratęsimams, iki 9 min.",
+              "seconds": 120,
+              "noWeight": true
             }
           ]
         }
