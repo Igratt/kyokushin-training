@@ -75,6 +75,19 @@ function normalizeExercise(e: unknown, label: string, fallbackId: string, ids: S
   // Timed exercise (plank): the app runs a hold timer of `seconds` per set, on both sides when `sides` is 2.
   const seconds = er.seconds === undefined ? undefined : Math.round(toNumber(er.seconds));
   if (seconds !== undefined && !(seconds >= 5 && seconds <= 900)) fail(`„${name}“: „seconds“ turi būti nuo 5 iki 900.`);
+  // A timed set in parts (fight simulation): every part has a name and seconds, together exactly `seconds`.
+  let segments: { label: string; seconds: number }[] | undefined;
+  if (er.segments !== undefined) {
+    if (!Array.isArray(er.segments) || er.segments.length < 2 || er.segments.length > 20) fail(`„${name}“: „segments“ turi būti 2–20 dalių sąrašas.`);
+    segments = (er.segments as unknown[]).map((p) => {
+      const pr = (p && typeof p === 'object' ? p : {}) as Record<string, unknown>;
+      const label = text(pr.label) ?? fail(`„${name}“: laikmačio dalis be pavadinimo („label“).`);
+      const sec = Math.round(toNumber(pr.seconds));
+      if (!(sec >= 3 && sec <= 900)) fail(`„${name}“: laikmačio dalis „${label}“ turi trukti nuo 3 iki 900 s.`);
+      return { label, seconds: sec };
+    });
+    if (segments.reduce((n, p) => n + p.seconds, 0) !== seconds) fail(`„${name}“: laikmačio dalių suma turi būti lygi „seconds“.`);
+  }
   const sides = er.sides === undefined ? undefined : Math.round(toNumber(er.sides));
   if (sides !== undefined && sides !== 1 && sides !== 2) fail(`„${name}“: „sides“ turi būti 1 arba 2.`);
   const startSide = er.startSide === undefined ? undefined : er.startSide;
@@ -97,6 +110,7 @@ function normalizeExercise(e: unknown, label: string, fallbackId: string, ids: S
     reps,
     restSeconds: rest,
     seconds,
+    segments,
     sides: sides as 1 | 2 | undefined,
     startSide: startSide as 'left' | 'right' | undefined,
     bonusSets: bonusSets || undefined,
@@ -181,6 +195,7 @@ function plain(ex: Exercise): Exercise {
     reps: ex.reps,
     restSeconds: ex.restSeconds,
     seconds: ex.seconds,
+    segments: ex.segments,
     sides: ex.sides,
     startSide: ex.startSide,
     bonusSets: ex.bonusSets,

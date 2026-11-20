@@ -1,5 +1,11 @@
 export type DayId = string;
 
+/** One part of a timed set in parts, e.g. "BURPIAI – max greitis!" for 10 s. */
+export interface TimerSegment {
+  label: string;
+  seconds: number;
+}
+
 export interface Exercise {
   id: string;
   name: string;
@@ -8,6 +14,9 @@ export interface Exercise {
   restSeconds: number;
   /** Timed exercise (plank etc.): seconds to hold per set. The app runs that timer itself after the rest. */
   seconds?: number;
+  /** A timed set in parts (fight simulation: a minute of fighting, 10 s of burpees...). The timer shows the name of
+   *  the part being done and beeps when the next one starts; their seconds add up to `seconds`. */
+  segments?: TimerSegment[];
   /** 2 = the hold is done on the left and then on the right side (side plank). */
   sides?: 1 | 2;
   /** One-sided exercise: start with this (weaker) side, then do the same reps with the other one. */

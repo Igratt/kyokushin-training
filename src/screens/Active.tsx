@@ -70,6 +70,7 @@ export default function Active({ session: s, dispatch, settings, suggested, last
   const [perSetText, setPerSetText] = useState('');
   const firedFor = useRef<number | null>(null);
   const workFired = useRef('');
+  const segFired = useRef('');
 
   const ex = day.exercises[s.exerciseIndex];
   const done = s.logs[s.exerciseIndex].sets.length;
@@ -83,6 +84,9 @@ export default function Active({ session: s, dispatch, settings, suggested, last
   const lastPerf = last[exerciseKey(ex.name)];
   const exWeightText = s.weights[ex.id] ?? '';
   const doneSets = effectiveSets(s, s.exerciseIndex);
+  // Timed set in parts (fight simulation): the part running now, its seconds left, and the next one.
+  const seg = work && work.phase === 'hold' ? segmentAt(ex.segments, work.total, workLeftMs / 1000) : null;
+  const segIndex = seg ? seg.index : -1;
 
   useEffect(() => {
     setShowNote(false);
@@ -112,6 +116,15 @@ export default function Active({ session: s, dispatch, settings, suggested, last
     else if (!nativeTimer) alarm.fire(settings, 'short');
     dispatch({ type: 'WORK_ADVANCE', now: Date.now() });
   }, [now, work, alarm, settings, dispatch]);
+
+  // Next part of a timed set in parts (burpees, the last 30 s...): a short beep, once per part.
+  useEffect(() => {
+    if (segIndex <= 0 || !work) return;
+    const key = `${s.exerciseIndex}:${done}:${work.side}:${segIndex}`;
+    if (segFired.current === key) return;
+    segFired.current = key;
+    alarm.fire(settings, 'short');
+  }, [segIndex, work, done, s.exerciseIndex, alarm, settings]);
 
   const completeSet = () => {
     alarm.prime();
@@ -219,7 +232,7 @@ export default function Active({ session: s, dispatch, settings, suggested, last
         {topBar}
         <div className="rest-view" id="work-timer">
           <div className="rest-label">
-            {prep ? (work.side === 2 ? 'Keisk pusę' : 'Pasiruošk') : 'Laikyk'}
+            {prep ? (work.side === 2 ? 'Keisk pusę' : 'Pasiruošk') : seg ? seg.label : 'Laikyk'}
             {work.side > 0 && (
               <span className="variant-chip on side-chip">{sideName(work.side, ex.startSide).replace(/^./, (c) => c.toUpperCase())} pusė</span>
             )}
@@ -228,10 +241,15 @@ export default function Active({ session: s, dispatch, settings, suggested, last
           <div className={'ring-wrap' + (prep ? ' prep' : '')}>
             <svg viewBox="0 0 120 120" className="ring" aria-hidden="true">
               <circle cx="60" cy="60" r="54" className="ring-bg" />
-              <circle cx="60" cy="60" r="54" className="ring-fg" style={{ strokeDasharray: RING, strokeDashoffset: RING * workFrac }} />
+              <circle cx="60" cy="60" r="54" className="ring-fg" style={{ strokeDasharray: RING, strokeDashoffset: RING * (seg ? seg.frac : workFrac) }} />
             </svg>
-            <div className="ring-time h-display">{prep ? leftSec : formatClock(leftSec)}</div>
+            <div className="ring-time h-display">{prep ? leftSec : formatClock(seg ? Math.ceil(seg.left) : leftSec)}</div>
           </div>
+          {seg && (
+            <div className="muted small">
+              {seg.next ? `Toliau: ${seg.next}` : 'Paskutinė dalis'} · iš viso liko {formatClock(leftSec)}
+            </div>
+          )}
           <div className="next-card">
             <ExerciseImage src={ex.image} name={ex.name} className="next-img" />
             <div>
@@ -412,4 +430,27 @@ export default function Active({ session: s, dispatch, settings, suggested, last
       </div>
     </div>
   );
+}
+
+/** Timed set in parts: which part is running `total - leftSec` seconds in, its seconds left, how far through it, and
+ *  the next part's name. "+15 s" lengthens the last part. */
+function segmentAt(list: Exercise['segments'], total: number, leftSec: number) {
+  if (!list || list.length === 0) return null;
+  const elapsed = total - leftSec;
+  let start = 0;
+  for (let i = 0; i < list.length; i++) {
+    const last = i === list.length - 1;
+    const end = last ? total : start + list[i].seconds;
+    if (last || elapsed < end) {
+      return {
+        index: i,
+        label: list[i].label,
+        left: Math.max(0, end - elapsed),
+        frac: Math.min(1, Math.max(0, (elapsed - start) / Math.max(1, end - start))),
+        next: last ? undefined : list[i + 1].label,
+      };
+    }
+    start = end;
+  }
+  return null;
 }

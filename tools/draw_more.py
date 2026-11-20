@@ -79,22 +79,20 @@ def ga5v():
 
 
 def ga6v():
-    """Cable lateral raise, front view: low pulley on the right, the left hand crosses in front and rises."""
+    """Band lateral raise, front view (no low cable at his gym, 2026-11-20): the band under the right foot, the left
+    hand crosses in front and rises."""
     pic, acc = Pic(), ACC["A"]
     for i in range(2):
         standing_view(pic, i, 1.1)
-        pic.capsule((CX + 92, 30), (CX + 92, 300), 8, EQUIP)
-        p = (CX + 80, 284)
-        pulley(pic, p)
         if i == 0:
             h = stand_front(pic, (CX + 14, 218), (CX + 34, 212), l_elbow=(4, 4), r_elbow=(6, 0))
         else:
             h = stand_front(pic, (CX - 80, 166), (CX + 34, 212), l_elbow=(-2, -8), r_elbow=(6, 0))
-        cable(pic, p, h["lh"])
+        band(pic, [(CX + 14, 296), h["lh"]])
         pic.dot(h["lh"], 4.5, GREY)
         if i:
             pic.arrow((CX - 14, 226), (CX - 62, 222), (CX - 78, 186), acc)
-        pic.caption("1 · Rankena prie kito klubo" if not i else "2 · Kelk į šoną iki peties")
+        pic.caption("1 · Guma po kita koja, prie klubo" if not i else "2 · Kelk į šoną iki peties")
     pic.badge(6)
     pic.save("G_A6v.webp")
 

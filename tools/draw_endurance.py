@@ -1,6 +1,7 @@
-"""Pictures of the endurance finishers (tools/add_endurance.py, 2026-11-18): punch-outs, guard hold with dumbbells,
-dumbbell guard punches, fight simulation (shadow fighting: main time and extensions) and burpees. rope, bounce and
-climber are spare drawings, checked but not used by any program now.
+"""Pictures of the endurance finishers (tools/add_endurance.py, 2026-11-18/20): punch-outs, guard hold with dumbbells,
+dumbbell guard punches and the fight simulation (a minute of shadow fighting, then 10 s of burpees, or of knees in the
+variant). rope, bounce and climber are spare drawings, checked but not used by any program now; burpee too (its plank
+pose is reused by fight_burst).
 Two panels each, same mannequin style. Day colour, corner number and file name are parameters, because the same
 picture sits at different positions in the three programs. Called by tools/add_endurance.py (no CLI of its own).
 """
@@ -84,6 +85,35 @@ def shadow_rounds(day, n, name, caps=("1 · Rankos gynyboje visą raundą", "2 �
             side_figure(pic, stance((GUARD[0], (204, 140)), f_elbow=(0, 6)))
             pic.arrow((168, 120), (196, 114), (222, 126), acc)
         pic.caption(caps[i])
+    pic.badge(n)
+    pic.save(name)
+
+
+def knee_strike():
+    """Front-leg knee strike, side view: thigh up and forward, support leg under the hip, guard up."""
+    return side((118, 206), (144, 232), (110, 290), (145, 136), (136, 140), torso_ang=92, head_ang=88,
+                knee=(28, -28), f_knee=(10, 0), elbow=(0, 16), f_elbow=(0, 16), n_toe=280, f_toe=0)
+
+
+def fight_burst(day, n, name, first, burst):
+    """Fight simulation (his ask, 2026-11-20): a minute of fighting, then 10 s of burpees ("burpee") or knees ("knee")."""
+    pic, acc = Pic(), ACC[day]
+    for i in range(2):
+        if i == 0:
+            standing_view(pic, i)
+            side_figure(pic, stance((GUARD[0], (204, 140)), f_elbow=(0, 6)))
+            pic.arrow((168, 120), (196, 114), (222, 126), acc)
+            pic.caption(first)
+        elif burst == "burpee":
+            standing_view(pic, i, 1.18)
+            side_figure(pic, pushup((78, 242), 296))
+            pic.arrow((150, 248), (178, 238), (204, 252), acc)
+            pic.caption("2 · Po minutės – 10 s burpių")
+        else:
+            standing_view(pic, i)
+            side_figure(pic, knee_strike())
+            pic.arrow((176, 232), (194, 214), (186, 184), acc)
+            pic.caption("2 · Po minutės – 10 s kelių")
     pic.badge(n)
     pic.save(name)
 
@@ -177,9 +207,8 @@ def climber(day, n, name):
     pic.save(name)
 
 
-POSES = dict(guard=guard, guard_punch=guard_punch, punch_out=punch_out, shadow=shadow_rounds, burpee=burpee,
-             fight=lambda d, n, f: shadow_rounds(d, n, f, ("1 · 3 min kovos tempu, gynyba",
-                                                          "2 · Kas 30 s – 10 s visu greičiu")),
-             fight_ext=lambda d, n, f: shadow_rounds(d, n, f, ("1 · Po 30 s pauzės – vėl gynyba",
-                                                              "2 · 2 min kovos tempu, krušos")),
-             rope=rope, bounce=bounce, climber=climber)
+POSES = dict(guard=guard, guard_punch=guard_punch, punch_out=punch_out, shadow=shadow_rounds,
+             fight=lambda d, n, f: fight_burst(d, n, f, "1 · Minutė kovos pagal eigą", "burpee"),
+             fight_ext=lambda d, n, f: fight_burst(d, n, f, "1 · Po pauzės – minutė kovos", "burpee"),
+             fight_kick=lambda d, n, f: fight_burst(d, n, f, "1 · Minutė kovos pagal eigą", "knee"),
+             burpee=burpee, rope=rope, bounce=bounce, climber=climber)

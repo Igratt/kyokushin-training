@@ -219,14 +219,14 @@
           "variants": [
             {
               "id": "GA6v",
-              "name": "Cable Lateral Raise",
-              "tag": "lynas, viena ranka",
+              "name": "Band Lateral Raise",
+              "tag": "guma, viena ranka",
               "sets": 4,
               "reps": "12–15 / ranka",
               "restSeconds": 60,
               "image": "assets/G_A6v.webp",
-              "description": "Stovėk šonu prie žemo lyno, rankena tolimesnėje rankoje prie kito klubo. Kelk ranką į šoną iki peties aukščio, alkūnė šiek tiek sulenkta, ir lėtai nuleisk. Pečius laikyk žemai, nekelk jų prie ausų.",
-              "focus": "Pečių vidurinė dalis su pastoviu krūviu, be trapecijų.",
+              "description": "Užlipk ant gumos galo priešinga koja, kitą galą laikyk ranka prie kito klubo, kad guma eitų įstrižai per kūną. Kelk ranką į šoną iki peties aukščio, alkūnė šiek tiek sulenkta, ir lėtai nuleisk. Pečius laikyk žemai, nekelk jų prie ausų. Per lengva – suimk gumą trumpiau.",
+              "focus": "Pečių vidurinė dalis, krūvis didžiausias viršuje, be trapecijų.",
               "startSide": "left",
               "bonusSets": 1
             }
@@ -286,26 +286,86 @@
           "id": "GA9",
           "name": "Kova: pagrindinis laikas",
           "sets": 1,
-          "reps": "3 min",
+          "reps": "3 min + burpiai",
           "restSeconds": 25,
           "image": "assets/G_A9.webp",
-          "description": "Kovos simuliacija (jei yra maišas – ant maišo): 3 min kovos tempu – smūgių serijos į kūną, keliai, žemi ir aukšti spyriai, judėjimas. Kas 30 s – 10 s visu greičiu (smūgių kruša į kūną), tada vėl kovos tempas. Rankos visą laiką gynyboje, iškvėpk su kiekvienu smūgiu, tarp serijų atpalaiduok pečius. Po jo – pratęsimai, kaip tavo kovose.",
-          "focus": "Ištvermė: kovos tempas visą pagrindinį laiką.",
-          "seconds": 180,
+          "description": "Kovos simuliacija pagal tavo kovos eigą (jei yra maišas – ant maišo). Laikmatis pats rodo, ką daryti, ir pypteli, kai keičiasi: 1-a minutė – pavieniai smūgiai, 10 s burpių max greičiu, 2-a minutė – serijos po 3–4, vėl 10 s burpių, 3-ia minutė – serijos po 5–6, paskutinės 30 s – be sustojimo, max jėga ir greitis, ir dar 10 s burpių. Po burpio iškart atgal į stovėseną. Tarp serijų rankos visada gynyboje, iškvėpk su kiekvienu smūgiu, pečiai atpalaiduoti. Po pagrindinio laiko – pratęsimai, kaip tavo kovose.",
+          "focus": "Ištvermė: kovos tempas, net kai kvėpavimas jau dažnas.",
+          "seconds": 210,
           "noWeight": true,
+          "segments": [
+            {
+              "label": "1-a min: pavieniai smūgiai",
+              "seconds": 60
+            },
+            {
+              "label": "BURPIAI – max greitis!",
+              "seconds": 10
+            },
+            {
+              "label": "2-a min: serijos po 3–4",
+              "seconds": 60
+            },
+            {
+              "label": "BURPIAI – max greitis!",
+              "seconds": 10
+            },
+            {
+              "label": "3-ia min: serijos po 5–6",
+              "seconds": 30
+            },
+            {
+              "label": "Be sustojimo – max jėga!",
+              "seconds": 30
+            },
+            {
+              "label": "BURPIAI – max greitis!",
+              "seconds": 10
+            }
+          ],
           "variants": [
             {
               "id": "GA9v",
-              "name": "Kova su burpiais",
-              "tag": "burpiai",
+              "name": "Kova su kelių smūgiais",
+              "tag": "keliai",
               "sets": 1,
-              "reps": "3 min",
+              "reps": "3 min + keliai",
               "restSeconds": 25,
               "image": "assets/G_A9v.webp",
-              "description": "Kaip pagrindinis laikas – 3 min kovos tempu, bet kiekvienos minutės paskutinės 10 s – burpiai vietoj smūgių krušos. Treniruoja tęsti kovą, kai kojos jau sunkios, o kvėpavimas dažnas. Po jo – pratęsimai.",
-              "focus": "Ištvermė: viso kūno kondicija kovos tempui išlaikyti.",
-              "seconds": 180,
-              "noWeight": true
+              "description": "Ta pati kovos eiga, bet vietoj burpių – 10 s kelių smūgių pakaitomis max greičiu, rankos gynyboje. Tarp serijų nuolat judi ant pirštų, kad kovos tempą išlaikytų ir kojos. Tarp serijų rankos visada gynyboje, iškvėpk su kiekvienu smūgiu, pečiai atpalaiduoti.",
+              "focus": "Ištvermė: kojos neapsunksta per kovą.",
+              "seconds": 210,
+              "noWeight": true,
+              "segments": [
+                {
+                  "label": "1-a min: pavieniai smūgiai",
+                  "seconds": 60
+                },
+                {
+                  "label": "KELIAI – max greitis!",
+                  "seconds": 10
+                },
+                {
+                  "label": "2-a min: serijos po 3–4",
+                  "seconds": 60
+                },
+                {
+                  "label": "KELIAI – max greitis!",
+                  "seconds": 10
+                },
+                {
+                  "label": "3-ia min: serijos po 5–6",
+                  "seconds": 30
+                },
+                {
+                  "label": "Be sustojimo – max jėga!",
+                  "seconds": 30
+                },
+                {
+                  "label": "KELIAI – max greitis!",
+                  "seconds": 10
+                }
+              ]
             }
           ]
         },
@@ -313,26 +373,70 @@
           "id": "GA10",
           "name": "Kova: pratęsimai",
           "sets": 3,
-          "reps": "2 min",
+          "reps": "2 min + burpiai",
           "restSeconds": 25,
           "image": "assets/G_A10.webp",
-          "description": "Iškart po pagrindinio laiko: pratęsimai po 2 min, prieš kiekvieną 30 s pauzė, kaip laukiant teisėjų sprendimo. Tas pats kovos tempas. Kas 30 s – 10 s visu greičiu (smūgių kruša į kūną), tada vėl kovos tempas. Rankos visą laiką gynyboje, iškvėpk su kiekvienu smūgiu, tarp serijų atpalaiduok pečius. Ilgiausia kova: 3 + 2 + 2 + 2 = 9 min. Kai lengva – trumpink pauzę iki 15 s arba krušas daryk kas 20 s.",
+          "description": "Iškart po pagrindinio laiko: pratęsimai po 2 min, prieš kiekvieną 30 s pauzė, kaip laukiant teisėjų sprendimo. Laikmatis rodo eigą: 1-a minutė – serijos po 3–4, 10 s burpių, 2-a minutė – serijos po 5–6, paskutinės 30 s – be sustojimo, ir dar 10 s burpių. Tarp serijų rankos visada gynyboje, iškvėpk su kiekvienu smūgiu, pečiai atpalaiduoti. Ilgiausia kova: 3 + 2 + 2 + 2 = 9 min. Pradžioje tai žiauriai sunku – normalu. Jei krenta smūgių kokybė, pailgink poilsį prieš pratęsimus iki 60 s ir kas savaitę trumpink: 45 s, 30 s, vėliau 15 s.",
           "focus": "Ištvermė: jėgų užtenka ir pratęsimams, iki 9 min.",
-          "seconds": 120,
+          "seconds": 140,
           "noWeight": true,
+          "segments": [
+            {
+              "label": "1-a min: serijos po 3–4",
+              "seconds": 60
+            },
+            {
+              "label": "BURPIAI – max greitis!",
+              "seconds": 10
+            },
+            {
+              "label": "2-a min: serijos po 5–6",
+              "seconds": 30
+            },
+            {
+              "label": "Be sustojimo – max jėga!",
+              "seconds": 30
+            },
+            {
+              "label": "BURPIAI – max greitis!",
+              "seconds": 10
+            }
+          ],
           "variants": [
             {
               "id": "GA10v",
-              "name": "Pratęsimai su burpiais",
-              "tag": "burpiai",
+              "name": "Pratęsimai su kelių smūgiais",
+              "tag": "keliai",
               "sets": 3,
-              "reps": "2 min",
+              "reps": "2 min + keliai",
               "restSeconds": 25,
               "image": "assets/G_A10v.webp",
-              "description": "Pratęsimai po 2 min su 30 s pauze, kaip pagrindinėje versijoje, bet kiekvienos minutės paskutinės 10 s – burpiai vietoj smūgių krušos.",
+              "description": "Pratęsimai po 2 min su 30 s pauze, ta pati eiga, bet vietoj burpių – 10 s kelių smūgių pakaitomis max greičiu. Tarp serijų nuolat judi ant pirštų. Pradžioje tai žiauriai sunku – normalu. Jei krenta smūgių kokybė, pailgink poilsį prieš pratęsimus iki 60 s ir kas savaitę trumpink: 45 s, 30 s, vėliau 15 s.",
               "focus": "Ištvermė: jėgų užtenka ir pratęsimams, iki 9 min.",
-              "seconds": 120,
-              "noWeight": true
+              "seconds": 140,
+              "noWeight": true,
+              "segments": [
+                {
+                  "label": "1-a min: serijos po 3–4",
+                  "seconds": 60
+                },
+                {
+                  "label": "KELIAI – max greitis!",
+                  "seconds": 10
+                },
+                {
+                  "label": "2-a min: serijos po 5–6",
+                  "seconds": 30
+                },
+                {
+                  "label": "Be sustojimo – max jėga!",
+                  "seconds": 30
+                },
+                {
+                  "label": "KELIAI – max greitis!",
+                  "seconds": 10
+                }
+              ]
             }
           ]
         }

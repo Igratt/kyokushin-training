@@ -2,7 +2,10 @@
 gets hard and the legs run out of energy. His fights: 3 min main time + up to three 2-min extensions (9 min at most).
 A first version with light 30-60 s finishers was too easy for his karate volume, so every block is harder than a fight:
 Tabata intervals for the legs, punch-outs and a heavy guard hold for the arms, and a fight simulation (main time, then
-extensions after a 30 s pause like the judges' decision). Always after the speed/strength work, before the automatic
+extensions after a 30 s pause like the judges' decision). The fight follows his own fights (2026-11-20): minute 1
+mostly single strikes, minute 2 series of 3-4, minute 3 series of 5-6, the last 30 s non-stop at full power and
+speed (an extension: 3-4, then 5-6, the last 30 s non-stop); after every minute 10 s of burpees at full
+speed (his ask, same day), alternating knees in the variant; the app's timer runs these parts itself (field segments). Always after the speed/strength work, before the automatic
 hip release; every finisher has a variant (alternates like the rest).
 
   karate-power   A legs Tabata 8 | B punch-outs 3 + heavy guard 2 | C fight 3 min + 3 x 2 min
@@ -30,8 +33,24 @@ PAUSE = 25  # + the engine's 5 s prep = the 30 s pause before an extension
 SHORT = 5  # + 5 s prep = 10 s between Tabata intervals
 MARK = "Ištvermė pabaigoje"  # start of this script's goal sentence; a re-run replaces it
 
-BURST = ("Kas 30 s – 10 s visu greičiu (smūgių kruša į kūną), tada vėl kovos tempas. Rankos visą laiką gynyboje, "
-         "iškvėpk su kiekvienu smūgiu, tarp serijų atpalaiduok pečius.")
+GUARD_TIP = "Tarp serijų rankos visada gynyboje, iškvėpk su kiekvienu smūgiu, pečiai atpalaiduoti."
+EASE = ("Pradžioje tai žiauriai sunku – normalu. Jei krenta smūgių kokybė, pailgink poilsį prieš pratęsimus iki 60 s ir "
+        "kas savaitę trumpink: 45 s, 30 s, vėliau 15 s.")
+BURPEES, KNEES = "BURPIAI – max greitis!", "KELIAI – max greitis!"
+LAST30 = "Be sustojimo – max jėga!"
+
+
+def main_time(burst):
+    """His fight (2026-11-20): minute 1 single strikes, 2 series of 3-4, 3 series of 5-6 with the last 30 s non-stop,
+    and 10 s of burpees (or knees) after every minute, as he asked. The app's timer shows each part and beeps."""
+    return [("1-a min: pavieniai smūgiai", 60), (burst, 10), ("2-a min: serijos po 3–4", 60), (burst, 10),
+            ("3-ia min: serijos po 5–6", 30), (LAST30, 30), (burst, 10)]
+
+
+def extension(burst):
+    """A 2-min extension the same way (my assumption, told him): series of 3-4, then 5-6 with the last 30 s non-stop."""
+    return [("1-a min: serijos po 3–4", 60), (burst, 10), ("2-a min: serijos po 5–6", 30), (LAST30, 30), (burst, 10)]
+
 
 # kind -> (main, variant). draw = pose in draw_endurance, copy = existing picture renumbered.
 KINDS = {
@@ -76,28 +95,32 @@ KINDS = {
              focus="Ištvermė: rankos nekrenta net po ilgų smūgių serijų."),
     ),
     "fight": (
-        dict(name="Kova: pagrindinis laikas", reps="3 min", seconds=180, rest=PAUSE, noWeight=True, draw="fight",
-             description="Kovos simuliacija (jei yra maišas – ant maišo): 3 min kovos tempu – smūgių serijos į kūną, "
-                         "keliai, žemi ir aukšti spyriai, judėjimas. " + BURST + " Po jo – pratęsimai, kaip tavo "
-                         "kovose.",
-             focus="Ištvermė: kovos tempas visą pagrindinį laiką."),
-        dict(name="Kova su burpiais", tag="burpiai", reps="3 min", seconds=180, rest=PAUSE, noWeight=True,
-             draw="burpee",
-             description="Kaip pagrindinis laikas – 3 min kovos tempu, bet kiekvienos minutės paskutinės 10 s – "
-                         "burpiai vietoj smūgių krušos. Treniruoja tęsti kovą, kai kojos jau sunkios, o kvėpavimas "
-                         "dažnas. Po jo – pratęsimai.",
-             focus="Ištvermė: viso kūno kondicija kovos tempui išlaikyti."),
+        dict(name="Kova: pagrindinis laikas", reps="3 min + burpiai", seconds=210, segments=main_time(BURPEES),
+             rest=PAUSE, noWeight=True, draw="fight",
+             description="Kovos simuliacija pagal tavo kovos eigą (jei yra maišas – ant maišo). Laikmatis pats rodo, ką "
+                         "daryti, ir pypteli, kai keičiasi: 1-a minutė – pavieniai smūgiai, 10 s burpių max greičiu, "
+                         "2-a minutė – serijos po 3–4, vėl 10 s burpių, 3-ia minutė – serijos po 5–6, paskutinės 30 s – "
+                         "be sustojimo, max jėga ir greitis, ir dar 10 s burpių. Po burpio iškart atgal į stovėseną. "
+                         + GUARD_TIP + " Po pagrindinio laiko – pratęsimai, kaip tavo kovose.",
+             focus="Ištvermė: kovos tempas, net kai kvėpavimas jau dažnas."),
+        dict(name="Kova su kelių smūgiais", tag="keliai", reps="3 min + keliai", seconds=210,
+             segments=main_time(KNEES), rest=PAUSE, noWeight=True, draw="fight_kick",
+             description="Ta pati kovos eiga, bet vietoj burpių – 10 s kelių smūgių pakaitomis max greičiu, rankos "
+                         "gynyboje. Tarp serijų nuolat judi ant pirštų, kad kovos tempą išlaikytų ir kojos. " + GUARD_TIP,
+             focus="Ištvermė: kojos neapsunksta per kovą."),
     ),
     "ext": (
-        dict(name="Kova: pratęsimai", reps="2 min", seconds=120, rest=PAUSE, noWeight=True, draw="fight_ext",
+        dict(name="Kova: pratęsimai", reps="2 min + burpiai", seconds=140, segments=extension(BURPEES), rest=PAUSE,
+             noWeight=True, draw="fight_ext",
              description="Iškart po pagrindinio laiko: pratęsimai po 2 min, prieš kiekvieną 30 s pauzė, kaip laukiant "
-                         "teisėjų sprendimo. Tas pats kovos tempas. " + BURST + " Ilgiausia kova: 3 + 2 + 2 + 2 = "
-                         "9 min. Kai lengva – trumpink pauzę iki 15 s arba krušas daryk kas 20 s.",
+                         "teisėjų sprendimo. Laikmatis rodo eigą: 1-a minutė – serijos po 3–4, 10 s burpių, 2-a "
+                         "minutė – serijos po 5–6, paskutinės 30 s – be sustojimo, ir dar 10 s burpių. " + GUARD_TIP
+                         + " Ilgiausia kova: 3 + 2 + 2 + 2 = 9 min. " + EASE,
              focus="Ištvermė: jėgų užtenka ir pratęsimams, iki 9 min."),
-        dict(name="Pratęsimai su burpiais", tag="burpiai", reps="2 min", seconds=120, rest=PAUSE, noWeight=True,
-             draw="burpee",
-             description="Pratęsimai po 2 min su 30 s pauze, kaip pagrindinėje versijoje, bet kiekvienos minutės "
-                         "paskutinės 10 s – burpiai vietoj smūgių krušos.",
+        dict(name="Pratęsimai su kelių smūgiais", tag="keliai", reps="2 min + keliai", seconds=140,
+             segments=extension(KNEES), rest=PAUSE, noWeight=True, draw="fight_kick",
+             description="Pratęsimai po 2 min su 30 s pauze, ta pati eiga, bet vietoj burpių – 10 s kelių smūgių "
+                         "pakaitomis max greičiu. Tarp serijų nuolat judi ant pirštų. " + EASE,
              focus="Ištvermė: jėgų užtenka ir pratęsimams, iki 9 min."),
     ),
 }
@@ -129,6 +152,8 @@ def build(spec, ex_id, sets, image):
                description=spec["description"], focus=spec["focus"], seconds=spec["seconds"])
     if spec.get("noWeight"):
         out["noWeight"] = True
+    if "segments" in spec:
+        out["segments"] = [dict(label=label, seconds=sec) for label, sec in spec["segments"]]
     return out
 
 
@@ -150,6 +175,7 @@ def check(prog):
                 ids.add(e["id"])
                 assert 1 <= e["sets"] <= 20 and 0 <= e["restSeconds"] <= 900, e["id"]
                 assert "seconds" not in e or 5 <= e["seconds"] <= 900, e["id"]
+                assert "segments" not in e or sum(p["seconds"] for p in e["segments"]) == e["seconds"], e["id"]
                 assert e.get("sides", 1) in (1, 2), e["id"]
                 if e.get("bonusSets"):
                     assert e["bonusSets"] < e["sets"] and e.get("startSide") in ("left", "right"), e["id"]
