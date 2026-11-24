@@ -132,7 +132,7 @@ C = [
                   newv("C", 7, "Overhead Dumbbell Triceps Extension", "virš galvos", 3, "10–12", 60,
                        "Abiem rankom laikyk vieną hantelį virš galvos. Alkūnės į viršų ir arti galvos: lenk rankas, kol hantelis už galvos, tada tiesk aukštyn. Alkūnės nejuda, pilvas įtemptas.",
                        "Ilgoji tricepso galva: stipresnis smūgio užbaigimas.")),
-    with_variants(reuse("B9", "C", 8, 3, "45–60 s", 45), reuse("B9v", "C", 8, 3, "30–45 s / pusė", 45, True)),
+    with_variants(reuse("B9", "C", 8, 3, "45–60 s", 45), reuse("B9v", "C", 8, 3, "40 s / pusė", 45, True)),
 ]
 
 D = [
@@ -149,6 +149,21 @@ D = [
     with_variants(reuse("A3v", "D", 6, 3, "8 / koja", 75), reuse("B10v", "D", 6, 3, "5 / koja", 45, True)),
     with_variants(reuse("C7", "D", 7, 3, "10–12 / pusė", 60), reuse("C7v", "D", 7, 3, "10 / pusė", 60, True)),
     with_variants(reuse("A8", "D", 8, 3, "10 / pusė", 50), reuse("A8v", "D", 8, 3, "10 / pusė", 50, True)),
+    # 2026-11-24, his ask: knee holds in the mawashi geri and uchi positions. The left leg is weaker, so it goes
+    # first and gets the extra set; the timer parts tell him when to change position.
+    with_variants(new("D", 9, "Mawashi + Uchi Knee Hold", 3, "20 + 20 s / koja", 45,
+        "Stovėk ant vienos kojos, rankos gynyboje. 20 s laikyk kelią iškeltą į šoną klubo aukštyje ir pasuktą kaip "
+        "mawashi geri, blauzda lygiagreti grindims. Tada 20 s – kelias priekyje, patrauktas skersai kūno (uchi). "
+        "Kelias kuo aukščiau, liemuo tiesus. Per sunku – lengvai prisilaikyk sienos.",
+        "Aukštesni spyriai: klubo jėga spyrio pozicijose. Kairė silpnesnė, todėl pirma ir gauna papildomą setą.",
+        seconds=40, sides=2, startSide="left", bonusSets=1, noWeight=True,
+        segments=[dict(label="Mawashi geri pozicija", seconds=20), dict(label="Uchi pozicija", seconds=20)]),
+                  newv("D", 9, "Mawashi + Uchi Knee Raises", "dinamiškai", 3, "5 + 5 / koja", 45,
+                       "Stovėk ant vienos kojos, rankos gynyboje. 5 kartus kelk kelią į šoną ir pasuk kaip mawashi "
+                       "geri, viršuje 2 s sulaikyk ir lėtai nuleisk. Tada 5 kartus kelk kelią priekyje skersai kūno "
+                       "(uchi), viršuje irgi 2 s.",
+                       "Klubo jėga ir valdymas spyrio pozicijose, kairė koja pirma.", startSide="left", bonusSets=1,
+                       noWeight=True)),
 ]
 
 UPPER, LOWER = stretches_of["B"], stretches_of["A"]

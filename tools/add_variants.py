@@ -32,9 +32,9 @@ V = {
     "A9": dict(name="Weighted Crunch", tag="su svoriu", sets=3, reps="12–15", restSeconds=45,
                description="Kaip įprastas crunch, tik ant krūtinės laikyk svorio diską ar hantelį. Kelk pečius kontroliuotai ir lėtai leiskis.",
                focus="Trumpa amplitudė, kontrolė."),
-    "B1": dict(name="Banded Rotational Punch", tag="su guma", sets=4, reps="5 / pusė", restSeconds=75,
-               description="Gumą pritvirtink už nugaros peties aukštyje. Kovinė stovėsena: sprogstamai smūgiuok į priekį sukdamas galinę pėdą ir klubus, tada kontroliuotai grįžk.",
-               focus="Jėga iš pėdos ir klubų, greitas smūgis."),
+    "B1": dict(name="Landmine Rotation", tag="landmine", sets=4, reps="5 / pusė", restSeconds=75,
+               description="Vienas štangos galas įremtas į kampą ar landmine laikiklį, kitą laikyk abiem rankomis prieš save. Sukdamas klubus ir galinę pėdą lanku nuleisk galą prie vieno klubo, tada per viršų – prie kito. Rankos beveik tiesios, judesys iš klubų, ne iš rankų.",
+               focus="Sukimo jėga iš pėdų ir klubų, kaip smūgyje."),  # 2026-11-24: was the banded rotational punch
     "B3": dict(name="Band-Assisted Pull-Ups", tag="su guma", sets=4, reps="8–10", restSeconds=90,
                description="Gumos kilpą permesk per skersinį ir perkišk per save, į apačią įstatyk kelį ar pėdą. Prisitrauk iki smakro virš skersinio ir lėtai, pilnai nusileisk. Guma leidžia daugiau kartojimų nei paprasti prisitraukimai: kai lengvai padarai 10, imk plonesnę gumą.",
                focus="Daugiau kartojimų nugarai: mentės žemyn, be siūbavimo."),
@@ -53,7 +53,7 @@ V = {
     "B8": dict(name="Low-to-High Chop (kettlebell)", tag="iš apačios į viršų", sets=3, reps="10 / pusė", restSeconds=60,
                description="Kettlebell abiem rankomis prie išorinės kairio kelio pusės, lengvas pritūpimas. Sukdamas klubus ir liemenį kelk jį įstrižai per kūną virš dešinio peties, galinė pėda pasisuka kartu. Lėtai grąžink tuo pačiu keliu.",
                focus="Rotacija iš klubų, rankos tik laiko svorį."),
-    "B9": dict(name="Side Plank", tag="šoninė", sets=3, reps="30–45 s / pusė", restSeconds=45,
+    "B9": dict(name="Side Plank", tag="šoninė", sets=3, reps="40 s / pusė", restSeconds=45, seconds=40, sides=2,
                description="Atsiremk į dilbį ir pėdos šoną, kūnas tiesus nuo galvos iki kulnų. Klubai aukštai, neleisk jiems nukristi.",
                focus="Tiesi linija, įtemptas šonas."),
     "C1": dict(name="Dumbbell Jump Squat", tag="su hanteliais", sets=4, reps="3", restSeconds=75,
@@ -91,6 +91,7 @@ for day in data["days"]:
         variant = {"id": ex["id"] + "v", "name": v["name"], "tag": v["tag"], "sets": v["sets"], "reps": v["reps"],
                    "restSeconds": v["restSeconds"], "image": f"assets/{day['id']}_{n}v.webp",
                    "description": v["description"], "focus": v["focus"]}
+        variant.update({k: v[k] for k in ("seconds", "sides") if k in v})  # timed variants (Side Plank)
         ex["variants"] = [variant]
         added += 1
 json.dump(data, open(PATH, "w", encoding="utf-8"), ensure_ascii=False, indent=2)

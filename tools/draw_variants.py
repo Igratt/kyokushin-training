@@ -349,23 +349,36 @@ def a9v():
 
 # ------------------------------------------------------------------ B day
 def b1v():
+    """Landmine rotation from the front (2026-11-24; replaced the banded rotational punch, whose band rubbed his thumb
+    and shoulders). The bar runs from the anchor on the floor in front of the feet to both hands, which swing from one
+    hip over the top to the other while the back heel turns."""
     pic, acc = Pic(), ACCENT["B"]
-    for i in range(2):
+    piv = (CX, 298)                                           # anchor between the feet
+    for i, sd in enumerate((-1, 1)):                          # sd: the side the hands are on
         standing_view(pic, i)
-        post(pic, 12, 110)
-        anchor = (12, 156)
-        pulley(pic, anchor)
-        if i == 0:
-            j = side((124, 206), (156, 292), (92, 292), (150, 140), (140, 146), torso_ang=84, head_ang=80,
-                     knee=(20, 0), elbow=(0, 18), f_elbow=(0, 18))
-        else:
-            j = side((128, 206), (158, 292), (100, 284), (142, 142), (214, 148), torso_ang=80, head_ang=78,
-                     knee=(20, 0), f_toe=-40, elbow=(0, 18), f_elbow=(0, -6))
-        band(pic, [anchor, (60, 150), j["f_hand"]])
-        side_figure(pic, j)
+        sh = [(CX + sd * 16, 158), (CX - sd * 8, 154)]        # near, far: the turned torso looks narrow
+        hands = [(CX + sd * 36, 190), (CX + sd * 32, 194)]
+        ankles = [(CX + sd * 24, 292), (CX - sd * 22, 287)]   # front foot flat, back heel up
+        knees = [(sd * 10, 0), (sd * 8, 0)]
+        elbows = [(-sd * 10, 10), (sd * 2, 8)]   # near elbow tucked at the hip
+        if sd > 0:                                            # front() takes the viewer's left side first
+            for v in (sh, hands, ankles, knees, elbows):
+                v.reverse()
+        rect(pic, piv[0] - 12, piv[1] - 7, piv[0] + 12, piv[1] + 6, EQUIP_HI)
+        f = front(pic, (CX - 12, 206), (CX + 12, 206), sh[0], sh[1], (CX + sd * 4, 133), ankles[0], ankles[1],
+                  hands[0], hands[1], l_knee=knees[0], r_knee=knees[1], l_elbow=elbows[0], r_elbow=elbows[1])
+        grip = ((f["lh"][0] + f["rh"][0]) / 2, (f["lh"][1] + f["rh"][1]) / 2)
+        dx, dy = grip[0] - piv[0], grip[1] - piv[1]
+        n = (dx * dx + dy * dy) ** 0.5
+        u = (dx / n, dy / n)
+        tip = (grip[0] + u[0] * 12, grip[1] + u[1] * 12)
+        pic.capsule(piv, tip, 4.5, GREY)
+        pic.capsule((grip[0] - u[0] * 5, grip[1] - u[1] * 5), tip, 6.5, EQUIP_HI)
+        for h in (f["lh"], f["rh"]):
+            pic.dot(h, R_HAND + 0.5, NEAR)
         if i:
-            pic.arrow((150, 118), (186, 112), (222, 126), acc)
-        pic.caption("1 · Guma už nugaros" if not i else "2 · Sprogstamas smūgis")
+            pic.arrow((CX - 54, 178), (CX, 34), (CX + 56, 172), acc)
+        pic.caption("1 · Galas prie vieno klubo" if not i else "2 · Lanku per viršų – prie kito")
     pic.badge(1)
     pic.save("B_1v.webp")
 

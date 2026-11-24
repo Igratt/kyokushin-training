@@ -75,11 +75,11 @@ KINDS = {
                          "gynyba su tais pačiais hanteliais, kumščiai prie skruostų. Alkūnės iki galo netiesink, pečiai "
                          "žemyn, iškvėpk su kiekvienu smūgiu. Kai lengva – sunkesni hanteliai (iki 2 kg) arba +15 s.",
              focus="Ištvermė: rankos ištveria kovos tempą ir po to dar laiko gynybą."),
-        dict(name="Banded Punch-Outs", tag="su guma", reps="90 s", seconds=90, noWeight=True, copy="P_B1v.webp",
-             description="Guma pritvirtinta už nugaros krūtinės aukštyje, kilpos rankose. Kol laikmatis rodo daugiau "
-                         "nei 30 s – greiti tiesūs smūgiai prieš gumą be sustojimo, paskutinės 30 s – gynyba, guma "
-                         "įtempta. Pečiai žemyn, iškvėpk su kiekvienu smūgiu.",
-             focus="Ištvermė: smūgiai nesilpnėja kovos gale, gynyba nekrenta."),
+        dict(name="Plate Press-Outs", tag="su disku", reps="90 s", seconds=90, noWeight=True, draw="plate_press",
+             description="Laikyk 2,5–5 kg diską abiem rankomis prie krūtinės. Kol laikmatis rodo daugiau nei 30 s – "
+                         "greitai išstumk diską į priekį ir grąžink be sustojimo, paskutinės 30 s – laikyk jį prie "
+                         "smakro kaip gynybą. Pečiai žemyn, iškvėpk su kiekvienu išstūmimu.",
+             focus="Ištvermė: rankos ir pečiai nesilpsta kovos gale, gynyba nekrenta."),  # 2026-11-24: was with a band
     ),
     "guard": (
         dict(name="Guard Hold (sunkus)", reps="60 s", seconds=60, draw="guard",

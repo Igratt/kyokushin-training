@@ -226,25 +226,18 @@ def pa5v():
 
 
 def pb1v():
-    """Banded speed punches: band from a post behind at chest height to the punching hand."""
+    """Speed punches with light dumbbells (2026-11-24; the band version rubbed his thumb and shoulders)."""
+    import draw_endurance as de  # it imports this module, so only here
     pic, acc = Pic(), ACC["B"]
     for i in range(2):
         standing_view(pic, i)
-        post(pic, 14, 120)
-        anchor = (14, 150)
-        pulley(pic, anchor)
         if i == 0:
-            j = side((118, 206), (148, 290), (90, 290), (198, 146), (150, 150), torso_ang=84, head_ang=82,
-                     knee=(18, 0), elbow=(0, 16), f_elbow=(0, 18))
-            band(pic, [anchor, (80, 152), j["f_hand"]])
-            pic.caption("1 · Guma už nugaros, rankoje")
+            de.with_dumbbells(pic, de.stance(), acc)
+            pic.caption("1 · Gynyba, lengvi hanteliai")
         else:
-            j = side((120, 206), (150, 290), (92, 290), (150, 150), (200, 144), torso_ang=82, head_ang=80,
-                     knee=(18, 0), elbow=(0, 18), f_elbow=(0, 6))
-            band(pic, [anchor, (100, 148), j["f_hand"]])
-            pic.caption("2 · Tiesūs smūgiai prieš gumą")
-        side_figure(pic, j)
-        pic.arrow((168, 122), (196, 116), (226, 130), acc)
+            de.with_dumbbells(pic, de.stance(((178, 146), de.GUARD[1]), elbow=(0, 6)), acc)
+            pic.arrow((168, 120), (196, 114), (222, 126), acc)
+            pic.caption("2 · 10 s greitų tiesių smūgių")
     pic.badge(1)
     pic.save("P_B1v.webp")
 

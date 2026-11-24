@@ -5,9 +5,9 @@ pose is reused by fight_burst).
 Two panels each, same mannequin style. Day colour, corner number and file name are parameters, because the same
 picture sits at different positions in the three programs. Called by tools/add_endurance.py (no CLI of its own).
 """
-from draw_exercises import ACCENT, Pic, bezier, go, side_figure
+from draw_exercises import ACCENT, NEAR, R_HAND, W_FORE, Pic, bezier, go, side_figure
 from draw_more import db_line
-from draw_variants import CX, front, pushup, shadow, side, standing_view
+from draw_variants import CX, ellipse, front, pushup, shadow, side, standing_view
 
 ACC = dict(ACCENT, D=(168, 85, 247))
 
@@ -70,6 +70,34 @@ def punch_out(day, n, name):
         else:
             with_dumbbells(pic, stance(), acc)
             pic.caption("2 · Paskutinės 30 s – gynyba")
+    pic.badge(n)
+    pic.save(name)
+
+
+def plate(pic, c, acc):
+    """A weight plate held upright in both hands, seen from the side and turned a little toward the viewer."""
+    ellipse(pic, c, 9, 26, acc)
+    ellipse(pic, c, 6, 20, tuple(int(v * 0.7) for v in acc))
+    ellipse(pic, c, 2.5, 5, (24, 30, 52))
+
+
+def plate_press(day, n, name):
+    """Plate press-outs (2026-11-24; replaced the banded punch-outs, whose band rubbed his thumb and shoulders): a plate
+    in both hands pushed straight out and back fast, then held at the chin for the last 30 s."""
+    pic, acc = Pic(), ACC[day]
+    for i in range(2):
+        standing_view(pic, i)
+        if i == 0:
+            j, c = stance(((176, 152), (172, 154)), elbow=(0, 4), f_elbow=(0, 4)), (179, 153)
+        else:
+            j, c = stance(((148, 150), (144, 152))), (151, 150)
+        side_figure(pic, j)
+        plate(pic, c, acc)
+        pic.capsule(j["n_elbow"], j["n_hand"], W_FORE, NEAR)  # the near hand grips the rim in front of the plate
+        pic.dot(j["n_hand"], R_HAND, NEAR)
+        if i == 0:
+            pic.arrow((160, 112), (190, 104), (218, 118), acc)
+        pic.caption("1 · 60 s greitų išstūmimų" if i == 0 else "2 · Paskutinės 30 s – prie smakro")
     pic.badge(n)
     pic.save(name)
 
@@ -207,7 +235,7 @@ def climber(day, n, name):
     pic.save(name)
 
 
-POSES = dict(guard=guard, guard_punch=guard_punch, punch_out=punch_out, shadow=shadow_rounds,
+POSES = dict(guard=guard, guard_punch=guard_punch, punch_out=punch_out, plate_press=plate_press, shadow=shadow_rounds,
              fight=lambda d, n, f: fight_burst(d, n, f, "1 · Minutė kovos pagal eigą", "burpee"),
              fight_ext=lambda d, n, f: fight_burst(d, n, f, "1 · Po pauzės – minutė kovos", "burpee"),
              fight_kick=lambda d, n, f: fight_burst(d, n, f, "1 · Minutė kovos pagal eigą", "knee"),

@@ -438,14 +438,14 @@
           "variants": [
             {
               "id": "PB1v",
-              "name": "Banded Speed Punches",
-              "tag": "su guma",
+              "name": "Dumbbell Speed Punches",
+              "tag": "lengvi hanteliai",
               "sets": 4,
               "reps": "10 s",
               "restSeconds": 50,
               "image": "assets/P_B1v.webp",
-              "description": "Guma pritvirtinta už nugaros krūtinės aukštyje, kilpos rankose. Kovinė stovėsena: 10 s tiesių smūgių kuo greičiau prieš gumą, kiekvienas grįžta į gynybą.",
-              "focus": "Smūgių greitis prieš pasipriešinimą ir greitesnis rankos grąžinimas.",
+              "description": "Lengvi hanteliai (0,5–1 kg) rankose, kovinė stovėsena. 10 s tiesių smūgių kuo greičiau, kiekvienas grįžta į gynybą. Alkūnės smūgio gale neužrakink, pečiai žemyn.",
+              "focus": "Smūgių greitis su svoriu ir greitesnis rankos grąžinimas.",
               "seconds": 10
             }
           ]
@@ -549,15 +549,14 @@
         },
         {
           "id": "PB6",
-          "name": "Banded Rotational Punch",
-          "tag": "su guma",
+          "name": "Landmine Rotation",
+          "tag": "landmine",
           "image": "assets/P_B6.webp",
-          "description": "Gumą pritvirtink už nugaros peties aukštyje. Kovinė stovėsena: sprogstamai smūgiuok į priekį sukdamas galinę pėdą ir klubus, tada kontroliuotai grįžk.",
-          "focus": "Smūgio greitis prieš gumą: kairė silpnesnė, todėl pirma.",
-          "sets": 4,
-          "reps": "8 / ranka",
+          "description": "Vienas štangos galas įremtas į kampą ar landmine laikiklį, kitą laikyk abiem rankomis prieš save. Sukdamas klubus ir galinę pėdą lanku nuleisk galą prie vieno klubo, tada per viršų – prie kito. Rankos beveik tiesios, judesys iš klubų, ne iš rankų.",
+          "focus": "Sukimo galia smūgiui: sprogstamai iš pėdų ir klubų.",
+          "sets": 3,
+          "reps": "6 / pusė",
           "restSeconds": 60,
-          "startSide": "left",
           "variants": [
             {
               "id": "PB6v",
@@ -570,8 +569,7 @@
               "reps": "8 / pusė",
               "restSeconds": 60
             }
-          ],
-          "bonusSets": 1
+          ]
         },
         {
           "id": "PB7",
@@ -609,14 +607,14 @@
           "variants": [
             {
               "id": "PB8v",
-              "name": "Banded Punch-Outs",
-              "tag": "su guma",
+              "name": "Plate Press-Outs",
+              "tag": "su disku",
               "sets": 3,
               "reps": "90 s",
               "restSeconds": 30,
               "image": "assets/P_B8v.webp",
-              "description": "Guma pritvirtinta už nugaros krūtinės aukštyje, kilpos rankose. Kol laikmatis rodo daugiau nei 30 s – greiti tiesūs smūgiai prieš gumą be sustojimo, paskutinės 30 s – gynyba, guma įtempta. Pečiai žemyn, iškvėpk su kiekvienu smūgiu.",
-              "focus": "Ištvermė: smūgiai nesilpnėja kovos gale, gynyba nekrenta.",
+              "description": "Laikyk 2,5–5 kg diską abiem rankomis prie krūtinės. Kol laikmatis rodo daugiau nei 30 s – greitai išstumk diską į priekį ir grąžink be sustojimo, paskutinės 30 s – laikyk jį prie smakro kaip gynybą. Pečiai žemyn, iškvėpk su kiekvienu išstūmimu.",
+              "focus": "Ištvermė: rankos ir pečiai nesilpsta kovos gale, gynyba nekrenta.",
               "seconds": 90,
               "noWeight": true
             }

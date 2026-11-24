@@ -112,9 +112,9 @@ B = [
         "Kovinė stovėsena, rankos gynyboje. 10 s tiesių smūgių (kairė, dešinė) kuo greičiau, kiekvienas smūgis "
         "grįžta į gynybą. Pečiai atsipalaidavę, kvėpuok trumpai.",
         "Smūgių greitis ir rankų grąžinimas.", seconds=10),
-                  newv("B", 1, "Banded Speed Punches", "su guma", 4, "10 s", 50,
-                       "Guma pritvirtinta už nugaros krūtinės aukštyje, kilpos rankose. Kovinė stovėsena: 10 s tiesių smūgių kuo greičiau prieš gumą, kiekvienas grįžta į gynybą.",
-                       "Smūgių greitis prieš pasipriešinimą ir greitesnis rankos grąžinimas.", seconds=10)),
+                  newv("B", 1, "Dumbbell Speed Punches", "lengvi hanteliai", 4, "10 s", 50,
+                       "Lengvi hanteliai (0,5–1 kg) rankose, kovinė stovėsena. 10 s tiesių smūgių kuo greičiau, kiekvienas grįžta į gynybą. Alkūnės smūgio gale neužrakink, pečiai žemyn.",
+                       "Smūgių greitis su svoriu ir greitesnis rankos grąžinimas.", seconds=10)),  # 2026-11-24: was with a band
     with_variants(reuse("B1", "B", 2, 4, "4 / pusė", 90),
                   reuse("C6v", "B", 2, 4, "4 / pusė", 90, True)),
     with_variants(new("B", 3, "Medicine Ball Shot Put", 3, "4 / ranka", 75,
@@ -132,8 +132,8 @@ B = [
                       + FAST,
           focus="Smūgio galia su svoriu: pėda, klubai, ranka viena grandine.", startSide="right"),
                   reuse("B4", "B", 5, 3, "6 / ranka", 90, True)),
-    with_variants(reuse("B1v", "B", 6, 3, "8 / ranka", 60, startSide="left",
-          focus="Smūgio greitis prieš gumą: kairė silpnesnė, todėl pirma."),
+    with_variants(reuse("B1v", "B", 6, 3, "6 / pusė", 60,
+          focus="Sukimo galia smūgiui: sprogstamai iš pėdų ir klubų."),
                   reuse("B8v", "B", 6, 3, "8 / pusė", 60, True)),
     with_variants(reuse("B3", "B", 7, 3, "4", 120, name="Explosive Pull-Ups",
                         description="Iš kabėjimo trauk sprogstamai, kuo greičiau smakras virš skersinio, "

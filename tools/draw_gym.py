@@ -6,8 +6,8 @@ Pictures reused from the Kyokushin program are copied with the right number by t
 import math
 import sys
 
-from draw_exercises import Pic, dumbbell_side, go, side_figure
-from draw_variants import CX, EQUIP, EQUIP_HI, GREY, arc_pts, cable, db_end, limb, lying_view, pulley, rect, side, stand_front, standing_view
+from draw_exercises import FAR, NEAR, W_FOOT, W_SHIN, W_THIGH, Pic, dumbbell_side, go, side_figure
+from draw_variants import CX, EQUIP, EQUIP_HI, GREY, arc_pts, cable, db_end, front, limb, lying_view, pulley, rect, side, stand_front, standing_view
 
 ACC = {"A": (59, 130, 246), "B": (249, 115, 22), "C": (34, 197, 94), "D": (168, 85, 247)}
 
@@ -193,7 +193,47 @@ def gd3():
     pic.save("G_D3.webp")
 
 
-ALL = dict(ga4=ga4, ga5=ga5, ga6=ga6, ga7=ga7, gc2=gc2, gc7=gc7, gd3=gd3)
+def knee_holds(name, caps, arrows):
+    """One-leg stance from the front, the weaker left leg working (on the viewer's right). 1: the mawashi geri chamber,
+    knee forward and out at hip height, turned over, the shin flat out to the side. 2: the uchi position, knee high in
+    front and across the body, the shin hanging. The working leg is drawn again on top: in 2 it is in front of the body."""
+    pic, acc = Pic(), ACC["D"]
+    for i in range(2):
+        standing_view(pic, i)
+        if i == 0:   # lean away from the knee, the working hip a little higher
+            l_hip, r_hip, l_sh, r_sh, head = (CX - 12, 208), (CX + 12, 202), (CX - 34, 156), (CX + 20, 150), (CX - 10, 132)
+            knee, ankle, toe = (CX + 38, 184), (CX + 78, 188), (CX + 89, 190)
+        else:
+            l_hip, r_hip, l_sh, r_sh, head = (CX - 12, 207), (CX + 12, 204), (CX - 30, 155), (CX + 24, 152), (CX - 4, 132)
+            knee, ankle, toe = (CX - 8, 186), (CX - 2, 228), (CX + 1, 239)
+        foot = (CX - 16, 292)
+        front(pic, l_hip, r_hip, l_sh, r_sh, head, foot, ankle, (head[0] - 12, head[1] + 8), (head[0] + 12, head[1] + 4),
+              l_knee=(-4, 0), l_elbow=(-8, 16), r_elbow=(8, 16), r_knee_pt=knee, feet=False)
+        pic.capsule((foot[0] + 2, foot[1] + 4), (foot[0] - 11, foot[1] + 4), W_FOOT + 1, FAR)
+        pic.capsule(r_hip, knee, W_THIGH + 1, NEAR)
+        pic.capsule(knee, ankle, W_SHIN + 1, NEAR)
+        pic.capsule(ankle, toe, W_FOOT + 1, NEAR)
+        if arrows:
+            if i == 0:
+                pic.arrow((CX + 40, 262), (CX + 72, 250), (CX + 66, 214), acc)
+            else:
+                pic.arrow((CX + 34, 262), (CX + 42, 226), (CX + 22, 198), acc)
+        pic.caption(caps[i])
+    pic.badge(9)
+    pic.save(name)
+
+
+def gd9():
+    """Knee holds, 20 s in each position (2026-11-24, his ask)."""
+    knee_holds("G_D9.webp", ("1 · Mawashi: kelias į šoną, 20 s", "2 · Uchi: kelias skersai, 20 s"), False)
+
+
+def gd9v():
+    """The same two positions as raises with a 2 s pause at the top."""
+    knee_holds("G_D9v.webp", ("1 · Kelk į šoną, 2 s viršuje", "2 · Kelk skersai, 2 s viršuje"), True)
+
+
+ALL = dict(ga4=ga4, ga5=ga5, ga6=ga6, ga7=ga7, gc2=gc2, gc7=gc7, gd3=gd3, gd9=gd9, gd9v=gd9v)
 
 if __name__ == "__main__":
     for key in sys.argv[1:] or list(ALL):
