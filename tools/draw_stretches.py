@@ -5,7 +5,7 @@ Usage:  py tools/draw_stretches.py [key ...]     (no keys = all)
 import sys
 
 from draw_exercises import FAR, NEAR, R_HAND, TORSO, W, W_FOOT, W_FORE, W_UPPER, Pic, centered, go, side_figure
-from draw_variants import EQUIP, along, front, limb, rect
+from draw_variants import EQUIP, along, bench, front, limb, rect
 
 CX = W / 2
 TEAL = (45, 212, 191)
@@ -250,8 +250,33 @@ def cobra():
     finish(pic, "Klubai prie grindų, krūtinė aukštyn", "cobra")
 
 
+def db_chest():
+    """Dumbbell chest stretch on a flat bench (his ask, 2026-11-27): the arms out to the sides, the dumbbells pull them
+    below the bench. Side view, head left (as G_A4); the arms are drawn shorter because they hang out sideways."""
+    from draw_more import db_line  # here, not at the top: draw_more imports this module
+
+    pic = Pic()
+    pic.full(284)
+    pic.view(292, 284, 1.8)
+    dx = 135
+    bench(pic, 36 + dx, 160 + dx, 250)
+    hip, sh, f_sh = (136 + dx, 238), (82 + dx, 238), (79 + dx, 240)
+    n_knee, n_ankle = limb(hip, (194 + dx, 290), 44, 44, (184 + dx, 226))
+    f_knee, f_ankle = limb(hip, (188 + dx, 291), 44, 44, (178 + dx, 228))
+    n_elbow, n_hand = limb(sh, (90 + dx, 274), 20, 18, (78 + dx, 256))
+    f_elbow, f_hand = limb(f_sh, (86 + dx, 271), 19, 16, (75 + dx, 254))
+    j = dict(hip=hip, sh=sh, head=(62 + dx, 237), n_knee=n_knee, n_ankle=n_ankle, n_toe=go(n_ankle, 0, 18),
+             f_knee=f_knee, f_ankle=f_ankle, f_toe=go(f_ankle, 0, 18), f_sh=f_sh, n_elbow=n_elbow, n_hand=n_hand,
+             f_elbow=f_elbow, f_hand=f_hand)
+    db_line(pic, f_hand, 0, TEAL)
+    side_figure(pic, j)
+    db_line(pic, n_hand, 0, TEAL)
+    pic.arrow((115 + dx, 263), (120 + dx, 274), (116 + dx, 285), TEAL, 3)
+    finish(pic, "Rankos į šonus, hanteliai tempia žemyn", "db_chest")
+
+
 ALL = dict(hip_flexor=hip_flexor, pigeon=pigeon, hamstring=hamstring, butterfly=butterfly, straddle=straddle, calf=calf,
-           doorway=doorway, cross_body=cross_body, triceps=triceps, thread=thread, child=child, wrist=wrist, wgs=wgs, cobra=cobra)
+           doorway=doorway, cross_body=cross_body, triceps=triceps, thread=thread, child=child, wrist=wrist, wgs=wgs, cobra=cobra, db_chest=db_chest)
 
 if __name__ == "__main__":
     for key in sys.argv[1:] or list(ALL):

@@ -766,13 +766,13 @@
       ],
       "stretches": [
         {
-          "id": "S_doorway",
-          "name": "Doorway Chest Stretch",
-          "hold": 45,
+          "id": "S_db_chest",
+          "name": "Dumbbell Chest Stretch",
+          "hold": 120,
           "sides": 1,
-          "image": "assets/S_doorway.webp",
-          "description": "Dilbius padėk ant durų staktos, alkūnės pečių aukštyje. Ženk žingsnį pirmyn, kol pajusi tempimą krūtinėje.",
-          "focus": "krūtinei po spaudimų, laisvesniam smūgiui"
+          "image": "assets/S_db_chest.webp",
+          "description": "Prieš paleisdamas laikmatį atsisėsk ant suolo galo, lengvi hanteliai (pradžiai ~4–6 kg) ant šlaunų. Atsigulk, iškelk hantelius virš krūtinės ir, alkūnes truputį sulenkęs, išskėsk rankas į šonus, šiek tiek žemiau pečių. Tada atsipalaiduok ir leisk hanteliams nusverti rankas žemyn, kol krūtinėje gerai tempia. Mentės prispaustos prie suolo, kvėpuok ramiai. Jei gelia peties priekyje, o ne tempia krūtinę, baik. Baigdamas sulenk alkūnes ir pakelk hantelius prie krūtinės.",
+          "focus": "krūtinei ir pečių priekiui po spaudimų ir smūgių: laisvesnis smūgis, pečiai nesisuka į priekį"
         },
         {
           "id": "S_cross_body",
@@ -1240,6 +1240,15 @@
         }
       ],
       "stretches": [
+        {
+          "id": "S_db_chest",
+          "name": "Dumbbell Chest Stretch",
+          "hold": 120,
+          "sides": 1,
+          "image": "assets/S_db_chest.webp",
+          "description": "Prieš paleisdamas laikmatį atsisėsk ant suolo galo, lengvi hanteliai (pradžiai ~4–6 kg) ant šlaunų. Atsigulk, iškelk hantelius virš krūtinės ir, alkūnes truputį sulenkęs, išskėsk rankas į šonus, šiek tiek žemiau pečių. Tada atsipalaiduok ir leisk hanteliams nusverti rankas žemyn, kol krūtinėje gerai tempia. Mentės prispaustos prie suolo, kvėpuok ramiai. Jei gelia peties priekyje, o ne tempia krūtinę, baik. Baigdamas sulenk alkūnes ir pakelk hantelius prie krūtinės.",
+          "focus": "krūtinei ir pečių priekiui po spaudimų ir smūgių: laisvesnis smūgis, pečiai nesisuka į priekį"
+        },
         {
           "id": "S_wgs",
           "name": "World's Greatest Stretch",

@@ -3,6 +3,8 @@
 A day: hips, hamstrings, adductors, calves (kicks, stances, after squats and jumps).
 B day: chest, shoulders, triceps, thoracic rotation, wrists (punches, after presses and pulls).
 C day: whole body.
+Dumbbell Chest Stretch, 2 min (his ask, 2026-11-27): leads the B list (instead of the doorway stretch) and the C list.
+make_hard_gym / make_karate_power copy these lists: hard-gym A + C, karate-power B + C.
 """
 import json
 
@@ -30,6 +32,14 @@ S = {
     "doorway": dict(name="Doorway Chest Stretch", sides=1,
                     description="Dilbius padėk ant durų staktos, alkūnės pečių aukštyje. Ženk žingsnį pirmyn, kol pajusi tempimą krūtinėje.",
                     focus="krūtinei po spaudimų, laisvesniam smūgiui"),
+    "db_chest": dict(name="Dumbbell Chest Stretch", sides=1,
+                     description="Prieš paleisdamas laikmatį atsisėsk ant suolo galo, lengvi hanteliai (pradžiai ~4–6 kg) "
+                                 "ant šlaunų. Atsigulk, iškelk hantelius virš krūtinės ir, alkūnes truputį sulenkęs, išskėsk "
+                                 "rankas į šonus, šiek tiek žemiau pečių. Tada atsipalaiduok ir leisk hanteliams nusverti "
+                                 "rankas žemyn, kol krūtinėje gerai tempia. Mentės prispaustos prie suolo, kvėpuok ramiai. "
+                                 "Jei gelia peties priekyje, o ne tempia krūtinę, baik. Baigdamas sulenk alkūnes ir pakelk "
+                                 "hantelius prie krūtinės.",
+                     focus="krūtinei ir pečių priekiui po spaudimų ir smūgių: laisvesnis smūgis, pečiai nesisuka į priekį"),
     "cross_body": dict(name="Cross-Body Shoulder Stretch", sides=2,
                        description="Ištiestą ranką trauk per krūtinę, kita ranka prispausk ją ties alkūne. Petys žemai, ne prie ausies.",
                        focus="pečiams ir galinei deltai po traukimų"),
@@ -55,8 +65,9 @@ S = {
 
 DAYS = {
     "A": [("hip_flexor", 45), ("pigeon", 45), ("hamstring", 45), ("butterfly", 45), ("straddle", 45), ("calf", 30)],
-    "B": [("doorway", 45), ("cross_body", 30), ("triceps", 30), ("thread", 30), ("child", 45), ("wrist", 30)],
-    "C": [("wgs", 30), ("hip_flexor", 30), ("pigeon", 30), ("hamstring", 45), ("cobra", 30), ("child", 45), ("straddle", 45)],
+    "B": [("db_chest", 120), ("cross_body", 30), ("triceps", 30), ("thread", 30), ("child", 45), ("wrist", 30)],
+    "C": [("db_chest", 120), ("wgs", 30), ("hip_flexor", 30), ("pigeon", 30), ("hamstring", 45), ("cobra", 30),
+          ("child", 45), ("straddle", 45)],
 }
 
 data = json.load(open(PATH, encoding="utf-8"))
