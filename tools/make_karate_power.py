@@ -172,8 +172,8 @@ C = [
 
 program = {
     "id": "karate-power",
-    "programName": "Karatė: sprogstamumas",
-    "focus": "Greitis, sprogstamumas, reakcija",
+    "programName": "Karate Explosive",
+    "focus": "Lengvai ir greitai, be masės, 3 d./sav.",
     "goal": "Tik karatė naudai, ne raumenų masei: 3 dienos po ~50 min. Mažai kartojimų maksimaliu greičiu ir "
             "ilgas poilsis, kad kiekvienas kartojimas būtų greitas. Smūgių ir spyrių greitis su guma, reakcijos "
             "startai, šuoliai, metimai ir greiti kėlimai. Kai greitis krenta, setą baik. Silpnesnė pusė pirma ir "

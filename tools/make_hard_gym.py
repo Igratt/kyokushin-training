@@ -169,8 +169,8 @@ D = [
 UPPER, LOWER = stretches_of["B"], stretches_of["A"]
 program = {
     "id": "hard-gym",
-    "programName": "Hard Gym: jėga + masė",
-    "focus": "Sporto salė: jėga + masė",
+    "programName": "Hard Gym 4x",
+    "focus": "Karatė pertraukai, 4 d./sav.",
     "goal": "Karatė pertraukai: 4 dienos, viršus ir apačia po du kartus. Sunkūs pagrindiniai kėlimai po 4–6 kartus, "
             "pagalbiniai po 8–15 ir po vieną sprogstamą pratimą, kad neprarastum greičio. Prieš kiekvieną treniruotę "
             "viso kūno apšilimas, vienpusiai pratimai pradedami silpnesne puse ir gauna papildomą setą tik jai.",

@@ -1,6 +1,6 @@
 import { useState, type CSSProperties } from 'react';
 import type { WorkoutRecord } from '../types';
-import { DEFAULT_PROGRAM_ID, dayColor } from '../data/programs';
+import { BUILTIN_PROGRAMS, DEFAULT_PROGRAM_ID, dayColor } from '../data/programs';
 import { formatDate, formatDuration, formatWeight } from '../workout/engine';
 import { Confirm, DayTag, TopBar } from '../ui';
 
@@ -14,6 +14,9 @@ interface Props {
 }
 
 const colorOf = (r: WorkoutRecord) => r.dayColor ?? dayColor(r.dayId, 0);
+// Built-in programs were renamed (2026-11-27): an old workout shows the program's name of today.
+const programNameOf = (r: WorkoutRecord) =>
+  BUILTIN_PROGRAMS.find((p) => p.id === (r.programId ?? DEFAULT_PROGRAM_ID))?.programName ?? r.programName;
 const nameOf = (r: WorkoutRecord) => r.dayName ?? `${r.dayId} DIENA`;
 
 export default function History(p: Props) {
@@ -49,7 +52,7 @@ export default function History(p: Props) {
         <h1 className="h-display title">
           {formatDate(rec.finishedAt)} {status(rec)}
         </h1>
-        {rec.programName && <p className="muted small">{rec.programName}</p>}
+        {programNameOf(rec) && <p className="muted small">{programNameOf(rec)}</p>}
         {rec.stretched && <p className="small saved-note">✓ Tempimas atliktas</p>}
         <div className="stats">
           <div className="stat">
@@ -108,7 +111,7 @@ export default function History(p: Props) {
                   </span>
                   <span className="muted small">
                     {formatDuration(r.durationSec)} · {r.totalSetsDone}/{r.totalSetsPlanned} setų
-                    {multiProgram && r.programName ? ` · ${r.programName}` : ''}
+                    {multiProgram && programNameOf(r) ? ` · ${programNameOf(r)}` : ''}
                   </span>
                 </span>
                 <span className="chev">›</span>
