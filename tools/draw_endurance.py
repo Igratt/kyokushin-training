@@ -1,7 +1,8 @@
-"""Pictures of the endurance finishers (tools/add_endurance.py, 2026-11-18/20): punch-outs, guard hold with dumbbells,
-dumbbell guard punches and the fight simulation (a minute of shadow fighting, then 10 s of burpees, or of knees in the
-variant). rope, bounce and climber are spare drawings, checked but not used by any program now; burpee too (its plank
-pose is reused by fight_burst).
+"""Pictures of the endurance finishers (tools/add_endurance.py, 2026-11-18/25): punch-outs, guard hold with dumbbells,
+dumbbell guard punches, the fight simulation (a minute of shadow fighting, then 10 s of burpees, or of knees in the
+variant) and the heavy-bag rounds (2026-11-25; their variant, jump rope + shadow fighting, reuses the rope pose).
+bounce and climber are spare drawings, checked but not used by any program now; burpee too (its plank pose is reused
+by fight_burst).
 Two panels each, same mannequin style. Day colour, corner number and file name are parameters, because the same
 picture sits at different positions in the three programs. Called by tools/add_endurance.py (no CLI of its own).
 """
@@ -146,29 +147,82 @@ def fight_burst(day, n, name, first, burst):
     pic.save(name)
 
 
+def rope_pose(pic, acc, up=0):
+    """Jump rope, front view: up=0 the rope over the head, up=14 a low jump with the rope under the feet."""
+    hands = ((CX - 42, 204 - up), (CX + 42, 204 - up))
+    if up:
+        shadow(pic, CX, 26)
+    front(pic, (CX - 12, 206 - up), (CX + 12, 206 - up), (CX - 28, 152 - up), (CX + 28, 152 - up),
+          (CX, 132 - up), (CX - 13, 290 - up), (CX + 13, 290 - up), hands[0], hands[1], l_knee=(-6, 0),
+          r_knee=(6, 0), l_elbow=(4, 0), r_elbow=(-4, 0))
+    ends = []
+    for s, h in zip((-1, 1), hands):
+        ends.append((h[0] + s * 6, h[1] + 12))
+        pic.capsule(h, ends[-1], 3.5, acc)
+    if up:
+        pic.path(bezier(ends[0], (CX, 390), ends[1]), acc, 2.4)
+        pic.arrow((CX + 78, 282), (CX + 86, 256), (CX + 78, 230), acc)
+    else:
+        pic.path(bezier(ends[0], (CX, -16), ends[1]), acc, 2.4)
+
+
 def rope(day, n, name):
-    """Jump rope, front view: the rope over the head, then under the feet in a low jump."""
+    """Jump rope: the rope over the head, then under the feet in a low jump."""
     pic, acc = Pic(), ACC[day]
     for i in range(2):
         standing_view(pic, i)
-        up = 14 * i
-        hands = ((CX - 42, 204 - up), (CX + 42, 204 - up))
-        if i:
-            shadow(pic, CX, 26)
-        front(pic, (CX - 12, 206 - up), (CX + 12, 206 - up), (CX - 28, 152 - up), (CX + 28, 152 - up),
-              (CX, 132 - up), (CX - 13, 290 - up), (CX + 13, 290 - up), hands[0], hands[1], l_knee=(-6, 0),
-              r_knee=(6, 0), l_elbow=(4, 0), r_elbow=(-4, 0))
-        ends = []
-        for s, h in zip((-1, 1), hands):
-            ends.append((h[0] + s * 6, h[1] + 12))
-            pic.capsule(h, ends[-1], 3.5, acc)
+        rope_pose(pic, acc, 14 * i)
+        pic.caption(("1 · Lengvai ant pirštų, suka riešai", "2 · Žemas šuolis, virvė po kojomis")[i])
+    pic.badge(n)
+    pic.save(name)
+
+
+BAG, BAG_HI, BAG_TOP, CHAIN = (150, 58, 52), (184, 84, 74), (70, 32, 32), (150, 160, 186)
+
+
+def heavy_bag(pic, x, acc, top=92, bottom=238):
+    """A hanging heavy bag from the side: chains to a hook, leather body with a light strip, a band in the day colour."""
+    hook = (x, 66)
+    pic.capsule((x, 34), hook, 2.4, CHAIN)
+    for s in (-1, 1):
+        pic.capsule(hook, (x + s * 13, top + 3), 1.8, CHAIN)
+    pic.dot(hook, 3, CHAIN)
+    pic.capsule((x, top + 18), (x, bottom - 18), 36, BAG)
+    pic.capsule((x - 8, top + 22), (x - 8, bottom - 24), 7, BAG_HI)
+    pic.capsule((x - 15, top + 5), (x + 15, top + 5), 7, BAG_TOP)
+    mid = (top + bottom) / 2
+    pic.capsule((x - 17, mid), (x + 17, mid), 5, acc)
+
+
+def bag_rounds(day, n, name):
+    """Heavy-bag rounds (his ask, 2026-11-25: with karate only 1-2 times a week the arms burn and the stamina dropped):
+    a strike with the other fist at the face and the hand straight back to the guard, then close-range combinations."""
+    pic, acc = Pic(), ACC[day]
+    for i in range(2):
+        standing_view(pic, i)
+        heavy_bag(pic, 210, acc)
         if i == 0:
-            pic.path(bezier(ends[0], (CX, -16), ends[1]), acc, 2.4)
-            pic.caption("1 · Lengvai ant pirštų, suka riešai")
+            side_figure(pic, stance((GUARD[0], (204, 140)), dx=10, f_elbow=(0, 6)))  # the arm stops at full reach
+            pic.arrow((188, 114), (172, 106), (154, 114), acc)  # back to the guard
+            pic.caption("1 · Po smūgio – ranka į gynybą")
         else:
-            pic.path(bezier(ends[0], (CX, 390), ends[1]), acc, 2.4)
-            pic.arrow((CX + 78, 282), (CX + 86, 256), (CX + 78, 230), acc)
-            pic.caption("2 · Žemas šuolis, virvė po kojomis")
+            side_figure(pic, stance(((159, 170), GUARD[1]), dx=30))  # close: the near arm bent, a short shot
+            pic.arrow((166, 204), (182, 208), (190, 192), acc)
+            pic.caption("2 · Kombinacijos po 6–8 smūgius")
+    pic.badge(n)
+    pic.save(name)
+
+
+def rope_shadow(day, n, name):
+    """The rounds' variant without the bag: jump rope, then shadow fighting without stopping."""
+    pic, acc = Pic(), ACC[day]
+    standing_view(pic, 0)
+    rope_pose(pic, acc)
+    pic.caption("1 · Šokdynė: lengvai ant pirštų")
+    standing_view(pic, 1)
+    side_figure(pic, stance((GUARD[0], (204, 140)), f_elbow=(0, 6)))
+    pic.arrow((168, 120), (196, 114), (222, 126), acc)
+    pic.caption("2 · Šešėlio kova be sustojimo")
     pic.badge(n)
     pic.save(name)
 
@@ -239,4 +293,4 @@ POSES = dict(guard=guard, guard_punch=guard_punch, punch_out=punch_out, plate_pr
              fight=lambda d, n, f: fight_burst(d, n, f, "1 · Minutė kovos pagal eigą", "burpee"),
              fight_ext=lambda d, n, f: fight_burst(d, n, f, "1 · Po pauzės – minutė kovos", "burpee"),
              fight_kick=lambda d, n, f: fight_burst(d, n, f, "1 · Minutė kovos pagal eigą", "knee"),
-             burpee=burpee, rope=rope, bounce=bounce, climber=climber)
+             burpee=burpee, rope=rope, bounce=bounce, climber=climber, bag=bag_rounds, rope_shadow=rope_shadow)

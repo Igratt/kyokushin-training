@@ -2,7 +2,7 @@
   "id": "hard-gym",
   "programName": "Hard Gym: jėga + masė",
   "focus": "Sporto salė: jėga + masė",
-  "goal": "Karatė pertraukai: 4 dienos, viršus ir apačia po du kartus. Sunkūs pagrindiniai kėlimai po 4–6 kartus, pagalbiniai po 8–15 ir po vieną sprogstamą pratimą, kad neprarastum greičio. Prieš kiekvieną treniruotę viso kūno apšilimas, vienpusiai pratimai pradedami silpnesne puse ir gauna papildomą setą tik jai. Ištvermė pabaigoje, kad per pertrauką nedingtų karatė kondicija: A – kovos simuliacija 3 + 2 + 2 + 2 min, B – smūgiai su hanteliais, C – šuolių intervalai.",
+  "goal": "Karatė pertraukai: 4 dienos, viršus ir apačia po du kartus. Sunkūs pagrindiniai kėlimai po 4–6 kartus, pagalbiniai po 8–15 ir po vieną sprogstamą pratimą, kad neprarastum greičio. Prieš kiekvieną treniruotę viso kūno apšilimas, vienpusiai pratimai pradedami silpnesne puse ir gauna papildomą setą tik jai. Ištvermė pabaigoje, kad per pertrauką nedingtų karatė kondicija: A – kovos simuliacija 3 + 2 + 2 + 2 min, B – smūgiai su hanteliais, C – šuolių intervalai ir raundai su maišu, D – raundai su maišu.",
   "days": [
     {
       "id": "A",
@@ -1163,6 +1163,65 @@
               "noWeight": true
             }
           ]
+        },
+        {
+          "id": "GC10",
+          "name": "Raundai su maišu",
+          "sets": 3,
+          "reps": "3 min",
+          "restSeconds": 55,
+          "image": "assets/G_C10.webp",
+          "description": "3 raundai po 3 min su 1 min poilsio, kaip karatė treniruotėje, su bintais ar lengvomis pirštinėmis. Raundas eina kaip tavo kova, laikmatis pats rodo eigą ir pypteli: 1-a minutė – pavieniai smūgiai, 2-a – kombinacijos, 3-ia – kombinacijos po 6–8 smūgius, paskutinės 30 s – darbas be sustojimo. Tarp smūgių nuolat judi, tempas toks, kad išlaikytum visus 3 raundus. Po kiekvieno smūgio ranka grįžta į gynybą, kita visą laiką prie veido. Kai rankos dega, jų nenuleisk: atpalaiduok pečius ir iškvėpk su kiekvienu smūgiu. Kai po kelių savaičių taps lengviau, poilsį tarp raundų trumpink iki 45 s, vėliau 30 s.",
+          "focus": "Ištvermė: rankos ištveria visą treniruotę ir kovą, kvėpavimas atsistato greičiau.",
+          "seconds": 180,
+          "noWeight": true,
+          "segments": [
+            {
+              "label": "1-a min: pavieniai smūgiai",
+              "seconds": 60
+            },
+            {
+              "label": "2-a min: kombinacijos",
+              "seconds": 60
+            },
+            {
+              "label": "3-ia min: kombinacijos po 6–8",
+              "seconds": 30
+            },
+            {
+              "label": "Paskutinės 30 s: be sustojimo!",
+              "seconds": 30
+            }
+          ],
+          "variants": [
+            {
+              "id": "GC10v",
+              "name": "Šokdynė + šešėlis",
+              "tag": "be maišo",
+              "sets": 3,
+              "reps": "3 min",
+              "restSeconds": 55,
+              "image": "assets/G_C10v.webp",
+              "description": "Raundai be maišo: 3 po 3 min su 1 min poilsio. Laikmatis rodo eigą: 90 s šokdynės lengvai ant pirštų, 60 s šešėlio kovos kombinacijomis (smūgiai ir spyriai į orą, rankos visada gynyboje) ir paskutinės 30 s – darbas be sustojimo. Tempas toks, kad išlaikytum visus 3 raundus. Kai taps lengviau – poilsį trumpink iki 45 s, vėliau 30 s.",
+              "focus": "Ištvermė: kvėpavimas ir kojos ištveria visą kovą, rankos nekrenta.",
+              "seconds": 180,
+              "noWeight": true,
+              "segments": [
+                {
+                  "label": "Šokdynė",
+                  "seconds": 90
+                },
+                {
+                  "label": "Šešėlio kova: kombinacijos",
+                  "seconds": 60
+                },
+                {
+                  "label": "Paskutinės 30 s: be sustojimo!",
+                  "seconds": 30
+                }
+              ]
+            }
+          ]
         }
       ],
       "stretches": [
@@ -1551,6 +1610,65 @@
               "startSide": "left",
               "bonusSets": 1,
               "noWeight": true
+            }
+          ]
+        },
+        {
+          "id": "GD10",
+          "name": "Raundai su maišu",
+          "sets": 3,
+          "reps": "3 min",
+          "restSeconds": 55,
+          "image": "assets/G_D10.webp",
+          "description": "3 raundai po 3 min su 1 min poilsio, kaip karatė treniruotėje, su bintais ar lengvomis pirštinėmis. Raundas eina kaip tavo kova, laikmatis pats rodo eigą ir pypteli: 1-a minutė – pavieniai smūgiai, 2-a – kombinacijos, 3-ia – kombinacijos po 6–8 smūgius, paskutinės 30 s – darbas be sustojimo. Tarp smūgių nuolat judi, tempas toks, kad išlaikytum visus 3 raundus. Po kiekvieno smūgio ranka grįžta į gynybą, kita visą laiką prie veido. Kai rankos dega, jų nenuleisk: atpalaiduok pečius ir iškvėpk su kiekvienu smūgiu. Kai po kelių savaičių taps lengviau, poilsį tarp raundų trumpink iki 45 s, vėliau 30 s.",
+          "focus": "Ištvermė: rankos ištveria visą treniruotę ir kovą, kvėpavimas atsistato greičiau.",
+          "seconds": 180,
+          "noWeight": true,
+          "segments": [
+            {
+              "label": "1-a min: pavieniai smūgiai",
+              "seconds": 60
+            },
+            {
+              "label": "2-a min: kombinacijos",
+              "seconds": 60
+            },
+            {
+              "label": "3-ia min: kombinacijos po 6–8",
+              "seconds": 30
+            },
+            {
+              "label": "Paskutinės 30 s: be sustojimo!",
+              "seconds": 30
+            }
+          ],
+          "variants": [
+            {
+              "id": "GD10v",
+              "name": "Šokdynė + šešėlis",
+              "tag": "be maišo",
+              "sets": 3,
+              "reps": "3 min",
+              "restSeconds": 55,
+              "image": "assets/G_D10v.webp",
+              "description": "Raundai be maišo: 3 po 3 min su 1 min poilsio. Laikmatis rodo eigą: 90 s šokdynės lengvai ant pirštų, 60 s šešėlio kovos kombinacijomis (smūgiai ir spyriai į orą, rankos visada gynyboje) ir paskutinės 30 s – darbas be sustojimo. Tempas toks, kad išlaikytum visus 3 raundus. Kai taps lengviau – poilsį trumpink iki 45 s, vėliau 30 s.",
+              "focus": "Ištvermė: kvėpavimas ir kojos ištveria visą kovą, rankos nekrenta.",
+              "seconds": 180,
+              "noWeight": true,
+              "segments": [
+                {
+                  "label": "Šokdynė",
+                  "seconds": 90
+                },
+                {
+                  "label": "Šešėlio kova: kombinacijos",
+                  "seconds": 60
+                },
+                {
+                  "label": "Paskutinės 30 s: be sustojimo!",
+                  "seconds": 30
+                }
+              ]
             }
           ]
         }

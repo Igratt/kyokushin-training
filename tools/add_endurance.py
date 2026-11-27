@@ -8,10 +8,16 @@ speed (an extension: 3-4, then 5-6, the last 30 s non-stop); after every minute 
 speed (his ask, same day), alternating knees in the variant; the app's timer runs these parts itself (field segments). Always after the speed/strength work, before the automatic
 hip release; every finisher has a variant (alternates like the rest).
 
-  karate-power   A legs Tabata 8 | B punch-outs 3 + heavy guard 2 | C fight 3 min + 3 x 2 min
-  kyokushin-mix  A legs Tabata 6 | B punch-outs 2                  | C fight 3 min + 1 x 2 min
-  hard-gym       A fight 3 min + 3 x 2 min | B punch-outs 3 (lower day, arms fresh) | C Tabata 8 (upper day, legs
-                 fresh) | D none (long hip day)
+  karate-power   A legs Tabata 8 + rounds 3 | B punch-outs 3 + heavy guard 2 + rounds 3 | C fight 3 min + 3 x 2 min
+  kyokushin-mix  A legs Tabata 6 + rounds 3 | B punch-outs 2 + rounds 3                  | C fight 3 min + 1 x 2 min
+  hard-gym       A fight 3 min + 3 x 2 min | B punch-outs 3 (lower day, arms fresh) | C Tabata 8 + rounds 3 (upper
+                 day, legs fresh) | D rounds 3 (long hip day)
+
+Rounds (2026-11-25): he now trains karate only 1-2 times a week and noticed that the arms burn and the stamina dropped
+compared with karate alone. He chose 3 x 3 min heavy-bag rounds (1 min rest, as in a class) at a pace he holds all
+round, on two days of every program, after the finishers above (he does them and the load is right, so they stay).
+Each round runs like his fight (his correction, same day): minute 1 single strikes, 2 combinations, 3 combinations of
+6-8 strikes, the last 30 s non-stop. Variant: jump rope + shadow fighting, the last 30 s non-stop too.
 
 Run LAST: add_variants.py -> add_hips.py -> make_hard_gym.py -> make_karate_power.py -> add_endurance.py (the others
 rewrite the JSON and drop the finishers). Idempotent: removes its own exercises (by name) and appends them again; the
@@ -32,12 +38,14 @@ REST = 30
 PAUSE = 25  # + the engine's 5 s prep = the 30 s pause before an extension
 SHORT = 5  # + 5 s prep = 10 s between Tabata intervals
 MARK = "Ištvermė pabaigoje"  # start of this script's goal sentence; a re-run replaces it
+ROUND_REST = 55  # + 5 s prep = 1 min between the rounds, as in a karate class
 
 GUARD_TIP = "Tarp serijų rankos visada gynyboje, iškvėpk su kiekvienu smūgiu, pečiai atpalaiduoti."
 EASE = ("Pradžioje tai žiauriai sunku – normalu. Jei krenta smūgių kokybė, pailgink poilsį prieš pratęsimus iki 60 s ir "
         "kas savaitę trumpink: 45 s, 30 s, vėliau 15 s.")
 BURPEES, KNEES = "BURPIAI – max greitis!", "KELIAI – max greitis!"
 LAST30 = "Be sustojimo – max jėga!"
+NONSTOP = "Paskutinės 30 s: be sustojimo!"  # the rounds' last 30 s (his words, 2026-11-25)
 
 
 def main_time(burst):
@@ -123,24 +131,50 @@ KINDS = {
                          "pakaitomis max greičiu. Tarp serijų nuolat judi ant pirštų. " + EASE,
              focus="Ištvermė: jėgų užtenka ir pratęsimams, iki 9 min."),
     ),
+    "rounds": (
+        dict(name="Raundai su maišu", reps="3 min", seconds=180, rest=ROUND_REST, noWeight=True, draw="bag",
+             segments=[("1-a min: pavieniai smūgiai", 60), ("2-a min: kombinacijos", 60),
+                       ("3-ia min: kombinacijos po 6–8", 30), (NONSTOP, 30)],
+             description="3 raundai po 3 min su 1 min poilsio, kaip karatė treniruotėje, su bintais ar lengvomis "
+                         "pirštinėmis. Raundas eina kaip tavo kova, laikmatis pats rodo eigą ir pypteli: 1-a minutė – "
+                         "pavieniai smūgiai, 2-a – kombinacijos, 3-ia – kombinacijos po 6–8 smūgius, paskutinės 30 s – "
+                         "darbas be sustojimo. Tarp smūgių nuolat judi, tempas toks, kad išlaikytum visus 3 raundus. "
+                         "Po kiekvieno smūgio ranka grįžta į gynybą, kita visą laiką prie veido. Kai rankos dega, jų "
+                         "nenuleisk: atpalaiduok pečius ir iškvėpk su kiekvienu smūgiu. Kai po kelių savaičių taps "
+                         "lengviau, poilsį tarp raundų trumpink iki 45 s, vėliau 30 s.",
+             focus="Ištvermė: rankos ištveria visą treniruotę ir kovą, kvėpavimas atsistato greičiau."),
+        dict(name="Šokdynė + šešėlis", tag="be maišo", reps="3 min", seconds=180, rest=ROUND_REST, noWeight=True,
+             draw="rope_shadow",
+             segments=[("Šokdynė", 90), ("Šešėlio kova: kombinacijos", 60), (NONSTOP, 30)],
+             description="Raundai be maišo: 3 po 3 min su 1 min poilsio. Laikmatis rodo eigą: 90 s šokdynės lengvai "
+                         "ant pirštų, 60 s šešėlio kovos kombinacijomis (smūgiai ir spyriai į orą, rankos visada "
+                         "gynyboje) ir paskutinės 30 s – darbas be sustojimo. Tempas toks, kad išlaikytum visus 3 "
+                         "raundus. Kai taps lengviau – poilsį trumpink iki 45 s, vėliau 30 s.",
+             focus="Ištvermė: kvėpavimas ir kojos ištveria visą kovą, rankos nekrenta."),
+    ),
 }
 
 # program -> (id prefix, picture name, {day: [(kind, sets), ...]}, (old, new) in the goal or None, goal sentence)
 PLAN = {
     "karate-power": ("P", "P_{day}{n}{v}.webp",
-                     {"A": [("tabata", 8)], "B": [("punchout", 3), ("guard", 2)], "C": [("fight", 1), ("ext", 3)]},
-                     ("3 dienos po ~50 min", "3 dienos po ~60 min"),
-                     MARK + ": A – šuolių intervalai, B – smūgiai su hanteliais ir sunki gynyba, C – kovos simuliacija "
-                     "3 + 2 + 2 + 2 min. Visada po greičio darbo, kad kovoje rankos ir kojos neužsirūgštų."),
+                     {"A": [("tabata", 8), ("rounds", 3)], "B": [("punchout", 3), ("guard", 2), ("rounds", 3)],
+                      "C": [("fight", 1), ("ext", 3)]},
+                     ("3 dienos po ~50 min", "3 dienos po ~60–70 min"),
+                     MARK + ": A – šuolių intervalai ir raundai su maišu, B – smūgiai su hanteliais, sunki gynyba ir "
+                     "raundai su maišu, C – kovos simuliacija 3 + 2 + 2 + 2 min. Visada po greičio darbo, kad kovoje "
+                     "rankos ir kojos neužsirūgštų."),
     "kyokushin-mix": ("", "{day}_{n}{v}.webp",
-                      {"A": [("tabata", 6)], "B": [("punchout", 2)], "C": [("fight", 1), ("ext", 1)]},
+                      {"A": [("tabata", 6), ("rounds", 3)], "B": [("punchout", 2), ("rounds", 3)],
+                       "C": [("fight", 1), ("ext", 1)]},
                       None,
-                      MARK + ": A – šuolių intervalai, B – smūgiai su hanteliais, C – kova 3 + 2 min."),
+                      MARK + ": A – šuolių intervalai ir raundai su maišu, B – smūgiai su hanteliais ir raundai su "
+                      "maišu, C – kova 3 + 2 min."),
     "hard-gym": ("G", "G_{day}{n}{v}.webp",
-                 {"A": [("fight", 1), ("ext", 3)], "B": [("punchout", 3)], "C": [("tabata", 8)]},
+                 {"A": [("fight", 1), ("ext", 3)], "B": [("punchout", 3)], "C": [("tabata", 8), ("rounds", 3)],
+                  "D": [("rounds", 3)]},
                  None,
                  MARK + ", kad per pertrauką nedingtų karatė kondicija: A – kovos simuliacija 3 + 2 + 2 + 2 min, "
-                 "B – smūgiai su hanteliais, C – šuolių intervalai."),
+                 "B – smūgiai su hanteliais, C – šuolių intervalai ir raundai su maišu, D – raundai su maišu."),
 }
 
 
